@@ -1,0 +1,301 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #06060a;
+  --bg2: #0c0c12;
+  --bg3: #111118;
+  --bg4: #16161f;
+  --border: #1a1a28;
+  --border2: #222233;
+  --accent-green: #39e97b;
+  --accent-purple: #9b7cff;
+  --accent-orange: #ff7c3a;
+  --accent-blue: #3acdff;
+  --accent-pink: #f472b6;
+  --accent-yellow: #ffcc00;
+  --brand-color: #9b7cff;
+  --danger: #ff4f4f;
+  --text: #eeeef5;
+  --muted: #55556a;
+  --muted2: #888899;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', 'Barlow', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Custom Modal Scrollbar */
+.modal-content-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.modal-content-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-content-scroll::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 10px;
+}
+
+.modal-content-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+input, textarea, select, button {
+  font-family: inherit;
+}
+
+.font-heading {
+  font-family: 'Syne', 'Barlow Condensed', sans-serif;
+}
+
+.font-mono {
+  font-family: 'Space Mono', 'DM Mono', monospace;
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium text-sm transition-all duration-150 cursor-pointer border-none;
+  }
+  
+  .btn-primary {
+    @apply bg-accent-green text-black hover:bg-green-400;
+  }
+  
+  .btn-secondary {
+    @apply bg-accent-purple/20 text-accent-purple border border-accent-purple/30 hover:bg-accent-purple/30;
+  }
+  
+  .btn-ghost {
+    @apply bg-transparent text-muted-2 border border-border-2 hover:bg-background-3 hover:text-text;
+  }
+  
+  .btn-danger {
+    @apply bg-danger/15 text-danger border border-danger/20 hover:bg-danger/25;
+  }
+  
+  .btn-orange {
+    @apply bg-accent-orange/20 text-accent-orange border border-accent-orange/30 hover:bg-accent-orange/30;
+  }
+
+  .card {
+    @apply bg-background-2 border border-border rounded-xl;
+  }
+
+  .input {
+    @apply bg-background-3 border border-border-2 rounded-lg px-3 py-2 text-text text-sm outline-none transition-colors;
+  }
+  
+  .input:focus {
+    @apply border-accent-purple;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono uppercase tracking-wide;
+  }
+
+  .badge-green {
+    @apply bg-accent-green/10 text-accent-green border border-accent-green/20;
+  }
+
+  .badge-purple {
+    @apply bg-accent-purple/10 text-accent-purple border border-accent-purple/20;
+  }
+
+  .badge-orange {
+    @apply bg-accent-orange/10 text-accent-orange border border-accent-orange/20;
+  }
+
+  .badge-blue {
+    @apply bg-accent-blue/10 text-accent-blue border border-accent-blue/20;
+  }
+
+  .badge-pink {
+    @apply bg-accent-pink/10 text-accent-pink border border-accent-pink/20;
+  }
+
+  .badge-yellow {
+    @apply bg-accent-yellow/10 text-accent-yellow border border-accent-yellow/20;
+  }
+
+  .badge-danger {
+    @apply bg-danger/10 text-danger border border-danger/20;
+  }
+
+  .badge-muted {
+    @apply bg-muted/10 text-muted-2 border border-muted/20;
+  }
+}
+
+.table-container {
+  @apply overflow-x-auto;
+}
+
+table {
+  @apply w-full border-collapse;
+}
+
+th {
+  @apply text-left py-3 px-4 text-xs font-mono uppercase tracking-wider text-muted-2 bg-background-3 border-b border-border;
+}
+
+td {
+  @apply py-3 px-4 text-sm border-b border-border;
+}
+
+tr:hover td {
+  @apply bg-background-3;
+}
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4;
+}
+
+.modal {
+  @apply bg-background-2 border border-border-2 rounded-2xl w-full max-w-lg p-0 overflow-hidden relative animate-slide-up shadow-2xl;
+  box-shadow: 0 0 40px rgba(0,0,0,0.5), 0 0 20px rgba(155, 124, 255, 0.05);
+}
+
+.modal-header {
+  @apply p-6 border-b border-border-2;
+}
+
+.modal-body {
+  @apply p-6;
+}
+
+.modal-footer {
+  @apply p-4 bg-background-3/50 flex justify-end gap-3;
+}
+
+.template-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+.template-card {
+  @apply relative p-5 text-left rounded-xl transition-all duration-300 border border-border-2 bg-background-3/40 hover:bg-background-3 hover:border-accent-purple/50 cursor-pointer overflow-hidden;
+}
+
+.template-card::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-br from-current to-transparent opacity-0 transition-opacity duration-300 pointer-events-none;
+}
+
+.template-card:hover::before {
+  @apply opacity-[0.03];
+}
+
+.template-card-icon {
+  @apply w-10 h-10 rounded-lg flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110;
+}
+
+.template-card-title {
+  @apply font-bold text-sm text-text mb-1;
+}
+
+.template-card-desc {
+  @apply text-xs text-muted-2 leading-relaxed;
+}
+
+.stat-card {
+  @apply bg-background-2 border border-border rounded-xl p-4;
+}
+
+.stat-number {
+  @apply font-heading text-3xl font-extrabold;
+}
+
+.stat-label {
+  @apply font-mono text-xs uppercase tracking-wider text-muted-2 mt-1;
+}
+
+.kanban-column {
+  @apply bg-background-2 border border-border rounded-xl p-3 min-h-[300px];
+}
+
+.kanban-card {
+  @apply bg-background-3 border border-border rounded-lg p-3 mb-2 cursor-pointer transition-colors;
+}
+
+.kanban-card:hover {
+  @apply border-accent-purple;
+}
+
+.progress-bar {
+  @apply h-1 bg-background-3 rounded-full overflow-hidden;
+}
+
+.progress-fill {
+  @apply h-full bg-gradient-to-r from-accent-purple to-accent-green transition-all duration-300;
+}
+
+.tooltip {
+  @apply relative;
+}
+
+.tooltip::after {
+  @apply absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-background-4 text-xs text-muted-2 rounded opacity-0 pointer-events-none transition-opacity whitespace-nowrap;
+  content: attr(data-tooltip);
+}
+
+.tooltip:hover::after {
+  @apply opacity-100;
+}
+
+/* Sidebar Animations */
+.sidebar-transition {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}

@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xenotrix — Client Onboarding Checklist</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #06060a;
+        --bg2: #0c0c12;
+        --bg3: #111118;
+        --bg4: #17171f;
+        --border: #1a1a28;
+        --border2: #222233;
+        --green: #39e97b;
+        --purple: #9b7cff;
+        --orange: #ff7c3a;
+        --red: #ff4f4f;
+        --blue: #3acdff;
+        --yellow: #ffcc00;
+        --text: #eeeef5;
+        --muted: #55556a;
+        --muted2: #888899;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Barlow", sans-serif;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .header {
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .logo {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 900;
+        font-size: 22px;
+        color: var(--orange);
+        letter-spacing: 1px;
+      }
+      .logo span {
+        color: var(--muted2);
+        font-weight: 400;
+        font-size: 12px;
+        margin-left: 8px;
+        font-family: "Space Mono", monospace;
+      }
+      .header-right {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .btn-print {
+        background: rgba(255, 124, 58, 0.12);
+        border: 1px solid rgba(255, 124, 58, 0.25);
+        color: var(--orange);
+        padding: 6px 16px;
+        border-radius: 4px;
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        cursor: pointer;
+        letter-spacing: 0.5px;
+        transition: all 0.15s;
+      }
+      .btn-print:hover {
+        background: rgba(255, 124, 58, 0.2);
+      }
+      .progress-bar {
+        background: var(--bg3);
+        height: 3px;
+        position: sticky;
+        top: 53px;
+        z-index: 99;
+      }
+      .progress-fill {
+        height: 3px;
+        background: linear-gradient(90deg, var(--orange), var(--purple));
+        transition: width 0.3s;
+        width: 0%;
+      }
+
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 40px 24px;
+      }
+
+      .hero {
+        text-align: center;
+        padding: 44px 0 36px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 44px;
+      }
+      .hero-eyebrow {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--orange);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      .hero h1 {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 900;
+        font-size: 52px;
+        line-height: 1;
+        margin-bottom: 10px;
+      }
+      .hero h1 em {
+        color: var(--orange);
+        font-style: normal;
+      }
+      .hero p {
+        color: var(--muted2);
+        font-size: 15px;
+        max-width: 480px;
+        margin: 0 auto 16px;
+      }
+      .progress-summary {
+        display: flex;
+        gap: 6px;
+        justify-content: center;
+        align-items: center;
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted2);
+      }
+      .progress-summary span {
+        color: var(--orange);
+        font-weight: 700;
+      }
+
+      /* CLIENT INFO FORM */
+      .client-form {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 22px;
+        margin-bottom: 32px;
+      }
+      .form-title {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        margin-bottom: 14px;
+        color: var(--orange);
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .form-group label {
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--muted2);
+      }
+      .form-group input,
+      .form-group select {
+        background: var(--bg3);
+        border: 1px solid var(--border2);
+        border-radius: 4px;
+        padding: 8px 10px;
+        color: var(--text);
+        font-family: "Barlow", sans-serif;
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .form-group input:focus,
+      .form-group select:focus {
+        border-color: var(--orange);
+      }
+
+      /* PHASE BLOCK */
+      .phase-block {
+        margin-bottom: 32px;
+      }
+      .phase-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 18px;
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 8px 8px 0 0;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .phase-header:hover {
+        background: var(--bg3);
+      }
+      .phase-num {
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted2);
+      }
+      .phase-name {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 700;
+        font-size: 20px;
+      }
+      .phase-count {
+        margin-left: auto;
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        padding: 3px 10px;
+        border-radius: 2px;
+      }
+      .ph1 .phase-name,
+      .ph1 .phase-count {
+        color: var(--orange);
+      }
+      .ph2 .phase-name,
+      .ph2 .phase-count {
+        color: var(--purple);
+      }
+      .ph3 .phase-name,
+      .ph3 .phase-count {
+        color: var(--blue);
+      }
+      .ph4 .phase-name,
+      .ph4 .phase-count {
+        color: var(--green);
+      }
+      .ph1 .phase-count {
+        background: rgba(255, 124, 58, 0.1);
+        border: 1px solid rgba(255, 124, 58, 0.2);
+      }
+      .ph2 .phase-count {
+        background: rgba(155, 124, 255, 0.1);
+        border: 1px solid rgba(155, 124, 255, 0.2);
+      }
+      .ph3 .phase-count {
+        background: rgba(58, 205, 255, 0.1);
+        border: 1px solid rgba(58, 205, 255, 0.2);
+      }
+      .ph4 .phase-count {
+        background: rgba(57, 233, 123, 0.1);
+        border: 1px solid rgba(57, 233, 123, 0.2);
+      }
+
+      .phase-body {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-top: none;
+        border-radius: 0 0 8px 8px;
+        overflow: hidden;
+      }
+
+      .check-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        padding: 13px 18px;
+        border-bottom: 1px solid var(--border);
+        transition: background 0.12s;
+        cursor: pointer;
+      }
+      .check-item:last-child {
+        border-bottom: none;
+      }
+      .check-item:hover {
+        background: var(--bg3);
+      }
+      .check-item.done {
+        opacity: 0.5;
+      }
+      .check-item.done .ci-title {
+        text-decoration: line-through;
+        color: var(--muted2);
+      }
+
+      .checkbox {
+        width: 18px;
+        height: 18px;
+        border-radius: 3px;
+        border: 1.5px solid var(--border2);
+        background: var(--bg3);
+        flex-shrink: 0;
+        margin-top: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s;
+      }
+      .check-item.done .checkbox {
+        background: var(--green);
+        border-color: var(--green);
+      }
+      .checkbox-tick {
+        color: #000;
+        font-size: 11px;
+        font-weight: 700;
+        display: none;
+      }
+      .check-item.done .checkbox-tick {
+        display: block;
+      }
+
+      .ci-content {
+        flex: 1;
+      }
+      .ci-title {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 2px;
+      }
+      .ci-desc {
+        font-size: 12px;
+        color: var(--muted2);
+        line-height: 1.5;
+      }
+      .ci-tag {
+        display: inline-block;
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        padding: 2px 7px;
+        border-radius: 2px;
+        margin-top: 5px;
+      }
+      .tag-collect {
+        background: rgba(255, 124, 58, 0.1);
+        color: var(--orange);
+        border: 1px solid rgba(255, 124, 58, 0.2);
+      }
+      .tag-action {
+        background: rgba(155, 124, 255, 0.1);
+        color: var(--purple);
+        border: 1px solid rgba(155, 124, 255, 0.2);
+      }
+      .tag-send {
+        background: rgba(58, 205, 255, 0.1);
+        color: var(--blue);
+        border: 1px solid rgba(58, 205, 255, 0.2);
+      }
+      .tag-verify {
+        background: rgba(57, 233, 123, 0.1);
+        color: var(--green);
+        border: 1px solid rgba(57, 233, 123, 0.2);
+      }
+      .tag-critical {
+        background: rgba(255, 79, 79, 0.1);
+        color: var(--red);
+        border: 1px solid rgba(255, 79, 79, 0.2);
+      }
+
+      /* CALLOUT */
+      .callout {
+        border-left: 3px solid var(--orange);
+        background: rgba(255, 124, 58, 0.04);
+        padding: 12px 16px;
+        border-radius: 0 6px 6px 0;
+        margin: 16px 0;
+      }
+      .callout.g {
+        border-color: var(--green);
+        background: rgba(57, 233, 123, 0.04);
+      }
+      .callout strong {
+        display: block;
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--orange);
+        margin-bottom: 3px;
+      }
+      .callout.g strong {
+        color: var(--green);
+      }
+      .callout p {
+        font-size: 12px;
+        color: var(--muted2);
+      }
+
+      footer {
+        text-align: center;
+        padding: 32px 0 48px;
+        border-top: 1px solid var(--border);
+        margin-top: 40px;
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      footer span {
+        color: var(--orange);
+      }
+
+      @media print {
+        .header,
+        .progress-bar,
+        .btn-print {
+          display: none !important;
+        }
+        body {
+          background: white;
+          color: #111;
+        }
+        .phase-header {
+          background: #f5f5f5 !important;
+          border-color: #ddd !important;
+        }
+        .phase-body {
+          border-color: #ddd !important;
+        }
+        .check-item {
+          border-color: #eee !important;
+        }
+        .checkbox {
+          border-color: #999 !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <img
+          src="logo.png"
+          alt="Logo"
+          style="
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 12px;
+            margin-top: -2px;
+          "
+        />Xenotrix <span>Client Onboarding</span>
+      </div>
+      <div class="header-right">
+        <div class="progress-summary">
+          Done: <span id="doneCount">0</span> / <span id="totalCount">0</span>
+        </div>
+        <button class="btn-print" onclick="window.print()">⎙ Print</button>
+      </div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="wrap">
+      <!-- HERO -->
+      <div class="hero">
+        <div class="hero-eyebrow">Xenotrix · Operations</div>
+        <h1>Client<br /><em>Onboarding</em></h1>
+        <p>
+          Complete every item before starting any work. A clean onboarding =
+          smooth delivery = happy client = retainer.
+        </p>
+      </div>
+
+      <!-- CLIENT DETAILS -->
+      <div class="client-form">
+        <div class="form-title">▸ Project Details</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Client Name</label
+            ><input type="text" placeholder="e.g. Rajesh Kumar" />
+          </div>
+          <div class="form-group">
+            <label>Company</label
+            ><input type="text" placeholder="e.g. Spice Garden Restaurant" />
+          </div>
+          <div class="form-group">
+            <label>Phone / WhatsApp</label
+            ><input type="text" placeholder="+91 98765 43210" />
+          </div>
+          <div class="form-group">
+            <label>Email</label
+            ><input type="text" placeholder="owner@company.com" />
+          </div>
+          <div class="form-group">
+            <label>Project Type</label>
+            <select>
+              <option>Select project type...</option>
+              <option>Landing Page ($500–$1,000)</option>
+              <option>Website Revamp ($1,000–$1,500)</option>
+              <option>Full Website ($1,500–$3,000)</option>
+              <option>AI Chatbot ($800–$1,500)</option>
+              <option>CRM System ($1,500–$2,500)</option>
+              <option>SaaS MVP ($2,500–$4,000)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Deal Value</label
+            ><input type="text" placeholder="e.g. $1,500" />
+          </div>
+          <div class="form-group">
+            <label>Deposit Received</label
+            ><input type="text" placeholder="e.g. $750 on 20 Feb" />
+          </div>
+          <div class="form-group">
+            <label>Delivery Deadline</label><input type="date" />
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 1 -->
+      <div class="phase-block ph1">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <span class="phase-num">PHASE 01</span>
+          <span class="phase-name">Payment & Agreement</span>
+          <span class="phase-count" id="count-p1">0/4</span>
+        </div>
+        <div class="phase-body" id="body-p1">
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">50% deposit invoice sent and paid</div>
+              <div class="ci-desc">
+                Send invoice via Wave. Work does NOT begin until deposit clears.
+                Confirm payment received via bank/UPI/Razorpay notification.
+              </div>
+              <span class="ci-tag tag-critical">CRITICAL — NO EXCEPTIONS</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">Client contract signed</div>
+              <div class="ci-desc">
+                Send the 1-page Xenotrix Service Agreement. Get a WhatsApp "I
+                agree" or email confirmation as minimum. PDF signature
+                preferred.
+              </div>
+              <span class="ci-tag tag-collect">COLLECT</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">Project scope confirmed in writing</div>
+              <div class="ci-desc">
+                Send the accepted proposal back to client. Ask them to reply
+                "Confirmed" on WhatsApp. This becomes your scope protection.
+                Screenshot it.
+              </div>
+              <span class="ci-tag tag-action">ACTION</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">Project added to Notion tracker</div>
+              <div class="ci-desc">
+                Create new project page in Notion: Client name, start date,
+                deadline, deal value, GitHub repo link, staging URL placeholder.
+              </div>
+              <span class="ci-tag tag-action">ACTION</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 2 -->
+      <div class="phase-block ph2">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <span class="phase-num">PHASE 02</span>
+          <span class="phase-name">Content Collection</span>
+          <span class="phase-count" id="count-p2">0/6</span>
+        </div>
+        <div class="phase-body" id="body-p2">
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">
+                Business logo received (PNG + SVG if possible)
+              </div>
+              <div class="ci-desc">
+                Ask for logo on white background AND transparent background. If
+                they only have JPG, use remove.bg (free) to extract it.
+              </div>
+              <span class="ci-tag tag-collect">COLLECT</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">Brand colors and fonts confirmed</div>
+              <div class="ci-desc">
+                Ask: "What are your brand colors? Do you have a hex code? What
+                font do you use?" If they don't know — look at their current
+                site or existing materials and match it.
+              </div>
+              <span class="ci-tag tag-collect">COLLECT</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">All page text / copy received</div>
+              <div class="ci-desc">
+                Send the content brief: "Please send text for Home, About,
+                Services, and Contact pages." Set a 48-hour deadline. If they
+                delay, project timeline shifts — document this.
+              </div>
+              <span class="ci-tag tag-collect">COLLECT</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">All images / photos received</div>
+              <div class="ci-desc">
+                Business photos, product images, team photos. If they have none,
+                use Unsplash or Pexels (free). Tell them in advance so there are
+                no surprises.
+              </div>
+              <span class="ci-tag tag-collect">COLLECT</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">
+                Domain name and hosting access confirmed
+              </div>
+              <div class="ci-desc">
+                Ask: "Do you own a domain? If yes, what is it and can you add me
+                as a DNS manager?" If no domain — register one via Cloudflare
+                Registrar (cheapest, ~$9/year).
+              </div>
+              <span class="ci-tag tag-action">ACTION</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">
+                WhatsApp number and contact details for the website confirmed
+              </div>
+              <div class="ci-desc">
+                Phone number for click-to-call, WhatsApp number, email for
+                contact form, physical address (if needed), Google Maps embed
+                link, social media URLs.
+              </div>
+              <span class="ci-tag tag-collect">COLLECT</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 3 -->
+      <div class="phase-block ph3">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <span class="phase-num">PHASE 03</span>
+          <span class="phase-name">Technical Setup</span>
+          <span class="phase-count" id="count-p3">0/6</span>
+        </div>
+        <div class="phase-body" id="body-p3">
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">GitHub repo created for this project</div>
+              <div class="ci-desc">
+                Create private repo: xenotrix/[client-name]-website. Add your
+                partner dev as collaborator. Commit initial project structure
+                Day 1.
+              </div>
+              <span class="ci-tag tag-action">ACTION</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">
+                Vercel project created and connected to GitHub
+              </div>
+              <div class="ci-desc">
+                Deploy to Vercel immediately. Share staging URL with client on
+                Day 2. This shows progress and builds trust early.
+              </div>
+              <span class="ci-tag tag-action">ACTION</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">
+                Google Analytics 4 account created for client
+              </div>
+              <div class="ci-desc">
+                Create GA4 property. Add the tracking code to the site. Share
+                access with client's Gmail. This is a standard deliverable they
+                never think to ask for but always appreciate.
+              </div>
+              <span class="ci-tag tag-action">ACTION</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">Google Search Console set up</div>
+              <div class="ci-desc">
+                Add property for their domain. Verify via DNS. Submit sitemap
+                after launch. This is free SEO value you add at zero cost.
+              </div>
+              <span class="ci-tag tag-verify">VERIFY</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">Contact form tested and working</div>
+              <div class="ci-desc">
+                Submit a test form. Check the submission arrives on the client's
+                email. Check it works on mobile. This is the #1 thing broken on
+                most sites — fix it first.
+              </div>
+              <span class="ci-tag tag-verify">VERIFY</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">SSL certificate active on domain</div>
+              <div class="ci-desc">
+                Vercel provides free SSL automatically. Confirm https:// works
+                and there is no browser warning. Never launch a site without SSL
+                — Google penalizes it.
+              </div>
+              <span class="ci-tag tag-verify">VERIFY</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PHASE 4 -->
+      <div class="phase-block ph4">
+        <div class="phase-header" onclick="togglePhase(this)">
+          <span class="phase-num">PHASE 04</span>
+          <span class="phase-name">Handoff & Retainer Pitch</span>
+          <span class="phase-count" id="count-p4">0/6</span>
+        </div>
+        <div class="phase-body" id="body-p4">
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">
+                Final balance invoice (50%) sent and paid
+              </div>
+              <div class="ci-desc">
+                Send remaining 50% invoice on launch day. Site goes live AFTER
+                payment clears OR both parties agree on DNS transfer timing.
+                Never skip this.
+              </div>
+              <span class="ci-tag tag-critical">CRITICAL</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">
+                All login credentials handed to client securely
+              </div>
+              <div class="ci-desc">
+                Create a Google Doc or Notion page with all passwords, login
+                URLs, and access details. Share securely. Never send passwords
+                over WhatsApp as plain text.
+              </div>
+              <span class="ci-tag tag-send">SEND</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">
+                2-minute walkthrough video recorded and sent (Loom)
+              </div>
+              <div class="ci-desc">
+                Record a Loom video walking through the finished site. Show them
+                every feature. This reduces support questions by 80% and makes
+                clients feel taken care of.
+              </div>
+              <span class="ci-tag tag-send">SEND</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">Testimonial / review requested</div>
+              <div class="ci-desc">
+                On the launch call say: "We are a growing agency and reviews
+                mean everything to us. Would you be happy to send a quick
+                2-sentence WhatsApp message about your experience? We will quote
+                it on our website."
+              </div>
+              <span class="ci-tag tag-action">ACTION</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">
+                Maintenance retainer pitched on launch call
+              </div>
+              <div class="ci-desc">
+                "We can keep your site fast, secure, and updated for $200/month
+                — we monitor uptime, do monthly updates, and you get priority
+                support. Want us to just handle it?" Say this on every launch.
+                40% will say yes.
+              </div>
+              <span class="ci-tag tag-action">ACTION</span>
+            </div>
+          </div>
+          <div class="check-item" onclick="toggle(this)">
+            <div class="checkbox"><span class="checkbox-tick">✓</span></div>
+            <div class="ci-content">
+              <div class="ci-title">Referral ask made</div>
+              <div class="ci-desc">
+                "If you know any other business owners who need a website or
+                need to improve theirs — we give you 10% of whatever they spend
+                as a thank-you. No pressure, just wanted you to know."
+              </div>
+              <span class="ci-tag tag-action">ACTION</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout g" style="margin-top: 8px">
+        <strong>The Golden Rule</strong>
+        <p>
+          Every single completed project should result in three things: final
+          payment collected, a testimonial, and a retainer pitch. If you walk
+          away from a project without pitching the retainer, you left money on
+          the table.
+        </p>
+      </div>
+    </div>
+
+    <footer>
+      <span>Xenotrix</span> Digital Agency · Client Onboarding Checklist v1.0<br />
+      <span style="color: var(--muted); margin-top: 4px; display: block"
+        >Every completed project = payment + testimonial + retainer pitch</span
+      >
+    </footer>
+
+    <script>
+      function toggle(el) {
+        el.classList.toggle("done");
+        updateCounts();
+      }
+      function togglePhase(header) {
+        // phases always visible, just for UX feedback
+      }
+      function updateCounts() {
+        const phases = ["p1", "p2", "p3", "p4"];
+        let total = 0,
+          done = 0;
+        phases.forEach((p) => {
+          const body = document.getElementById("body-" + p);
+          const items = body.querySelectorAll(".check-item");
+          const doneItems = body.querySelectorAll(".check-item.done");
+          document.getElementById("count-" + p).textContent =
+            doneItems.length + "/" + items.length;
+          total += items.length;
+          done += doneItems.length;
+        });
+        document.getElementById("doneCount").textContent = done;
+        document.getElementById("totalCount").textContent = total;
+        document.getElementById("progressFill").style.width =
+          (total > 0 ? (done / total) * 100 : 0) + "%";
+      }
+      updateCounts();
+    </script>
+  </body>
+</html>

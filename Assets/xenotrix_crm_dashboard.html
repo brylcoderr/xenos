@@ -1,0 +1,1624 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xenotrix — Lead Tracker CRM</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #07070d;
+        --bg2: #0e0e18;
+        --bg3: #131320;
+        --bg4: #191926;
+        --border: #1c1c2e;
+        --border2: #242436;
+        --accent: #4ade80;
+        --accent2: #a78bfa;
+        --accent3: #fb923c;
+        --blue: #38bdf8;
+        --red: #f87171;
+        --yellow: #fbbf24;
+        --text: #f1f5f9;
+        --muted: #4b5563;
+        --muted2: #6b7280;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 14px;
+        min-height: 100vh;
+      }
+
+      /* TOPBAR */
+      .topbar {
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        padding: 0 24px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+      .logo {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 18px;
+        color: var(--accent);
+        letter-spacing: -0.5px;
+      }
+      .logo span {
+        color: var(--muted2);
+        font-weight: 400;
+        font-size: 12px;
+        margin-left: 8px;
+        font-family: "DM Mono", monospace;
+      }
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+      .btn {
+        padding: 7px 16px;
+        border-radius: 7px;
+        font-size: 13px;
+        font-family: "DM Sans", sans-serif;
+        cursor: pointer;
+        border: none;
+        transition: all 0.15s;
+        font-weight: 500;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #000;
+      }
+      .btn-primary:hover {
+        background: #22c55e;
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--muted2);
+        border: 1px solid var(--border2);
+      }
+      .btn-ghost:hover {
+        background: var(--bg3);
+        color: var(--text);
+      }
+      .btn-sm {
+        padding: 4px 10px;
+        font-size: 12px;
+      }
+      .btn-danger {
+        background: rgba(248, 113, 113, 0.15);
+        color: var(--red);
+        border: 1px solid rgba(248, 113, 113, 0.2);
+      }
+      .btn-danger:hover {
+        background: rgba(248, 113, 113, 0.25);
+      }
+
+      /* LAYOUT */
+      .container {
+        padding: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      /* STATS ROW */
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .stat-card {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+      }
+      .stat-card .s-num {
+        font-family: "Syne", sans-serif;
+        font-size: 26px;
+        font-weight: 800;
+      }
+      .stat-card .s-lbl {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        color: var(--muted2);
+        margin-top: 2px;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+      .stat-card .s-sub {
+        font-size: 11px;
+        color: var(--muted2);
+        margin-top: 4px;
+      }
+
+      /* TOOLBAR */
+      .toolbar {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        flex-wrap: wrap;
+      }
+      .search-wrap {
+        position: relative;
+        flex: 1;
+        min-width: 200px;
+      }
+      .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--muted2);
+        font-size: 14px;
+      }
+      .search-input {
+        width: 100%;
+        background: var(--bg3);
+        border: 1px solid var(--border2);
+        border-radius: 7px;
+        padding: 8px 12px 8px 36px;
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        outline: none;
+      }
+      .search-input:focus {
+        border-color: var(--accent2);
+      }
+      select.filter-sel {
+        background: var(--bg3);
+        border: 1px solid var(--border2);
+        border-radius: 7px;
+        padding: 8px 12px;
+        color: var(--text);
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        outline: none;
+        cursor: pointer;
+      }
+      .records-count {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--muted2);
+        margin-left: auto;
+      }
+
+      /* TABLE */
+      .table-wrap {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      thead th {
+        background: var(--bg3);
+        padding: 10px 14px;
+        text-align: left;
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        color: var(--muted2);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+        cursor: pointer;
+        user-select: none;
+      }
+      thead th:hover {
+        color: var(--text);
+      }
+      thead th.sorted {
+        color: var(--accent);
+      }
+      tbody tr {
+        border-bottom: 1px solid var(--border);
+        transition: background 0.1s;
+      }
+      tbody tr:last-child {
+        border-bottom: none;
+      }
+      tbody tr:hover {
+        background: var(--bg3);
+      }
+      tbody td {
+        padding: 12px 14px;
+        font-size: 13px;
+        vertical-align: middle;
+      }
+
+      /* STATUS BADGES */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 9px;
+        border-radius: 20px;
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+        cursor: pointer;
+        border: none;
+        font-weight: 500;
+      }
+      .badge::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: currentColor;
+        opacity: 0.8;
+      }
+      .b-new {
+        background: rgba(251, 191, 36, 0.1);
+        color: var(--yellow);
+        border: 1px solid rgba(251, 191, 36, 0.2);
+      }
+      .b-contacted {
+        background: rgba(56, 189, 248, 0.1);
+        color: var(--blue);
+        border: 1px solid rgba(56, 189, 248, 0.2);
+      }
+      .b-replied {
+        background: rgba(167, 139, 250, 0.1);
+        color: var(--accent2);
+        border: 1px solid rgba(167, 139, 250, 0.2);
+      }
+      .b-call-booked {
+        background: rgba(251, 146, 60, 0.1);
+        color: var(--accent3);
+        border: 1px solid rgba(251, 146, 60, 0.2);
+      }
+      .b-proposal {
+        background: rgba(74, 222, 128, 0.1);
+        color: var(--accent);
+        border: 1px solid rgba(74, 222, 128, 0.2);
+      }
+      .b-closed {
+        background: rgba(74, 222, 128, 0.2);
+        color: var(--accent);
+        border: 1px solid rgba(74, 222, 128, 0.4);
+      }
+      .b-rejected {
+        background: rgba(248, 113, 113, 0.1);
+        color: var(--red);
+        border: 1px solid rgba(248, 113, 113, 0.2);
+      }
+      .b-followup {
+        background: rgba(251, 191, 36, 0.15);
+        color: var(--yellow);
+        border: 1px solid rgba(251, 191, 36, 0.25);
+      }
+
+      /* CHANNEL TAGS */
+      .ch {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        padding: 2px 7px;
+        border-radius: 4px;
+      }
+      .ch-wa {
+        background: rgba(74, 222, 128, 0.1);
+        color: var(--accent);
+      }
+      .ch-call {
+        background: rgba(56, 189, 248, 0.1);
+        color: var(--blue);
+      }
+      .ch-sms {
+        background: rgba(251, 191, 36, 0.1);
+        color: var(--yellow);
+      }
+      .ch-li {
+        background: rgba(167, 139, 250, 0.1);
+        color: var(--accent2);
+      }
+
+      /* PHONE */
+      .phone-link {
+        color: var(--accent);
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        text-decoration: none;
+      }
+      .phone-link:hover {
+        text-decoration: underline;
+      }
+
+      /* ACTIONS */
+      .actions {
+        display: flex;
+        gap: 6px;
+      }
+
+      /* MODAL */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      .modal {
+        background: var(--bg2);
+        border: 1px solid var(--border2);
+        border-radius: 14px;
+        width: 100%;
+        max-width: 520px;
+        padding: 28px;
+        position: relative;
+      }
+      .modal h2 {
+        font-family: "Syne", sans-serif;
+        font-size: 20px;
+        font-weight: 800;
+        margin-bottom: 20px;
+      }
+      .modal-close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        color: var(--muted2);
+        width: 30px;
+        height: 30px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+      .form-group {
+        margin-bottom: 14px;
+      }
+      .form-group label {
+        display: block;
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--muted2);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 6px;
+      }
+      .form-input,
+      .form-select,
+      .form-textarea {
+        width: 100%;
+        background: var(--bg3);
+        border: 1px solid var(--border2);
+        border-radius: 8px;
+        padding: 9px 12px;
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .form-input:focus,
+      .form-select:focus,
+      .form-textarea:focus {
+        border-color: var(--accent2);
+      }
+      .form-textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+      }
+
+      /* EMPTY STATE */
+      .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+      }
+      .empty-state .empty-icon {
+        font-size: 40px;
+        margin-bottom: 12px;
+      }
+      .empty-state .empty-title {
+        font-family: "Syne", sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .empty-state .empty-sub {
+        color: var(--muted2);
+        font-size: 13px;
+      }
+
+      /* NOTES PREVIEW */
+      .notes-preview {
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        color: var(--muted2);
+        font-size: 12px;
+      }
+
+      /* FOLLOW UP DATE */
+      .followup-date {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+      }
+      .followup-date.overdue {
+        color: var(--red);
+      }
+      .followup-date.today {
+        color: var(--yellow);
+      }
+      .followup-date.upcoming {
+        color: var(--muted2);
+      }
+
+      /* IMPORT AREA */
+      .import-area {
+        border: 2px dashed var(--border2);
+        border-radius: 10px;
+        padding: 24px;
+        text-align: center;
+        color: var(--muted2);
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.15s;
+        margin-bottom: 14px;
+      }
+      .import-area:hover {
+        border-color: var(--accent2);
+        color: var(--text);
+      }
+
+      /* PAGINATION */
+      .pagination {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-top: 1px solid var(--border);
+      }
+      .pagination-info {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--muted2);
+      }
+      .pagination-btns {
+        display: flex;
+        gap: 6px;
+      }
+      .pg-btn {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        color: var(--muted2);
+        padding: 5px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.12s;
+      }
+      .pg-btn:hover {
+        background: var(--bg4);
+        color: var(--text);
+      }
+      .pg-btn.active {
+        background: var(--accent);
+        color: #000;
+        border-color: var(--accent);
+      }
+      .pg-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+      }
+
+      /* TOAST */
+      .toast {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        background: var(--bg4);
+        border: 1px solid var(--border2);
+        border-radius: 10px;
+        padding: 12px 18px;
+        font-size: 13px;
+        z-index: 200;
+        opacity: 0;
+        transform: translateY(8px);
+        transition: all 0.2s;
+        pointer-events: none;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .toast.success {
+        border-color: rgba(74, 222, 128, 0.3);
+      }
+      .toast.error {
+        border-color: rgba(248, 113, 113, 0.3);
+      }
+
+      /* KANBAN VIEW */
+      .kanban {
+        display: none;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+      .kanban.active {
+        display: grid;
+      }
+      .kanban-col {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px;
+        min-height: 300px;
+      }
+      .kanban-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .kanban-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .kanban-count {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--muted2);
+        background: var(--bg3);
+        padding: 2px 8px;
+        border-radius: 10px;
+      }
+      .kanban-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: border-color 0.12s;
+      }
+      .kanban-card:hover {
+        border-color: var(--accent2);
+      }
+      .kanban-card .kc-name {
+        font-weight: 500;
+        font-size: 13px;
+        margin-bottom: 3px;
+      }
+      .kanban-card .kc-company {
+        font-size: 11px;
+        color: var(--muted2);
+      }
+      .kanban-card .kc-phone {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--accent);
+        margin-top: 6px;
+      }
+      .kanban-card .kc-ch {
+        margin-top: 6px;
+      }
+
+      /* VIEW TOGGLE */
+      .view-toggle {
+        display: flex;
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 7px;
+        overflow: hidden;
+      }
+      .view-toggle button {
+        padding: 6px 12px;
+        background: transparent;
+        border: none;
+        color: var(--muted2);
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.12s;
+      }
+      .view-toggle button.active {
+        background: var(--bg4);
+        color: var(--text);
+      }
+
+      .hidden {
+        display: none !important;
+      }
+      .table-view.hidden {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .stats-row {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .kanban {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="logo">
+        <img
+          src="logo.png"
+          alt="Logo"
+          style="
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 10px;
+            margin-top: -2px;
+          "
+        />Xenotrix <span>Lead CRM v1.0</span>
+      </div>
+      <div class="topbar-right">
+        <div class="view-toggle">
+          <button class="active" onclick="switchView('table')" id="btn-table">
+            ☰ Table
+          </button>
+          <button onclick="switchView('kanban')" id="btn-kanban">
+            ⬡ Kanban
+          </button>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="showImportModal()">
+          ↑ Import CSV
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">
+          ↓ Export
+        </button>
+        <button class="btn btn-primary" onclick="showAddModal()">
+          + Add Lead
+        </button>
+        <button
+          class="btn btn-danger btn-sm"
+          onclick="
+            if (confirm('Clear ALL leads?')) {
+              leads = [];
+              save();
+              updateStats();
+              filterLeads();
+            }
+          "
+        >
+          🗑 Clear All
+        </button>
+      </div>
+    </div>
+
+    <!-- CONTAINER -->
+    <div class="container">
+      <!-- STATS -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="s-num" id="stat-total" style="color: var(--text)">0</div>
+          <div class="s-lbl">Total Leads</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-num" id="stat-contacted" style="color: var(--blue)">
+            0
+          </div>
+          <div class="s-lbl">Contacted</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-num" id="stat-replied" style="color: var(--accent2)">
+            0
+          </div>
+          <div class="s-lbl">Replied</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-num" id="stat-calls" style="color: var(--accent3)">
+            0
+          </div>
+          <div class="s-lbl">Calls Booked</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-num" id="stat-closed" style="color: var(--accent)">
+            0
+          </div>
+          <div class="s-lbl">Closed</div>
+        </div>
+        <div class="stat-card">
+          <div class="s-num" id="stat-revenue" style="color: var(--accent)">
+            $0
+          </div>
+          <div class="s-lbl">Revenue</div>
+        </div>
+      </div>
+
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input
+            type="text"
+            class="search-input"
+            id="searchInput"
+            placeholder="Search name, company, phone..."
+            oninput="filterLeads()"
+          />
+        </div>
+        <select class="filter-sel" id="statusFilter" onchange="filterLeads()">
+          <option value="">All Status</option>
+          <option value="New">New</option>
+          <option value="Contacted">Contacted</option>
+          <option value="Replied">Replied</option>
+          <option value="Call Booked">Call Booked</option>
+          <option value="Proposal Sent">Proposal Sent</option>
+          <option value="Closed">Closed</option>
+          <option value="Follow Up">Follow Up</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+        <select class="filter-sel" id="channelFilter" onchange="filterLeads()">
+          <option value="">All Channels</option>
+          <option value="WhatsApp">WhatsApp</option>
+          <option value="Cold Call">Cold Call</option>
+          <option value="SMS">SMS</option>
+          <option value="LinkedIn">LinkedIn</option>
+        </select>
+        <select class="filter-sel" id="bizFilter" onchange="filterLeads()">
+          <option value="">All Business Types</option>
+          <option value="Restaurant">Restaurant</option>
+          <option value="Clinic">Clinic</option>
+          <option value="Lawyer">Lawyer</option>
+          <option value="Real Estate">Real Estate</option>
+          <option value="Gym">Gym</option>
+          <option value="Retail">Retail</option>
+          <option value="Other">Other</option>
+        </select>
+        <span class="records-count" id="recordsCount">0 records</span>
+      </div>
+
+      <!-- TABLE VIEW -->
+      <div class="table-view" id="tableView">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th onclick="sortBy('name')">Name ↕</th>
+                <th onclick="sortBy('company')">Company ↕</th>
+                <th>Phone</th>
+                <th>Business Type</th>
+                <th>Channel</th>
+                <th onclick="sortBy('status')">Status ↕</th>
+                <th>Last Contact</th>
+                <th>Follow Up</th>
+                <th>Deal Value</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="leadsTableBody"></tbody>
+          </table>
+          <div class="pagination" id="paginationBar">
+            <span class="pagination-info" id="paginationInfo"></span>
+            <div class="pagination-btns" id="paginationBtns"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KANBAN VIEW -->
+      <div class="kanban" id="kanbanView">
+        <div class="kanban-col">
+          <div class="kanban-header">
+            <span class="kanban-title" style="color: var(--yellow)"
+              >New / Contacted</span
+            >
+            <span class="kanban-count" id="k-new">0</span>
+          </div>
+          <div id="k-col-new"></div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-header">
+            <span class="kanban-title" style="color: var(--accent2)"
+              >Replied / Call</span
+            >
+            <span class="kanban-count" id="k-replied">0</span>
+          </div>
+          <div id="k-col-replied"></div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-header">
+            <span class="kanban-title" style="color: var(--accent3)"
+              >Proposal Sent</span
+            >
+            <span class="kanban-count" id="k-proposal">0</span>
+          </div>
+          <div id="k-col-proposal"></div>
+        </div>
+        <div class="kanban-col">
+          <div class="kanban-header">
+            <span class="kanban-title" style="color: var(--accent)"
+              >Closed / Won</span
+            >
+            <span class="kanban-count" id="k-closed">0</span>
+          </div>
+          <div id="k-col-closed"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD/EDIT MODAL -->
+    <div class="modal-overlay hidden" id="leadModal">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <h2 id="modalTitle">Add New Lead</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Contact Name *</label>
+            <input class="form-input" id="f-name" placeholder="John Smith" />
+          </div>
+          <div class="form-group">
+            <label>Company Name</label>
+            <input
+              class="form-input"
+              id="f-company"
+              placeholder="Smith & Co."
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input
+              class="form-input"
+              id="f-phone"
+              placeholder="+91 98765 43210"
+            />
+          </div>
+          <div class="form-group">
+            <label>Business Type</label>
+            <select class="form-select" id="f-biztype">
+              <option value="">Select...</option>
+              <option>Restaurant</option>
+              <option>Clinic</option>
+              <option>Lawyer</option>
+              <option>Real Estate</option>
+              <option>Gym</option>
+              <option>Retail</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Status</label>
+            <select class="form-select" id="f-status">
+              <option>New</option>
+              <option>Contacted</option>
+              <option>Replied</option>
+              <option>Call Booked</option>
+              <option>Proposal Sent</option>
+              <option>Closed</option>
+              <option>Follow Up</option>
+              <option>Rejected</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Channel</label>
+            <select class="form-select" id="f-channel">
+              <option value="">Select...</option>
+              <option>WhatsApp</option>
+              <option>Cold Call</option>
+              <option>SMS</option>
+              <option>LinkedIn</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Deal Value ($)</label>
+            <input
+              class="form-input"
+              id="f-value"
+              placeholder="1500"
+              type="number"
+            />
+          </div>
+          <div class="form-group">
+            <label>Follow Up Date</label>
+            <input class="form-input" id="f-followup" type="date" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Website URL</label>
+          <input
+            class="form-input"
+            id="f-website"
+            placeholder="https://theirwebsite.com"
+          />
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea
+            class="form-textarea"
+            id="f-notes"
+            placeholder="Call notes, pain points, what they want..."
+          ></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+          <button class="btn btn-primary" onclick="saveLead()">
+            Save Lead
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPORT MODAL -->
+    <div class="modal-overlay hidden" id="importModal">
+      <div class="modal">
+        <button class="modal-close" onclick="closeImportModal()">✕</button>
+        <h2>Import Leads from CSV</h2>
+        <p style="color: var(--muted2); font-size: 13px; margin-bottom: 16px">
+          CSV columns: name, company, phone, biztype, channel, status, value,
+          followup, website, notes
+        </p>
+        <div
+          class="import-area"
+          onclick="document.getElementById('csvFileInput').click()"
+        >
+          📂 Click to upload CSV file
+          <input
+            type="file"
+            id="csvFileInput"
+            accept=".csv"
+            style="display: none"
+            onchange="importCSV(event)"
+          />
+        </div>
+        <p
+          style="
+            font-family: &quot;DM Mono&quot;, monospace;
+            font-size: 11px;
+            color: var(--muted2);
+            margin-bottom: 12px;
+          "
+        >
+          Or paste CSV data directly:
+        </p>
+        <textarea
+          class="form-textarea"
+          id="csvPasteArea"
+          placeholder="name,company,phone,biztype&#10;John Smith,Smith Clinic,+911234567890,Clinic&#10;..."
+          style="
+            min-height: 120px;
+            font-family: &quot;DM Mono&quot;, monospace;
+            font-size: 12px;
+          "
+        ></textarea>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" onclick="closeImportModal()">
+            Cancel
+          </button>
+          <button class="btn btn-primary" onclick="processCSVPaste()">
+            Import Leads
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+      // ==================== DATA ====================
+      let leads = JSON.parse(localStorage.getItem("xt_leads") || "[]");
+      let editingId = null;
+      let currentPage = 1;
+      const PER_PAGE = 20;
+      let sortField = "name";
+      let sortDir = 1;
+      let filteredLeads = [];
+
+      const STATUS_CLASS = {
+        New: "b-new",
+        Contacted: "b-contacted",
+        Replied: "b-replied",
+        "Call Booked": "b-call-booked",
+        "Proposal Sent": "b-proposal",
+        Closed: "b-closed",
+        Rejected: "b-rejected",
+        "Follow Up": "b-followup",
+      };
+      const CHANNEL_CLASS = {
+        WhatsApp: "ch-wa",
+        "Cold Call": "ch-call",
+        SMS: "ch-sms",
+        LinkedIn: "ch-li",
+      };
+
+      const STATUSES = [
+        "New",
+        "Contacted",
+        "Replied",
+        "Call Booked",
+        "Proposal Sent",
+        "Follow Up",
+        "Closed",
+        "Rejected",
+      ];
+
+      function save() {
+        localStorage.setItem("xt_leads", JSON.stringify(leads));
+      }
+
+      function genId() {
+        return (
+          Date.now().toString(36) + Math.random().toString(36).substr(2, 5)
+        );
+      }
+
+      // ==================== STATS ====================
+      function updateStats() {
+        document.getElementById("stat-total").textContent = leads.length;
+        document.getElementById("stat-contacted").textContent = leads.filter(
+          (l) =>
+            [
+              "Contacted",
+              "Replied",
+              "Call Booked",
+              "Proposal Sent",
+              "Follow Up",
+            ].includes(l.status),
+        ).length;
+        document.getElementById("stat-replied").textContent = leads.filter(
+          (l) => ["Replied", "Call Booked"].includes(l.status),
+        ).length;
+        document.getElementById("stat-calls").textContent = leads.filter(
+          (l) => l.status === "Call Booked",
+        ).length;
+        document.getElementById("stat-closed").textContent = leads.filter(
+          (l) => l.status === "Closed",
+        ).length;
+        const rev = leads
+          .filter((l) => l.status === "Closed" && l.value)
+          .reduce((s, l) => s + parseFloat(l.value || 0), 0);
+        document.getElementById("stat-revenue").textContent =
+          "$" + rev.toLocaleString();
+      }
+
+      // ==================== FILTER + SORT ====================
+      function filterLeads() {
+        const q = document.getElementById("searchInput").value.toLowerCase();
+        const st = document.getElementById("statusFilter").value;
+        const ch = document.getElementById("channelFilter").value;
+        const bz = document.getElementById("bizFilter").value;
+
+        filteredLeads = leads.filter((l) => {
+          const matchQ =
+            !q ||
+            [l.name, l.company, l.phone, l.notes].some((f) =>
+              (f || "").toLowerCase().includes(q),
+            );
+          const matchSt = !st || l.status === st;
+          const matchCh = !ch || l.channel === ch;
+          const matchBz = !bz || l.biztype === bz;
+          return matchQ && matchSt && matchCh && matchBz;
+        });
+
+        filteredLeads.sort((a, b) => {
+          const av = (a[sortField] || "").toString().toLowerCase();
+          const bv = (b[sortField] || "").toString().toLowerCase();
+          return av < bv ? -sortDir : av > bv ? sortDir : 0;
+        });
+
+        currentPage = 1;
+        document.getElementById("recordsCount").textContent =
+          filteredLeads.length + " records";
+        renderTable();
+        renderKanban();
+      }
+
+      function sortBy(field) {
+        if (sortField === field) sortDir *= -1;
+        else {
+          sortField = field;
+          sortDir = 1;
+        }
+        filterLeads();
+      }
+
+      // ==================== TABLE ====================
+      function renderTable() {
+        const tbody = document.getElementById("leadsTableBody");
+        const start = (currentPage - 1) * PER_PAGE;
+        const page = filteredLeads.slice(start, start + PER_PAGE);
+
+        if (filteredLeads.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="11"><div class="empty-state">
+      <div class="empty-icon">📋</div>
+      <div class="empty-title">No leads found</div>
+      <div class="empty-sub">Add your first lead or adjust filters</div>
+    </div></td></tr>`;
+          document.getElementById("paginationBar").style.display = "none";
+          return;
+        }
+
+        document.getElementById("paginationBar").style.display = "flex";
+        tbody.innerHTML = page
+          .map((l) => {
+            const fuDate = l.followup ? new Date(l.followup) : null;
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            let fuClass = "upcoming",
+              fuLabel = l.followup || "—";
+            if (fuDate) {
+              if (fuDate < today) fuClass = "overdue";
+              else if (fuDate.toDateString() === today.toDateString()) {
+                fuClass = "today";
+                fuLabel = "TODAY";
+              } else fuLabel = l.followup;
+            }
+            const statusStatuses = STATUSES.map(
+              (s) =>
+                `<option value="${s}"${l.status === s ? " selected" : ""}>${s}</option>`,
+            ).join("");
+            return `<tr>
+      <td><strong>${l.name || "—"}</strong></td>
+      <td>${l.company || "—"}</td>
+      <td><a href="tel:${l.phone}" class="phone-link">${l.phone || "—"}</a></td>
+      <td>${l.biztype || "—"}</td>
+      <td>${l.channel ? `<span class="ch ${CHANNEL_CLASS[l.channel] || ""}">${l.channel}</span>` : "—"}</td>
+      <td>
+        <select class="badge ${STATUS_CLASS[l.status] || "b-new"}" onchange="quickStatus('${l.id}', this.value)" title="Click to change status">
+          ${statusStatuses}
+        </select>
+      </td>
+      <td style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted2)">${l.lastContact || "—"}</td>
+      <td><span class="followup-date ${fuClass}">${fuLabel}</span></td>
+      <td style="font-family:'DM Mono',monospace;font-size:12px;color:var(--accent)">${l.value ? "$" + parseFloat(l.value).toLocaleString() : "—"}</td>
+      <td><div class="notes-preview" title="${(l.notes || "").replace(/"/g, "&quot;")}">${l.notes || "—"}</div></td>
+      <td>
+        <div class="actions">
+          ${l.phone ? `<a href="https://wa.me/${l.phone.replace(/\D/g, "")}" target="_blank"><button class="btn btn-ghost btn-sm" title="Open WhatsApp">💬</button></a>` : ""}
+          <button class="btn btn-ghost btn-sm" onclick="editLead('${l.id}')" title="Edit">✏️</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteLead('${l.id}')" title="Delete">✕</button>
+        </div>
+      </td>
+    </tr>`;
+          })
+          .join("");
+
+        renderPagination();
+      }
+
+      function renderPagination() {
+        const total = filteredLeads.length;
+        const pages = Math.ceil(total / PER_PAGE);
+        const start = (currentPage - 1) * PER_PAGE + 1;
+        const end = Math.min(currentPage * PER_PAGE, total);
+        document.getElementById("paginationInfo").textContent =
+          `Showing ${start}–${end} of ${total}`;
+
+        const btns = document.getElementById("paginationBtns");
+        let html = `<button class="pg-btn" onclick="goPage(${currentPage - 1})" ${currentPage <= 1 ? "disabled" : ""}>← Prev</button>`;
+        for (let i = 1; i <= Math.min(pages, 7); i++) {
+          html += `<button class="pg-btn ${i === currentPage ? "active" : ""}" onclick="goPage(${i})">${i}</button>`;
+        }
+        if (pages > 7)
+          html += `<span style="color:var(--muted2);font-size:12px;padding:4px">...</span><button class="pg-btn ${pages === currentPage ? "active" : ""}" onclick="goPage(${pages})">${pages}</button>`;
+        html += `<button class="pg-btn" onclick="goPage(${currentPage + 1})" ${currentPage >= pages ? "disabled" : ""}>Next →</button>`;
+        btns.innerHTML = html;
+      }
+
+      function goPage(p) {
+        const pages = Math.ceil(filteredLeads.length / PER_PAGE);
+        if (p < 1 || p > pages) return;
+        currentPage = p;
+        renderTable();
+      }
+
+      // ==================== KANBAN ====================
+      function renderKanban() {
+        const groups = {
+          new: leads.filter((l) => ["New", "Contacted"].includes(l.status)),
+          replied: leads.filter((l) =>
+            ["Replied", "Call Booked"].includes(l.status),
+          ),
+          proposal: leads.filter((l) => l.status === "Proposal Sent"),
+          closed: leads.filter((l) => l.status === "Closed"),
+        };
+        for (const [key, group] of Object.entries(groups)) {
+          const col = document.getElementById(`k-col-${key}`);
+          const count = document.getElementById(`k-${key}`);
+          count.textContent = group.length;
+          col.innerHTML =
+            group
+              .map(
+                (l) => `<div class="kanban-card" onclick="editLead('${l.id}')">
+      <div class="kc-name">${l.name || "Unknown"}</div>
+      <div class="kc-company">${l.company || ""}</div>
+      <div class="kc-phone">${l.phone || ""}</div>
+      <div class="kc-ch">${l.channel ? `<span class="ch ${CHANNEL_CLASS[l.channel] || ""}">${l.channel}</span>` : ""} ${l.value ? `<span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--accent);margin-left:4px">$${parseFloat(l.value).toLocaleString()}</span>` : ""}</div>
+    </div>`,
+              )
+              .join("") ||
+            '<div style="color:var(--muted2);font-size:12px;text-align:center;padding:20px">Empty</div>';
+        }
+      }
+
+      // ==================== QUICK STATUS ====================
+      function quickStatus(id, newStatus) {
+        const lead = leads.find((l) => l.id === id);
+        if (lead) {
+          lead.status = newStatus;
+          lead.lastContact = new Date().toISOString().split("T")[0];
+          save();
+          updateStats();
+          filterLeads();
+          showToast(`Status updated to "${newStatus}"`, "success");
+        }
+      }
+
+      // ==================== CRUD ====================
+      function showAddModal() {
+        editingId = null;
+        document.getElementById("modalTitle").textContent = "Add New Lead";
+        [
+          "name",
+          "company",
+          "phone",
+          "biztype",
+          "channel",
+          "status",
+          "value",
+          "followup",
+          "website",
+          "notes",
+        ].forEach((f) => {
+          const el = document.getElementById("f-" + f);
+          if (el) el.value = f === "status" ? "New" : "";
+        });
+        document.getElementById("leadModal").classList.remove("hidden");
+      }
+
+      function editLead(id) {
+        editingId = id;
+        const l = leads.find((l) => l.id === id);
+        if (!l) return;
+        document.getElementById("modalTitle").textContent = "Edit Lead";
+        document.getElementById("f-name").value = l.name || "";
+        document.getElementById("f-company").value = l.company || "";
+        document.getElementById("f-phone").value = l.phone || "";
+        document.getElementById("f-biztype").value = l.biztype || "";
+        document.getElementById("f-channel").value = l.channel || "";
+        document.getElementById("f-status").value = l.status || "New";
+        document.getElementById("f-value").value = l.value || "";
+        document.getElementById("f-followup").value = l.followup || "";
+        document.getElementById("f-website").value = l.website || "";
+        document.getElementById("f-notes").value = l.notes || "";
+        document.getElementById("leadModal").classList.remove("hidden");
+      }
+
+      function saveLead() {
+        const name = document.getElementById("f-name").value.trim();
+        const phone = document.getElementById("f-phone").value.trim();
+        if (!name || !phone) {
+          showToast("Name and phone are required", "error");
+          return;
+        }
+        const data = {
+          id: editingId || genId(),
+          name,
+          phone,
+          company: document.getElementById("f-company").value.trim(),
+          biztype: document.getElementById("f-biztype").value,
+          channel: document.getElementById("f-channel").value,
+          status: document.getElementById("f-status").value,
+          value: document.getElementById("f-value").value,
+          followup: document.getElementById("f-followup").value,
+          website: document.getElementById("f-website").value.trim(),
+          notes: document.getElementById("f-notes").value.trim(),
+          lastContact: new Date().toISOString().split("T")[0],
+          createdAt: editingId
+            ? (leads.find((l) => l.id === editingId) || {}).createdAt ||
+              new Date().toISOString()
+            : new Date().toISOString(),
+        };
+        if (editingId) {
+          const idx = leads.findIndex((l) => l.id === editingId);
+          if (idx > -1) leads[idx] = data;
+        } else {
+          leads.unshift(data);
+        }
+        save();
+        closeModal();
+        updateStats();
+        filterLeads();
+        showToast(editingId ? "Lead updated!" : "Lead added!", "success");
+      }
+
+      function deleteLead(id) {
+        if (!confirm("Delete this lead?")) return;
+        leads = leads.filter((l) => l.id !== id);
+        save();
+        updateStats();
+        filterLeads();
+        showToast("Lead deleted", "error");
+      }
+
+      function closeModal() {
+        document.getElementById("leadModal").classList.add("hidden");
+      }
+
+      // ==================== IMPORT / EXPORT ====================
+      function showImportModal() {
+        document.getElementById("importModal").classList.remove("hidden");
+      }
+      function closeImportModal() {
+        document.getElementById("importModal").classList.add("hidden");
+      }
+
+      function importCSV(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          parseAndImport(e.target.result);
+        };
+        reader.readAsText(file);
+      }
+
+      function processCSVPaste() {
+        const txt = document.getElementById("csvPasteArea").value.trim();
+        if (txt) parseAndImport(txt);
+      }
+
+      function parseAndImport(text) {
+        const lines = text.trim().split("\n");
+        const headers = lines[0]
+          .toLowerCase()
+          .split(",")
+          .map((h) => h.trim().replace(/"/g, ""));
+        const fieldMap = {
+          name: 0,
+          company: 0,
+          phone: 0,
+          biztype: 0,
+          channel: 0,
+          status: 0,
+          value: 0,
+          followup: 0,
+          website: 0,
+          notes: 0,
+        };
+        headers.forEach((h, i) => {
+          if (h in fieldMap) fieldMap[h] = i;
+        });
+
+        let count = 0;
+        for (let i = 1; i < lines.length; i++) {
+          const cols = lines[i]
+            .split(",")
+            .map((c) => c.trim().replace(/^"|"$/g, ""));
+          const phone = cols[fieldMap.phone] || "";
+          if (!phone) continue;
+          leads.push({
+            id: genId(),
+            name: cols[fieldMap.name] || "Unknown",
+            company: cols[fieldMap.company] || "",
+            phone,
+            biztype: cols[fieldMap.biztype] || "",
+            channel: cols[fieldMap.channel] || "",
+            status: cols[fieldMap.status] || "New",
+            value: cols[fieldMap.value] || "",
+            followup: cols[fieldMap.followup] || "",
+            website: cols[fieldMap.website] || "",
+            notes: cols[fieldMap.notes] || "",
+            lastContact: "",
+            createdAt: new Date().toISOString(),
+          });
+          count++;
+        }
+        save();
+        closeImportModal();
+        updateStats();
+        filterLeads();
+        showToast(`Imported ${count} leads!`, "success");
+      }
+
+      function exportCSV() {
+        const headers = [
+          "name",
+          "company",
+          "phone",
+          "biztype",
+          "channel",
+          "status",
+          "value",
+          "followup",
+          "website",
+          "notes",
+          "lastContact",
+        ];
+        const rows = [
+          headers.join(","),
+          ...leads.map((l) =>
+            headers
+              .map((h) => `"${(l[h] || "").toString().replace(/"/g, '""')}"`)
+              .join(","),
+          ),
+        ];
+        const blob = new Blob([rows.join("\n")], { type: "text/csv" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `xenotrix-leads-${new Date().toISOString().split("T")[0]}.csv`;
+        a.click();
+        showToast("CSV exported!", "success");
+      }
+
+      // ==================== VIEW SWITCH ====================
+      function switchView(v) {
+        document
+          .getElementById("tableView")
+          .classList.toggle("hidden", v !== "table");
+        document
+          .getElementById("kanbanView")
+          .classList.toggle("active", v === "kanban");
+        document
+          .getElementById("btn-table")
+          .classList.toggle("active", v === "table");
+        document
+          .getElementById("btn-kanban")
+          .classList.toggle("active", v === "kanban");
+      }
+
+      // ==================== TOAST ====================
+      function showToast(msg, type = "success") {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.className = `toast show ${type}`;
+        setTimeout(() => (t.className = "toast"), 2500);
+      }
+
+      // ==================== SAMPLE DATA ====================
+      function loadSampleData() {
+        if (leads.length > 0) return;
+        const samples = [
+          {
+            name: "Rajesh Kumar",
+            company: "Spice Garden Restaurant",
+            phone: "+91 98765 43210",
+            biztype: "Restaurant",
+            channel: "WhatsApp",
+            status: "Contacted",
+            value: "1500",
+            followup: new Date(Date.now() + 86400000)
+              .toISOString()
+              .split("T")[0],
+            notes:
+              "Website very old, no mobile version. Interested in redesign.",
+          },
+          {
+            name: "Dr. Priya Sharma",
+            company: "Sharma Clinic",
+            phone: "+91 87654 32109",
+            biztype: "Clinic",
+            channel: "Cold Call",
+            status: "Call Booked",
+            value: "2500",
+            followup: new Date(Date.now() + 172800000)
+              .toISOString()
+              .split("T")[0],
+            notes:
+              "Needs appointment booking system + new website. Good budget.",
+          },
+          {
+            name: "Amit Verma",
+            company: "Verma Law Associates",
+            phone: "+91 76543 21098",
+            biztype: "Lawyer",
+            channel: "WhatsApp",
+            status: "Replied",
+            value: "2000",
+            followup: new Date().toISOString().split("T")[0],
+            notes:
+              "Asked for portfolio. Send 2 examples of professional sites.",
+          },
+          {
+            name: "Sunita Patel",
+            company: "FitLife Gym",
+            phone: "+91 65432 10987",
+            biztype: "Gym",
+            channel: "WhatsApp",
+            status: "New",
+            value: "",
+            followup: "",
+            notes: "",
+          },
+          {
+            name: "Vikram Singh",
+            company: "Singh Properties",
+            phone: "+91 54321 09876",
+            biztype: "Real Estate",
+            channel: "SMS",
+            status: "Proposal Sent",
+            value: "3500",
+            followup: new Date(Date.now() + 259200000)
+              .toISOString()
+              .split("T")[0],
+            notes:
+              "Wants property listing site with search filters. Sent full proposal.",
+          },
+          {
+            name: "Neha Gupta",
+            company: "Gupta Sweets",
+            phone: "+91 43210 98765",
+            biztype: "Retail",
+            channel: "WhatsApp",
+            status: "Closed",
+            value: "1200",
+            followup: "",
+            notes:
+              "Delivered landing page. Happy client. Asked for maintenance plan.",
+          },
+        ];
+        samples.forEach((s) =>
+          leads.push({
+            id: genId(),
+            ...s,
+            lastContact: new Date().toISOString().split("T")[0],
+            createdAt: new Date().toISOString(),
+          }),
+        );
+        save();
+      }
+
+      // ==================== INIT ====================
+      loadSampleData();
+      filterLeads();
+      updateStats();
+    </script>
+  </body>
+</html>

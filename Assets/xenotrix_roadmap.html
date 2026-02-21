@@ -1,0 +1,1828 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xenotrix — Agency Roadmap & Execution Plan</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0a0f;
+        --bg2: #111118;
+        --bg3: #16161f;
+        --border: #1e1e2e;
+        --accent: #6ee7b7;
+        --accent2: #818cf8;
+        --accent3: #f472b6;
+        --warn: #fbbf24;
+        --text: #e2e8f0;
+        --muted: #64748b;
+        --red: #f87171;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      /* PRINT */
+      @media print {
+        .sidebar {
+          display: none;
+        }
+        .main {
+          margin-left: 0;
+        }
+        body {
+          background: white;
+          color: #111;
+        }
+        .phase-card,
+        .card,
+        .tool-box {
+          border: 1px solid #ddd;
+          background: #f9f9f9;
+        }
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 220px;
+        background: var(--bg2);
+        border-right: 1px solid var(--border);
+        padding: 24px 16px;
+        overflow-y: auto;
+        z-index: 100;
+      }
+      .sidebar-logo {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 20px;
+        color: var(--accent);
+        letter-spacing: -0.5px;
+        margin-bottom: 32px;
+        display: block;
+      }
+      .sidebar-logo span {
+        color: var(--muted);
+        font-weight: 400;
+        font-size: 11px;
+        display: block;
+      }
+      .sidebar nav a {
+        display: block;
+        padding: 7px 12px;
+        margin-bottom: 2px;
+        border-radius: 6px;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 12px;
+        font-family: "DM Mono", monospace;
+        transition: all 0.15s;
+      }
+      .sidebar nav a:hover {
+        background: var(--bg3);
+        color: var(--accent);
+      }
+      .sidebar nav .section-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #2e2e42;
+        padding: 14px 12px 4px;
+        font-family: "DM Mono", monospace;
+      }
+
+      /* MAIN */
+      .main {
+        margin-left: 220px;
+        max-width: 960px;
+        padding: 60px 48px;
+      }
+
+      /* HERO */
+      .hero {
+        padding: 60px 0 48px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 60px;
+      }
+      .hero-tag {
+        display: inline-block;
+        background: rgba(110, 231, 183, 0.08);
+        border: 1px solid rgba(110, 231, 183, 0.2);
+        color: var(--accent);
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        padding: 4px 12px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+      }
+      .hero h1 {
+        font-family: "Syne", sans-serif;
+        font-size: 52px;
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -2px;
+        margin-bottom: 16px;
+      }
+      .hero h1 span {
+        color: var(--accent);
+      }
+      .hero p {
+        color: var(--muted);
+        font-size: 17px;
+        max-width: 580px;
+      }
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-top: 40px;
+      }
+      .stat-box {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 20px;
+      }
+      .stat-box .num {
+        font-family: "Syne", sans-serif;
+        font-size: 28px;
+        font-weight: 800;
+        color: var(--accent);
+      }
+      .stat-box .lbl {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+        font-family: "DM Mono", monospace;
+      }
+
+      /* SECTION HEADERS */
+      .section {
+        margin-bottom: 64px;
+      }
+      .section-num {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--accent2);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      h2 {
+        font-family: "Syne", sans-serif;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 24px;
+      }
+      h3 {
+        font-family: "Syne", sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--text);
+      }
+
+      /* PHASE CARDS */
+      .phase-grid {
+        display: grid;
+        gap: 20px;
+      }
+      .phase-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 28px;
+        position: relative;
+        overflow: hidden;
+      }
+      .phase-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+      }
+      .phase-card.p1::before {
+        background: var(--accent);
+      }
+      .phase-card.p2::before {
+        background: var(--accent2);
+      }
+      .phase-card.p3::before {
+        background: var(--warn);
+      }
+      .phase-card.p4::before {
+        background: var(--accent3);
+      }
+      .phase-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 16px;
+      }
+      .phase-badge {
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        padding: 3px 10px;
+        border-radius: 20px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+      .badge-green {
+        background: rgba(110, 231, 183, 0.1);
+        color: var(--accent);
+        border: 1px solid rgba(110, 231, 183, 0.2);
+      }
+      .badge-purple {
+        background: rgba(129, 140, 248, 0.1);
+        color: var(--accent2);
+        border: 1px solid rgba(129, 140, 248, 0.2);
+      }
+      .badge-yellow {
+        background: rgba(251, 191, 36, 0.1);
+        color: var(--warn);
+        border: 1px solid rgba(251, 191, 36, 0.2);
+      }
+      .badge-pink {
+        background: rgba(244, 114, 182, 0.1);
+        color: var(--accent3);
+        border: 1px solid rgba(244, 114, 182, 0.2);
+      }
+      .target-rev {
+        font-family: "Syne", sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--accent);
+      }
+      .phase-body ul {
+        list-style: none;
+      }
+      .phase-body ul li {
+        padding: 8px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      .phase-body ul li:last-child {
+        border-bottom: none;
+      }
+      .phase-body ul li::before {
+        content: "→";
+        color: var(--accent);
+        font-family: "DM Mono", monospace;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .week-tag {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+        font-family: "DM Mono", monospace;
+        font-size: 10px;
+        padding: 2px 6px;
+        color: var(--muted);
+        margin-left: auto;
+        flex-shrink: 0;
+      }
+
+      /* TWO COL */
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      /* CARDS */
+      .card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 24px;
+      }
+      .card h3 {
+        font-size: 16px;
+        margin-bottom: 12px;
+      }
+
+      /* TOOL BOXES */
+      .tool-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+      }
+      .tool-box {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 18px;
+      }
+      .tool-box .tool-name {
+        font-family: "DM Mono", monospace;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--accent);
+        margin-bottom: 4px;
+      }
+      .tool-box .tool-use {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .tool-box .tool-tag {
+        display: inline-block;
+        margin-top: 8px;
+        font-size: 10px;
+        font-family: "DM Mono", monospace;
+        padding: 2px 8px;
+        border-radius: 10px;
+        background: rgba(110, 231, 183, 0.08);
+        color: var(--accent);
+        border: 1px solid rgba(110, 231, 183, 0.15);
+      }
+
+      /* SCRIPT BOX */
+      .script-box {
+        background: #0d1117;
+        border: 1px solid #21262d;
+        border-radius: 10px;
+        padding: 20px 24px;
+        font-family: "DM Mono", monospace;
+        font-size: 13px;
+        line-height: 1.8;
+        color: #c9d1d9;
+        position: relative;
+        margin: 16px 0;
+        white-space: pre-wrap;
+      }
+      .script-box::before {
+        content: attr(data-label);
+        position: absolute;
+        top: -10px;
+        left: 16px;
+        background: #0d1117;
+        padding: 0 8px;
+        font-size: 10px;
+        color: var(--muted);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        border: 1px solid #21262d;
+        border-radius: 4px;
+      }
+      .script-box .hl {
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .script-box .var {
+        color: var(--accent2);
+      }
+
+      /* TIMELINE */
+      .timeline {
+        position: relative;
+        padding-left: 28px;
+      }
+      .timeline::before {
+        content: "";
+        position: absolute;
+        left: 8px;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        background: linear-gradient(
+          to bottom,
+          var(--accent),
+          var(--accent2),
+          var(--accent3)
+        );
+        border-radius: 2px;
+      }
+      .timeline-item {
+        position: relative;
+        margin-bottom: 28px;
+      }
+      .timeline-item::before {
+        content: "";
+        position: absolute;
+        left: -24px;
+        top: 6px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        border: 2px solid var(--bg);
+      }
+      .timeline-item .tl-time {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--accent);
+        margin-bottom: 4px;
+      }
+      .timeline-item .tl-title {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+      }
+      .timeline-item .tl-desc {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      /* KPI TABLE */
+      .kpi-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .kpi-table th {
+        text-align: left;
+        padding: 10px 14px;
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px solid var(--border);
+      }
+      .kpi-table td {
+        padding: 12px 14px;
+        font-size: 13px;
+        border-bottom: 1px solid var(--border);
+      }
+      .kpi-table tr:last-child td {
+        border-bottom: none;
+      }
+      .kpi-table .val {
+        font-family: "DM Mono", monospace;
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .kpi-table .status-ok {
+        color: var(--accent);
+      }
+      .kpi-table .status-warn {
+        color: var(--warn);
+      }
+
+      /* AGENT GRID */
+      .agent-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .agent-card {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 20px;
+      }
+      .agent-card .agent-role {
+        font-family: "Syne", sans-serif;
+        font-weight: 700;
+        font-size: 15px;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .agent-icon {
+        font-size: 18px;
+      }
+      .agent-card .agent-tool {
+        font-family: "DM Mono", monospace;
+        font-size: 11px;
+        color: var(--accent2);
+        margin-bottom: 8px;
+      }
+      .agent-card .agent-desc {
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      /* CALLOUT */
+      .callout {
+        border-left: 3px solid var(--accent);
+        background: rgba(110, 231, 183, 0.04);
+        border-radius: 0 8px 8px 0;
+        padding: 16px 20px;
+        margin: 20px 0;
+        font-size: 14px;
+      }
+      .callout.warn {
+        border-color: var(--warn);
+        background: rgba(251, 191, 36, 0.04);
+      }
+      .callout.purple {
+        border-color: var(--accent2);
+        background: rgba(129, 140, 248, 0.04);
+      }
+      .callout strong {
+        display: block;
+        margin-bottom: 4px;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--accent);
+        font-family: "DM Mono", monospace;
+      }
+      .callout.warn strong {
+        color: var(--warn);
+      }
+      .callout.purple strong {
+        color: var(--accent2);
+      }
+
+      /* FOOTER */
+      footer {
+        margin-top: 80px;
+        padding: 40px 0;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      footer span {
+        color: var(--accent);
+      }
+
+      /* SCROLLBAR */
+      ::-webkit-scrollbar {
+        width: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 3px;
+      }
+
+      @media (max-width: 900px) {
+        .sidebar {
+          display: none;
+        }
+        .main {
+          margin-left: 0;
+          padding: 24px 20px;
+        }
+        .hero h1 {
+          font-size: 36px;
+        }
+        .hero-stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .two-col {
+          grid-template-columns: 1fr;
+        }
+        .tool-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .agent-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <span class="sidebar-logo">
+        <img
+          src="logo.png"
+          alt="Logo"
+          style="
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 8px;
+            margin-top: -2px;
+          "
+        />Xenotrix<span>Agency Operating System</span>
+      </span>
+      <nav>
+        <div class="section-label">Overview</div>
+        <a href="javascript:void(0)" onclick="scrollToSection('overview')"
+          >Mission & Metrics</a
+        >
+        <a href="javascript:void(0)" onclick="scrollToSection('reality')"
+          >Current Reality</a
+        >
+        <div class="section-label">Strategy</div>
+        <a href="javascript:void(0)" onclick="scrollToSection('phone-strategy')"
+          >Phone Strategy</a
+        >
+        <a href="javascript:void(0)" onclick="scrollToSection('agent-team')"
+          >AI Agent Team</a
+        >
+        <a href="javascript:void(0)" onclick="scrollToSection('outreach')"
+          >Outreach Scripts</a
+        >
+        <div class="section-label">Roadmap</div>
+        <a href="javascript:void(0)" onclick="scrollToSection('phase1')"
+          >Phase 1 — Foundation</a
+        >
+        <a href="javascript:void(0)" onclick="scrollToSection('phase2')"
+          >Phase 2 — First Clients</a
+        >
+        <a href="javascript:void(0)" onclick="scrollToSection('phase3')"
+          >Phase 3 — Scale</a
+        >
+        <a href="javascript:void(0)" onclick="scrollToSection('phase4')"
+          >Phase 4 — Expansion</a
+        >
+        <div class="section-label">Execution</div>
+        <a href="javascript:void(0)" onclick="scrollToSection('tools')"
+          >Free Tool Stack</a
+        >
+        <a href="javascript:void(0)" onclick="scrollToSection('funnel')"
+          >Sales Funnel</a
+        >
+        <a href="javascript:void(0)" onclick="scrollToSection('daily')"
+          >Daily Ops</a
+        >
+        <a href="javascript:void(0)" onclick="scrollToSection('kpis')"
+          >KPI Targets</a
+        >
+      </nav>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- HERO -->
+      <div class="hero" id="overview">
+        <div class="hero-tag">XENOTRIX · AGENCY OS · 2025</div>
+        <h1>Zero Budget.<br /><span>$50K Revenue.</span><br />2 People.</h1>
+        <p>
+          A complete execution playbook for building Xenotrix from scratch —
+          using phone numbers, AI agents, and pure system thinking. No fluff. No
+          budget. No waiting.
+        </p>
+        <div class="hero-stats">
+          <div class="stat-box">
+            <div class="num">$50K</div>
+            <div class="lbl">Annual Target</div>
+          </div>
+          <div class="stat-box">
+            <div class="num">2500+</div>
+            <div class="lbl">Phone Leads</div>
+          </div>
+          <div class="stat-box">
+            <div class="num">$0</div>
+            <div class="lbl">Initial Budget</div>
+          </div>
+          <div class="stat-box">
+            <div class="num">7 Days</div>
+            <div class="lbl">Delivery Promise</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REALITY CHECK -->
+      <section class="section" id="reality">
+        <div class="section-num">00 — CURRENT STATE</div>
+        <h2>Where You Are Right Now</h2>
+        <div class="two-col">
+          <div class="card">
+            <h3>✅ What You Have</h3>
+            <ul style="list-style: none">
+              <li
+                style="
+                  padding: 6px 0;
+                  border-bottom: 1px solid var(--border);
+                  font-size: 14px;
+                "
+              >
+                → 2 skilled developers (FE + BE)
+              </li>
+              <li
+                style="
+                  padding: 6px 0;
+                  border-bottom: 1px solid var(--border);
+                  font-size: 14px;
+                "
+              >
+                → xenotrix.com (live website)
+              </li>
+              <li
+                style="
+                  padding: 6px 0;
+                  border-bottom: 1px solid var(--border);
+                  font-size: 14px;
+                "
+              >
+                → 2500+ scraped leads with phone numbers
+              </li>
+              <li
+                style="
+                  padding: 6px 0;
+                  border-bottom: 1px solid var(--border);
+                  font-size: 14px;
+                "
+              >
+                → Clear service offerings defined
+              </li>
+              <li style="padding: 6px 0; font-size: 14px">
+                → Strategy and ambition
+              </li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>❌ What You Lack</h3>
+            <ul style="list-style: none">
+              <li
+                style="
+                  padding: 6px 0;
+                  border-bottom: 1px solid var(--border);
+                  font-size: 14px;
+                "
+              >
+                → Zero clients
+              </li>
+              <li
+                style="
+                  padding: 6px 0;
+                  border-bottom: 1px solid var(--border);
+                  font-size: 14px;
+                "
+              >
+                → Zero budget
+              </li>
+              <li
+                style="
+                  padding: 6px 0;
+                  border-bottom: 1px solid var(--border);
+                  font-size: 14px;
+                "
+              >
+                → No email addresses in lead data
+              </li>
+              <li
+                style="
+                  padding: 6px 0;
+                  border-bottom: 1px solid var(--border);
+                  font-size: 14px;
+                "
+              >
+                → No social proof / portfolio
+              </li>
+              <li style="padding: 6px 0; font-size: 14px">
+                → No sales process built yet
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout warn" style="margin-top: 20px">
+          <strong>Critical Insight</strong>
+          You have phone numbers, not emails. This is NOT a disadvantage —
+          WhatsApp + cold calling converts 3–5x better than cold email when done
+          right. Most agencies ignore the phone. You won't.
+        </div>
+      </section>
+
+      <!-- PHONE STRATEGY -->
+      <section class="section" id="phone-strategy">
+        <div class="section-num">01 — CORE STRATEGY</div>
+        <h2>Phone-First Outreach System</h2>
+        <p style="color: var(--muted); margin-bottom: 28px">
+          Since you have phone numbers — not emails — your primary channels are
+          WhatsApp Business, cold calling, and SMS. Here's how to work each.
+        </p>
+
+        <div class="phase-grid">
+          <div class="phase-card p1">
+            <div class="phase-header">
+              <div>
+                <h3>Channel 1: WhatsApp Business</h3>
+                <p style="color: var(--muted); font-size: 13px">
+                  Highest open rate of any channel. 90%+ reads within 3 minutes.
+                </p>
+              </div>
+              <span class="phase-badge badge-green">PRIMARY</span>
+            </div>
+            <div class="phase-body">
+              <ul>
+                <li>
+                  Set up WhatsApp Business account with Xenotrix branding,
+                  xenotrix.com link, and service catalog
+                </li>
+                <li>
+                  Use WhatsApp Web to batch-send messages — 50–80 contacts per
+                  day manually (free)
+                </li>
+                <li>
+                  Set auto-reply: "Thanks for replying! Book a free call:
+                  xenotrix.com/book"
+                </li>
+                <li>
+                  Use WATI free trial (3 days) or WA-Automate self-hosted for
+                  automation
+                </li>
+                <li>
+                  Create message templates: Website Audit, Free Landing Page
+                  Offer, Speed Fix
+                </li>
+                <li>
+                  Follow up every non-reply after 48 hours with a different
+                  message angle
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="phase-card p2">
+            <div class="phase-header">
+              <div>
+                <h3>Channel 2: Cold Calling</h3>
+                <p style="color: var(--muted); font-size: 13px">
+                  Fastest path to a decision. One call can close a deal same
+                  day.
+                </p>
+              </div>
+              <span class="phase-badge badge-purple">HIGH IMPACT</span>
+            </div>
+            <div class="phase-body">
+              <ul>
+                <li>
+                  Call 20–30 prospects per day minimum. Takes about 2 hours
+                  total.
+                </li>
+                <li>
+                  Target: local B2B businesses — restaurants, clinics, lawyers,
+                  real estate, gyms
+                </li>
+                <li>
+                  Use the "10-second hook" script: state problem you solve
+                  before pitching anything
+                </li>
+                <li>
+                  Goal of call: NOT to sell. Goal is to book a 15-min Zoom/Meet
+                  call
+                </li>
+                <li>
+                  Track every call in your CRM dashboard: Answered / Voicemail /
+                  Interested / Rejected
+                </li>
+                <li>
+                  Callback rate is 15–20% — follow up every lead that didn't
+                  answer
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="phase-card p3">
+            <div class="phase-header">
+              <div>
+                <h3>Channel 3: SMS Outreach</h3>
+                <p style="color: var(--muted); font-size: 13px">
+                  Short, direct, no fluff. Works when WhatsApp doesn't deliver.
+                </p>
+              </div>
+              <span class="phase-badge badge-yellow">SECONDARY</span>
+            </div>
+            <div class="phase-body">
+              <ul>
+                <li>
+                  Use TextBelt (free tier: 1/day) or Textbee (open-source
+                  self-hosted) for batch SMS
+                </li>
+                <li>Keep SMS under 160 characters. One clear CTA only.</li>
+                <li>
+                  Template: "Hi [Name], I help [business type] get more clients
+                  with fast websites. Free audit? Reply YES. — Xenotrix"
+                </li>
+                <li>
+                  Send SMS only to leads that didn't respond to WhatsApp after
+                  72 hours
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="phase-card p4">
+            <div class="phase-header">
+              <div>
+                <h3>Channel 4: Find Their Emails</h3>
+                <p style="color: var(--muted); font-size: 13px">
+                  Phone numbers → find emails for multi-channel attack.
+                </p>
+              </div>
+              <span class="phase-badge badge-pink">ENRICHMENT</span>
+            </div>
+            <div class="phase-body">
+              <ul>
+                <li>
+                  Use Hunter.io free (25/month): paste company domain → get
+                  email
+                </li>
+                <li>
+                  Use Apollo.io free (50 exports/month): search company → find
+                  contact emails
+                </li>
+                <li>
+                  Use LinkedIn: search company name → message on LinkedIn for
+                  free (50/week)
+                </li>
+                <li>
+                  Manual lookup: visit their website → look for Contact/Team
+                  page
+                </li>
+                <li>
+                  Enrich 10–20 top prospects per day to build an email list
+                  alongside phone list
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI AGENT TEAM -->
+      <section class="section" id="agent-team">
+        <div class="section-num">02 — AI AGENT TEAM</div>
+        <h2>Your Virtual 10-Person Team</h2>
+        <p style="color: var(--muted); margin-bottom: 28px">
+          You are 2 people. But you operate like 10 using AI agents. Here is
+          every role, the tool that fills it, and exactly how to use it.
+        </p>
+
+        <div class="agent-grid">
+          <div class="agent-card">
+            <div class="agent-role">
+              <span class="agent-icon">🔍</span> Lead Researcher
+            </div>
+            <div class="agent-tool">Tool: ChatGPT + Apollo Free + Google</div>
+            <div class="agent-desc">
+              Prompt ChatGPT: "Give me 20 questions to ask a restaurant owner
+              about their website problems." Use Apollo to enrich leads with
+              emails. Google "best restaurants in [city] no website" to find
+              fresh prospects daily.
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-role">
+              <span class="agent-icon">✍️</span> Copywriter
+            </div>
+            <div class="agent-tool">Tool: Claude.ai / ChatGPT Free</div>
+            <div class="agent-desc">
+              Generate all WhatsApp scripts, cold call openers, proposal copy,
+              and follow-up messages. Prompt: "Write a 3-touch WhatsApp sequence
+              for a web agency targeting local gyms." Never write outreach copy
+              manually.
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-role">
+              <span class="agent-icon">📋</span> Proposal Writer
+            </div>
+            <div class="agent-tool">Tool: Claude.ai + PDF Template</div>
+            <div class="agent-desc">
+              After every discovery call, paste notes into Claude: "Here are my
+              call notes: [notes]. Generate a complete proposal using this
+              template." Produces a ready-to-send PDF proposal in under 5
+              minutes.
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-role">
+              <span class="agent-icon">📅</span> Scheduler
+            </div>
+            <div class="agent-tool">Tool: Calendly Free / Cal.com</div>
+            <div class="agent-desc">
+              Self-hosted Cal.com on Railway (free). All call links go to your
+              calendar. Zero back-and-forth scheduling. WhatsApp auto-reply
+              points everyone here. 24/7 booking without manual effort.
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-role">
+              <span class="agent-icon">💬</span> AI Chatbot (xenotrix.com)
+            </div>
+            <div class="agent-tool">Tool: Botpress Free / Tidio Free</div>
+            <div class="agent-desc">
+              Install on xenotrix.com. Captures every site visitor's phone
+              number. Asks: "What kind of project are you looking for?" Routes
+              to your WhatsApp or Calendly link. Runs 24/7 with zero cost.
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-role">
+              <span class="agent-icon">📊</span> Analytics & Reporting
+            </div>
+            <div class="agent-tool">Tool: Google Analytics + Sheets</div>
+            <div class="agent-desc">
+              Weekly auto-report: paste your CRM sheet data into ChatGPT →
+              "Analyze my outreach performance this week and tell me what to
+              change." Replaces a full-time analyst with a 10-minute AI review.
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-role">
+              <span class="agent-icon">🤖</span> Automation Builder
+            </div>
+            <div class="agent-tool">Tool: n8n Self-Hosted (free)</div>
+            <div class="agent-desc">
+              Deploy n8n on Railway free tier. Build workflows: New lead added
+              to Sheet → Send WhatsApp template → If no reply in 48h → Send
+              follow-up. Replace 4 hours of daily manual work with one
+              automation.
+            </div>
+          </div>
+          <div class="agent-card">
+            <div class="agent-role">
+              <span class="agent-icon">🎨</span> Designer
+            </div>
+            <div class="agent-tool">Tool: Figma Free + Claude + V0.dev</div>
+            <div class="agent-desc">
+              Use V0.dev (Vercel's free AI UI builder) to generate React
+              components from prompts. Use Figma free for mockups. Claude
+              generates full HTML/CSS pages on demand. Never hire a designer in
+              Phase 1.
+            </div>
+          </div>
+        </div>
+
+        <div class="callout purple" style="margin-top: 24px">
+          <strong>Workflow Reality</strong>
+          Each of these "agents" takes 30–60 minutes to set up once and then
+          runs forever. Your total setup time for the full AI team:
+          approximately 3 days. Every hour you invest in setup saves 10 hours
+          per week in manual work.
+        </div>
+      </section>
+
+      <!-- OUTREACH SCRIPTS -->
+      <section class="section" id="outreach">
+        <div class="section-num">03 — OUTREACH SCRIPTS</div>
+        <h2>Exact Scripts That Convert</h2>
+
+        <h3 style="margin-top: 24px; margin-bottom: 8px">
+          WhatsApp Message — Template 1 (Website Audit)
+        </h3>
+        <div class="script-box" data-label="WHATSAPP · DAY 1">
+          Hi <span class="var">[Name]</span> 👋 I checked
+          <span class="var">[Company]</span>'s website and noticed
+          <span class="hl">3 quick fixes</span> that could bring you more
+          inquiries. I'm from <span class="hl">Xenotrix</span> — we build fast
+          websites for businesses like yours. Can I send you a
+          <span class="hl">free 5-minute audit video</span>? Takes nothing from
+          your side. Just reply <span class="hl">YES</span>.
+        </div>
+
+        <h3 style="margin-bottom: 8px">
+          WhatsApp Message — Template 2 (Direct Value)
+        </h3>
+        <div class="script-box" data-label="WHATSAPP · ALTERNATIVE">
+          Hi <span class="var">[Name]</span>, Quick question — are you getting
+          enough leads from your website? Most
+          <span class="var">[business type]</span> owners I speak to say their
+          site looks outdated and visitors don't contact them. We fixed this for
+          <span class="hl">3 businesses last month</span> and built their sites
+          in 7 days. Happy to show you what we did — 15 min call? Book here:
+          <span class="hl">xenotrix.com/book</span>
+        </div>
+
+        <h3 style="margin-bottom: 8px">Cold Call Script (30-Second Opener)</h3>
+        <div class="script-box" data-label="COLD CALL · OPENER">
+          "Hi, is this <span class="var">[Name]</span>? Great — I'll be super
+          quick, I promise. My name is <span class="var">[Your Name]</span> from
+          Xenotrix. We help <span class="var">[business type]</span> get more
+          customers from their website. I noticed your current site might be
+          losing you inquiries. I'm not selling anything right now — I just want
+          to show you <span class="hl">one specific thing</span> we'd fix for
+          free on a 10-minute call. Are you free this week — Wednesday or
+          Thursday?"
+
+          <span class="hl">IF NO:</span> "No problem at all. Can I send you a
+          quick WhatsApp with what I found? Takes 2 seconds to read."
+          <span class="hl">IF YES:</span> "Perfect. I'll send you a Calendly
+          link on WhatsApp right now. What's the best number?"
+        </div>
+
+        <h3 style="margin-bottom: 8px">
+          Follow-Up WhatsApp (48 hours after no reply)
+        </h3>
+        <div class="script-box" data-label="WHATSAPP · FOLLOW-UP">
+          Hey <span class="var">[Name]</span>, following up on my message from
+          <span class="var">[day]</span>. Just wanted to make sure it didn't get
+          buried. We're only taking
+          <span class="hl">2 new clients this month</span> — wanted to offer you
+          first look. 15-minute call, no pitch, just a free audit:
+          <span class="hl">xenotrix.com/book</span> 🚀
+        </div>
+
+        <h3 style="margin-bottom: 8px">Discovery Call Questions</h3>
+        <div class="card">
+          <ul style="list-style: none">
+            <li
+              style="
+                padding: 8px 0;
+                border-bottom: 1px solid var(--border);
+                font-size: 14px;
+              "
+            >
+              → "Tell me what you hate most about your current website."
+            </li>
+            <li
+              style="
+                padding: 8px 0;
+                border-bottom: 1px solid var(--border);
+                font-size: 14px;
+              "
+            >
+              → "How do most of your customers find you right now?"
+            </li>
+            <li
+              style="
+                padding: 8px 0;
+                border-bottom: 1px solid var(--border);
+                font-size: 14px;
+              "
+            >
+              → "What happens if someone visits your website today — where do
+              they go?"
+            </li>
+            <li
+              style="
+                padding: 8px 0;
+                border-bottom: 1px solid var(--border);
+                font-size: 14px;
+              "
+            >
+              → "If your website brought you 5 extra inquiries per month — what
+              would that be worth?"
+            </li>
+            <li
+              style="
+                padding: 8px 0;
+                border-bottom: 1px solid var(--border);
+                font-size: 14px;
+              "
+            >
+              → "Have you worked with a web agency before? What went wrong?"
+            </li>
+            <li
+              style="
+                padding: 8px 0;
+                border-bottom: 1px solid var(--border);
+                font-size: 14px;
+              "
+            >
+              → "If we could start Monday, what would you want live first?"
+            </li>
+            <li style="padding: 8px 0; font-size: 14px">
+              → "What's your budget range — just ballpark, I want to make sure I
+              propose the right solution."
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- PHASE 1 -->
+      <section class="section" id="phase1">
+        <div class="section-num">04 — ROADMAP</div>
+        <h2>
+          Phase 1: Foundation<br /><span
+            style="color: var(--muted); font-size: 20px"
+            >Days 1–14</span
+          >
+        </h2>
+
+        <div class="phase-card p1" style="margin-bottom: 20px">
+          <div class="phase-header">
+            <div>
+              <div class="phase-badge badge-green" style="margin-bottom: 8px">
+                WEEK 1–2
+              </div>
+              <div class="target-rev">Target: $0 → First Paid Client</div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <ul>
+              <li>
+                Set up WhatsApp Business account with full Xenotrix profile,
+                logo, description, and website link
+                <span class="week-tag">Day 1</span>
+              </li>
+              <li>
+                Install free Calendly or Cal.com — link to xenotrix.com/book
+                <span class="week-tag">Day 1</span>
+              </li>
+              <li>
+                Set up free Airtable CRM: Name / Company / Phone / Channel /
+                Status / Notes / Last Contact
+                <span class="week-tag">Day 1</span>
+              </li>
+              <li>
+                Import all 2500 phone leads into Airtable or Google Sheets —
+                segment by business type <span class="week-tag">Day 2</span>
+              </li>
+              <li>
+                Create 3 WhatsApp message templates using the scripts above
+                <span class="week-tag">Day 2</span>
+              </li>
+              <li>
+                Deploy n8n on Railway free tier — build basic lead-to-follow-up
+                automation <span class="week-tag">Day 3</span>
+              </li>
+              <li>
+                Add Botpress/Tidio chatbot to xenotrix.com — capture visitor
+                phone numbers <span class="week-tag">Day 3</span>
+              </li>
+              <li>
+                Begin WhatsApp outreach: 80 messages per day minimum
+                <span class="week-tag">Day 4+</span>
+              </li>
+              <li>
+                Begin cold calling: 25 calls per day — log every call in CRM
+                <span class="week-tag">Day 4+</span>
+              </li>
+              <li>
+                Build 1 free demo project: redesign a local business's site
+                without asking — use it as portfolio proof
+                <span class="week-tag">Day 5–7</span>
+              </li>
+              <li>
+                First discovery calls booked — use the call script and send
+                proposal within 2 hours of call ending
+                <span class="week-tag">Day 7+</span>
+              </li>
+              <li>
+                Close first client — take 50% upfront deposit to confirm start
+                <span class="week-tag">Day 10–14</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>Day 1 Priority</strong>
+          Before anything else: pick 10 leads, research their websites, and send
+          10 WhatsApp messages with specific observations about their site.
+          Specificity drives replies. "I noticed your contact form is broken on
+          mobile" beats any generic pitch.
+        </div>
+      </section>
+
+      <!-- PHASE 2 -->
+      <section class="section" id="phase2">
+        <h2>
+          Phase 2: First 3 Clients<br /><span
+            style="color: var(--muted); font-size: 20px"
+            >Days 15–60</span
+          >
+        </h2>
+
+        <div class="phase-card p2" style="margin-bottom: 20px">
+          <div class="phase-header">
+            <div>
+              <div class="phase-badge badge-purple" style="margin-bottom: 8px">
+                MONTH 1–2
+              </div>
+              <div class="target-rev" style="color: var(--accent2)">
+                Target: $2,000/month
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <ul>
+              <li>
+                Scale WhatsApp outreach to 100/day — A/B test 2 message
+                templates every week
+              </li>
+              <li>
+                Introduce a "Free Website Audit" hook: record a 3-minute Loom
+                video of their site issues and send it
+              </li>
+              <li>
+                After first client delivery: request a video testimonial or
+                written review immediately
+              </li>
+              <li>
+                Post every completed project on LinkedIn with before/after
+                screenshots — tag the client
+              </li>
+              <li>
+                Refine proposal template based on what's working in discovery
+                calls
+              </li>
+              <li>
+                Introduce Tier 1 "Fast Closer" offers: $500–$1,500 landing pages
+                — easier to sell, faster to deliver
+              </li>
+              <li>
+                Build a simple "portfolio" section on xenotrix.com with 3 real
+                projects
+              </li>
+              <li>
+                Set up email enrichment pipeline: use Apollo to find emails for
+                all phone leads — add to Gmail outreach
+              </li>
+              <li>
+                Use Notion to document every service as a repeatable SOP —
+                reduce delivery time to 5 days
+              </li>
+              <li>Target: 3 paid clients, $1,500–$2,000 collected</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- PHASE 3 -->
+      <section class="section" id="phase3">
+        <h2>
+          Phase 3: Scaling to $4K/Month<br /><span
+            style="color: var(--muted); font-size: 20px"
+            >Month 2–5</span
+          >
+        </h2>
+
+        <div class="phase-card p3" style="margin-bottom: 20px">
+          <div class="phase-header">
+            <div>
+              <div class="phase-badge badge-yellow" style="margin-bottom: 8px">
+                MONTH 2–5
+              </div>
+              <div class="target-rev" style="color: var(--warn)">
+                Target: $4,000/month
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <ul>
+              <li>
+                Convert at least 3 one-time clients to $200–$300/month
+                maintenance retainers — this is your survival income
+              </li>
+              <li>
+                Start cold email outreach in parallel — use Apollo to enrich
+                leads, GMass free to send batches
+              </li>
+              <li>
+                Launch a "Website in 7 Days for $1,500" productized offer as a
+                paid ad-free funnel on LinkedIn
+              </li>
+              <li>
+                Hire first freelancer on commission only: 10% per closed deal —
+                no salary risk
+              </li>
+              <li>
+                Build and launch 2–3 reusable templates (SaaS landing, clinic
+                site, restaurant) — sell for $800
+              </li>
+              <li>
+                Introduce Tier 2 offers ($2k–$4k): full custom websites, AI
+                chatbot setups, CRM systems
+              </li>
+              <li>
+                Weekly LinkedIn post about web problems SMBs face — drives
+                inbound without ads
+              </li>
+              <li>
+                By Month 5: aim for $2k MRR from retainers + $2k from new
+                projects = $4k/month
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- PHASE 4 -->
+      <section class="section" id="phase4">
+        <h2>
+          Phase 4: $50K/Year Run Rate<br /><span
+            style="color: var(--muted); font-size: 20px"
+            >Month 6–12</span
+          >
+        </h2>
+
+        <div class="phase-card p4" style="margin-bottom: 20px">
+          <div class="phase-header">
+            <div>
+              <div class="phase-badge badge-pink" style="margin-bottom: 8px">
+                MONTH 6–12
+              </div>
+              <div class="target-rev" style="color: var(--accent3)">
+                Target: $6K+/month
+              </div>
+            </div>
+          </div>
+          <div class="phase-body">
+            <ul>
+              <li>
+                10+ retainer clients at $200–$400/month = $2,000–$4,000 MRR
+                locked in
+              </li>
+              <li>
+                Productized services catalog live on xenotrix.com — clients can
+                buy without a call
+              </li>
+              <li>
+                White-label for other freelancers/agencies: you build, they sell
+                under their brand, you keep 60%
+              </li>
+              <li>
+                Build one internal SaaS tool (client reporting dashboard, AI
+                chatbot product) — potential MRR product
+              </li>
+              <li>
+                LinkedIn thought leadership: 3 posts/week minimum — case studies
+                convert best
+              </li>
+              <li>
+                Referral system: every client gets a unique referral code — 10%
+                commission for bringing new clients
+              </li>
+              <li>
+                Partner with 2–3 freelance marketers / copywriters — you provide
+                the tech, they bring clients
+              </li>
+              <li>
+                By Month 12: $6K+/month = $72K/year run rate — exceeds the $50K
+                target
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- FREE TOOL STACK -->
+      <section class="section" id="tools">
+        <div class="section-num">05 — TOOL STACK</div>
+        <h2>Complete Free Tool Stack</h2>
+        <div class="tool-grid">
+          <div class="tool-box">
+            <div class="tool-name">WhatsApp Business</div>
+            <div class="tool-use">
+              Primary outreach channel — 90% open rates
+            </div>
+            <div class="tool-tag">Free Forever</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">Airtable</div>
+            <div class="tool-use">CRM — track all leads, statuses, notes</div>
+            <div class="tool-tag">Free Tier</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">Cal.com</div>
+            <div class="tool-use">
+              Self-hosted booking — deploy free on Railway
+            </div>
+            <div class="tool-tag">Open Source</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">n8n</div>
+            <div class="tool-use">
+              All automation workflows — self-hosted on Railway
+            </div>
+            <div class="tool-tag">Open Source</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">Notion</div>
+            <div class="tool-use">SOPs, project management, internal wiki</div>
+            <div class="tool-tag">Free Tier</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">Vercel</div>
+            <div class="tool-use">Host all client projects — zero cost</div>
+            <div class="tool-tag">Free Tier</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">Apollo.io</div>
+            <div class="tool-use">
+              Find emails from company domains — 50 free/month
+            </div>
+            <div class="tool-tag">Free Tier</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">Loom</div>
+            <div class="tool-use">
+              Record website audit videos to send prospects
+            </div>
+            <div class="tool-tag">Free Tier</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">V0.dev</div>
+            <div class="tool-use">
+              AI-generated React UI components — speed up dev
+            </div>
+            <div class="tool-tag">Free Tier</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">Botpress</div>
+            <div class="tool-use">
+              AI chatbot for xenotrix.com — capture leads 24/7
+            </div>
+            <div class="tool-tag">Free Tier</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">Google Meet</div>
+            <div class="tool-use">
+              All discovery and sales calls — zero cost
+            </div>
+            <div class="tool-tag">Free Forever</div>
+          </div>
+          <div class="tool-box">
+            <div class="tool-name">Railway.app</div>
+            <div class="tool-use">
+              Host n8n, Cal.com, and other self-hosted tools
+            </div>
+            <div class="tool-tag">Free Tier</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SALES FUNNEL -->
+      <section class="section" id="funnel">
+        <div class="section-num">06 — SALES FUNNEL</div>
+        <h2>The 7-Step Conversion Pipeline</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="tl-time">STEP 1</div>
+            <div class="tl-title">Lead Identification</div>
+            <div class="tl-desc">
+              Segment your 2500 leads by business type. Prioritize: restaurants,
+              clinics, lawyers, gyms, real estate agents. These have budget and
+              visible website pain.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-time">STEP 2</div>
+            <div class="tl-title">Research (2 min per lead)</div>
+            <div class="tl-desc">
+              Visit their website. Note 1–2 specific problems: slow load, broken
+              mobile, no contact button, no Google Business, etc.
+              Personalization wins replies.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-time">STEP 3</div>
+            <div class="tl-title">WhatsApp Outreach</div>
+            <div class="tl-desc">
+              Send Template 1 with their specific problem mentioned. If no reply
+              in 48 hours, send follow-up. If no reply after that, try cold
+              call. Log every action in CRM.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-time">STEP 4</div>
+            <div class="tl-title">Discovery Call (15 min)</div>
+            <div class="tl-desc">
+              Ask the 7 discovery questions. Do NOT pitch yet. Listen. Your
+              goal: understand their pain deeply so your proposal is impossible
+              to say no to.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-time">STEP 5</div>
+            <div class="tl-title">Proposal (sent within 2 hours)</div>
+            <div class="tl-desc">
+              Use call notes + Claude AI to generate custom proposal. Send as
+              PDF. Valid 7 days. Follow up if no response within 48 hours.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-time">STEP 6</div>
+            <div class="tl-title">Invoice + 50% Deposit</div>
+            <div class="tl-desc">
+              Use Wave (free) or Stripe (free) to send invoice. Work begins only
+              after deposit. This confirms commitment and funds your delivery
+              costs.
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="tl-time">STEP 7</div>
+            <div class="tl-title">Delivery + Retainer Pitch</div>
+            <div class="tl-desc">
+              Deliver in 7 days or less. On launch day, pitch the maintenance
+              retainer. "We can keep this running for $200/month — want us to
+              handle it so you never worry about the site?"
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DAILY OPS -->
+      <section class="section" id="daily">
+        <div class="section-num">07 — DAILY OPERATIONS</div>
+        <h2>Your Daily Schedule (2-Person Team)</h2>
+        <div class="two-col">
+          <div class="card">
+            <h3>👤 Frontend Dev (You) — Sales + Delivery</h3>
+            <ul style="list-style: none; font-size: 13px">
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                9:00 AM — Review CRM, plan outreach for the day
+              </li>
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                9:30 AM — Send 80 WhatsApp messages (1 hour using templates)
+              </li>
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                11:00 AM — Cold calls (30 calls, ~1.5 hours)
+              </li>
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                1:00 PM — Discovery calls + proposal writing
+              </li>
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                3:00 PM — Frontend development / client delivery
+              </li>
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                6:00 PM — Reply to WhatsApp responses
+              </li>
+              <li style="padding: 7px 0">
+                7:00 PM — LinkedIn post + lead enrichment (20 leads)
+              </li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>👤 Backend Dev (Partner) — Build + Automate</h3>
+            <ul style="list-style: none; font-size: 13px">
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                9:00 AM — Check active client projects, plan sprints
+              </li>
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                9:30 AM — Backend development and API work
+              </li>
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                12:00 PM — Build / maintain n8n automations
+              </li>
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                1:00 PM — Client work: CRM setups, chatbot configs
+              </li>
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                3:00 PM — Infrastructure: hosting, deployments, DNS
+              </li>
+              <li
+                style="padding: 7px 0; border-bottom: 1px solid var(--border)"
+              >
+                5:00 PM — Code review + QA all active projects
+              </li>
+              <li style="padding: 7px 0">
+                7:00 PM — Document SOPs for completed deliverables
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top: 20px">
+          <strong>Non-Negotiable Daily Minimums</strong>
+          80 WhatsApp messages + 25 cold calls. Every single day, no excuses.
+          This is a numbers game. At a 3% conversion rate on 100 contacts = 3
+          leads/day = 21 leads/week = 3–5 clients/month at current close rates.
+        </div>
+      </section>
+
+      <!-- KPIs -->
+      <section class="section" id="kpis">
+        <div class="section-num">08 — KPIs</div>
+        <h2>Tracking Your Numbers</h2>
+        <table
+          class="kpi-table"
+          style="
+            width: 100%;
+            background: var(--bg3);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+          "
+        >
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Target</th>
+              <th>How to Measure</th>
+              <th>Action if Below Target</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>WhatsApp Reply Rate</td>
+              <td class="val">12%+</td>
+              <td>Replies / Messages sent</td>
+              <td>Change message template angle</td>
+            </tr>
+            <tr>
+              <td>Cold Call Answer Rate</td>
+              <td class="val">25%+</td>
+              <td>Answered / Calls made</td>
+              <td>Change call times (try 11am, 4pm)</td>
+            </tr>
+            <tr>
+              <td>Call → Discovery Rate</td>
+              <td class="val">20%+</td>
+              <td>Calls booked / Conversations</td>
+              <td>Soften the ask — offer free audit first</td>
+            </tr>
+            <tr>
+              <td>Discovery → Proposal</td>
+              <td class="val">80%+</td>
+              <td>Proposals sent / Calls done</td>
+              <td>Always send proposal — even if unlikely</td>
+            </tr>
+            <tr>
+              <td>Proposal → Close</td>
+              <td class="val">25%+</td>
+              <td>Deals closed / Proposals sent</td>
+              <td>Add urgency, follow up aggressively</td>
+            </tr>
+            <tr>
+              <td>Avg Project Value</td>
+              <td class="val">$1,500+</td>
+              <td>Total revenue / Clients</td>
+              <td>Upsell add-ons on every proposal</td>
+            </tr>
+            <tr>
+              <td>Client → Retainer Rate</td>
+              <td class="val">40%+</td>
+              <td>Retainers / Total clients</td>
+              <td>Pitch retainer on launch call every time</td>
+            </tr>
+            <tr>
+              <td>Projects Delivered On Time</td>
+              <td class="val">100%</td>
+              <td>On-time / Total delivered</td>
+              <td>Reduce scope before missing deadline</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="callout warn" style="margin-top: 24px">
+          <strong>Weekly Review Ritual</strong>
+          Every Sunday: open your CRM, count your numbers, paste them into
+          ChatGPT. Ask: "Here are my outreach metrics for the week: [data]. What
+          are the 3 most important changes I should make next week?" This
+          replaces a marketing consultant at zero cost.
+        </div>
+      </section>
+
+      <footer>
+        <div>Built for <span>Xenotrix Digital Agency</span> · xenotrix.com</div>
+        <div style="margin-top: 6px">
+          $0 Budget · 2 Developers · 12-Month Path to $50K
+        </div>
+      </footer>
+    </main>
+
+    <script>
+      function scrollToSection(id) {
+        const el = document.getElementById(id);
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+
+          // Update active link styling
+          document.querySelectorAll(".sidebar nav a").forEach((link) => {
+            link.style.color = "";
+            if (link.getAttribute("onclick")?.includes(`'${id}'`)) {
+              link.style.color = "var(--accent)";
+            }
+          });
+        }
+      }
+    </script>
+  </body>
+</html>

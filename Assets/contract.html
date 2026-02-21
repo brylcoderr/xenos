@@ -1,0 +1,877 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Xenotrix — Service Agreement</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #06060a;
+        --bg2: #0c0c12;
+        --bg3: #111118;
+        --border: #1a1a28;
+        --border2: #222233;
+        --green: #39e97b;
+        --purple: #9b7cff;
+        --blue: #3acdff;
+        --yellow: #ffcc00;
+        --red: #ff4f4f;
+        --text: #eeeef5;
+        --muted: #55556a;
+        --muted2: #888899;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Barlow", sans-serif;
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .header {
+        background: var(--bg2);
+        border-bottom: 1px solid var(--border);
+        padding: 16px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .logo {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 900;
+        font-size: 22px;
+        color: var(--purple);
+        letter-spacing: 1px;
+      }
+      .logo span {
+        color: var(--muted2);
+        font-weight: 400;
+        font-size: 12px;
+        margin-left: 8px;
+        font-family: "Space Mono", monospace;
+      }
+      .btn-print {
+        background: rgba(155, 124, 255, 0.12);
+        border: 1px solid rgba(155, 124, 255, 0.25);
+        color: var(--purple);
+        padding: 6px 16px;
+        border-radius: 4px;
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        cursor: pointer;
+        transition: all 0.15s;
+      }
+      .btn-print:hover {
+        background: rgba(155, 124, 255, 0.2);
+      }
+
+      .wrap {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 24px 60px;
+      }
+
+      /* CONTRACT PAPER */
+      .contract-paper {
+        background: var(--bg2);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      /* HEADER BAR */
+      .contract-top {
+        background: var(--bg3);
+        padding: 28px 36px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+      }
+      .ct-logo {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 900;
+        font-size: 28px;
+        color: var(--purple);
+      }
+      .ct-logo small {
+        display: block;
+        font-family: "Space Mono", monospace;
+        font-weight: 400;
+        font-size: 10px;
+        color: var(--muted2);
+        margin-top: 2px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+      .ct-doc-info {
+        text-align: right;
+      }
+      .ct-doc-info .doc-label {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--purple);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 4px;
+      }
+      .ct-doc-info .doc-title {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 900;
+        font-size: 22px;
+        color: var(--text);
+      }
+      .ct-doc-info .doc-sub {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--muted2);
+        margin-top: 4px;
+      }
+
+      /* PARTIES BLOCK */
+      .parties-block {
+        padding: 24px 36px;
+        border-bottom: 1px solid var(--border);
+        display: grid;
+        grid-template-columns: 1fr 40px 1fr;
+        gap: 0;
+        align-items: center;
+      }
+      .party {
+        background: var(--bg3);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 16px 18px;
+      }
+      .party-label {
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: var(--muted2);
+        margin-bottom: 8px;
+      }
+      .party-name {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        color: var(--text);
+      }
+      .party-detail {
+        font-size: 12px;
+        color: var(--muted2);
+        margin-top: 4px;
+      }
+      .party-input {
+        background: var(--bg);
+        border: none;
+        border-bottom: 1px solid var(--border2);
+        color: var(--text);
+        font-family: "Barlow", sans-serif;
+        font-size: 13px;
+        width: 100%;
+        padding: 3px 0;
+        outline: none;
+        margin-top: 4px;
+      }
+      .party-input:focus {
+        border-color: var(--purple);
+      }
+      .party-separator {
+        text-align: center;
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      /* SECTION BODY */
+      .contract-body {
+        padding: 28px 36px;
+      }
+      .contract-section {
+        margin-bottom: 22px;
+        padding-bottom: 22px;
+        border-bottom: 1px solid var(--border);
+      }
+      .contract-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+      .cs-num {
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        color: var(--purple);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 4px;
+      }
+      .cs-title {
+        font-family: "Barlow Condensed", sans-serif;
+        font-weight: 700;
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: var(--text);
+      }
+      .cs-text {
+        font-size: 13px;
+        color: var(--muted2);
+        line-height: 1.75;
+      }
+      .cs-text strong {
+        color: var(--text);
+      }
+      .cs-text em {
+        color: var(--purple);
+        font-style: normal;
+      }
+
+      /* INLINE FIELDS */
+      .inline-field {
+        display: inline-block;
+        border-bottom: 1px solid var(--border2);
+        min-width: 120px;
+        padding: 0 4px;
+        background: transparent;
+        color: var(--text);
+        font-family: "Barlow", sans-serif;
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .inline-field:focus {
+        border-color: var(--purple);
+      }
+
+      /* PAYMENT TABLE */
+      .pay-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0;
+      }
+      .pay-table th {
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        color: var(--muted2);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 8px 10px;
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+      }
+      .pay-table td {
+        padding: 10px 10px;
+        border-bottom: 1px solid var(--border);
+        font-size: 13px;
+        color: var(--text);
+      }
+      .pay-table tr:last-child td {
+        border-bottom: none;
+        font-weight: 700;
+        color: var(--green);
+      }
+      .pay-table .val {
+        font-family: "Space Mono", monospace;
+        color: var(--green);
+      }
+
+      /* BULLET CLAUSES */
+      .clause-list {
+        list-style: none;
+        margin-top: 8px;
+      }
+      .clause-list li {
+        padding: 6px 0;
+        border-bottom: 1px solid var(--border);
+        font-size: 13px;
+        color: var(--muted2);
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      .clause-list li:last-child {
+        border-bottom: none;
+      }
+      .clause-list li::before {
+        content: "§";
+        color: var(--purple);
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      /* SIGNATURE BLOCK */
+      .sig-block {
+        padding: 28px 36px;
+        border-top: 2px solid var(--border);
+        background: var(--bg3);
+      }
+      .sig-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+      }
+      .sig-panel {
+      }
+      .sig-label {
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        color: var(--muted2);
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 14px;
+      }
+      .sig-line {
+        border-bottom: 1px solid var(--border2);
+        height: 36px;
+        margin-bottom: 8px;
+        cursor: text;
+        position: relative;
+      }
+      .sig-line input {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: transparent;
+        border: none;
+        font-family: "Space Mono", monospace;
+        font-size: 12px;
+        color: var(--text);
+        padding: 4px 0;
+        outline: none;
+        width: 100%;
+      }
+      .sig-sub {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .sig-date-row {
+        display: flex;
+        gap: 16px;
+        margin-top: 14px;
+      }
+      .sig-date-group {
+        flex: 1;
+      }
+      .sig-date-group label {
+        font-family: "Space Mono", monospace;
+        font-size: 9px;
+        color: var(--muted2);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: block;
+        margin-bottom: 4px;
+      }
+      .sig-date-group input {
+        background: var(--bg);
+        border: 1px solid var(--border2);
+        border-radius: 4px;
+        padding: 6px 10px;
+        color: var(--text);
+        font-family: "Space Mono", monospace;
+        font-size: 12px;
+        outline: none;
+        width: 100%;
+      }
+      .sig-date-group input:focus {
+        border-color: var(--purple);
+      }
+
+      /* VALID TAG */
+      .valid-strip {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px;
+        background: rgba(57, 233, 123, 0.04);
+        border-top: 1px solid var(--border);
+      }
+      .valid-strip span {
+        font-family: "Space Mono", monospace;
+        font-size: 10px;
+        color: var(--muted2);
+      }
+      .valid-strip .v-status {
+        color: var(--green);
+        font-weight: 700;
+      }
+
+      footer {
+        text-align: center;
+        padding: 32px 0 48px;
+        font-family: "Space Mono", monospace;
+        font-size: 11px;
+        color: var(--muted);
+      }
+      footer span {
+        color: var(--purple);
+      }
+
+      @media print {
+        .header {
+          display: none !important;
+        }
+        body {
+          background: white;
+          color: #111;
+        }
+        .contract-paper {
+          border: 1px solid #ddd;
+          background: white;
+        }
+        .contract-top,
+        .sig-block {
+          background: #f9f9f9;
+        }
+        .party {
+          background: #f5f5f5;
+          border-color: #ddd;
+        }
+        .pay-table th,
+        .cs-text,
+        .clause-list li,
+        .sig-sub,
+        .valid-strip span {
+          color: #555;
+        }
+        .cs-title,
+        .party-name,
+        .ct-logo {
+          color: #111;
+        }
+        .cs-num,
+        .party-label,
+        .sig-label {
+          color: #999;
+        }
+        .inline-field,
+        .party-input,
+        .sig-line input {
+          color: #111 !important;
+        }
+        .btn-print {
+          display: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <img
+          src="logo.png"
+          alt="Logo"
+          style="
+            height: 24px;
+            vertical-align: middle;
+            margin-right: 12px;
+            margin-top: -2px;
+          "
+        />Xenotrix <span>Service Agreement</span>
+      </div>
+      <button class="btn-print" onclick="window.print()">
+        ⎙ Print / Save PDF
+      </button>
+    </div>
+
+    <div class="wrap">
+      <div class="contract-paper">
+        <!-- TOP BAR -->
+        <div class="contract-top">
+          <div>
+            <div
+              class="ct-logo"
+              style="display: flex; align-items: center; gap: 15px"
+            >
+              <img src="logo.png" alt="Logo" style="height: 48px" />
+              <div>XENOTRIX<small>Digital Agency · xenotrix.com</small></div>
+            </div>
+          </div>
+          <div class="ct-doc-info">
+            <div class="doc-label">Document Type</div>
+            <div class="doc-title">Service Agreement</div>
+            <div class="doc-sub">
+              Date:
+              <input
+                class="inline-field"
+                type="date"
+                style="min-width: 140px"
+                id="docDate"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- PARTIES -->
+        <div class="parties-block">
+          <div class="party">
+            <div class="party-label">Service Provider</div>
+            <div class="party-name">Xenotrix</div>
+            <div class="party-detail">xenotrix.com · sk@xenotrix.com</div>
+            <div class="party-detail" style="margin-top: 2px">
+              Digital Agency
+            </div>
+          </div>
+          <div class="party-separator">↔</div>
+          <div class="party">
+            <div class="party-label">Client</div>
+            <input
+              class="party-input"
+              placeholder="Client Full Name"
+              id="clientName"
+            />
+            <input
+              class="party-input"
+              placeholder="Company / Business Name"
+              id="clientCompany"
+              style="margin-top: 8px"
+            />
+            <input
+              class="party-input"
+              placeholder="Phone / WhatsApp"
+              id="clientPhone"
+              style="margin-top: 8px"
+            />
+            <input
+              class="party-input"
+              placeholder="Email Address"
+              id="clientEmail"
+              style="margin-top: 8px"
+            />
+          </div>
+        </div>
+
+        <!-- BODY -->
+        <div class="contract-body">
+          <!-- PROJECT SCOPE -->
+          <div class="contract-section">
+            <div class="cs-num">§ 01</div>
+            <div class="cs-title">Project Scope</div>
+            <div class="cs-text">
+              Xenotrix agrees to deliver the following services as described in
+              the attached proposal:
+            </div>
+            <div
+              style="
+                margin-top: 12px;
+                background: var(--bg3);
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                padding: 14px 16px;
+              "
+            >
+              <textarea
+                style="
+                  width: 100%;
+                  background: transparent;
+                  border: none;
+                  color: var(--text);
+                  font-family: &quot;Barlow&quot;, sans-serif;
+                  font-size: 13px;
+                  line-height: 1.7;
+                  outline: none;
+                  resize: vertical;
+                  min-height: 80px;
+                "
+                placeholder="Describe what will be delivered. Example:&#10;→ Full website design (5 pages): Home, About, Services, Portfolio, Contact&#10;→ Mobile-responsive design for all screen sizes&#10;→ Contact form with WhatsApp integration&#10;→ Google Analytics 4 setup&#10;→ Speed optimization (PageSpeed 80+ target)&#10;→ Hosting on Vercel with free SSL&#10;→ 2 rounds of revision included&#10;→ Delivery: 7 business days from content receipt"
+              ></textarea>
+            </div>
+            <div class="cs-text" style="margin-top: 10px; font-size: 12px">
+              <strong>Not included unless explicitly listed above:</strong>
+              content writing, photography, third-party software licences, more
+              than 2 rounds of revisions, ongoing maintenance (available as a
+              separate retainer).
+            </div>
+          </div>
+
+          <!-- TIMELINE -->
+          <div class="contract-section">
+            <div class="cs-num">§ 02</div>
+            <div class="cs-title">Timeline</div>
+            <div class="cs-text">
+              Delivery deadline:
+              <strong
+                ><input
+                  class="inline-field"
+                  type="date"
+                  id="deadline"
+                  style="min-width: 150px"
+              /></strong>
+              &nbsp;(7 business days from kickoff)<br /><br />
+              <strong>Timeline begins only after:</strong> (1) 50% deposit is
+              received, AND (2) all required content assets (text, images, logo)
+              are submitted by the client.<br /><br />
+              Client content delays directly push the delivery date. Xenotrix
+              will notify the client in writing if the timeline is affected by
+              late content submission.
+            </div>
+          </div>
+
+          <!-- PAYMENT -->
+          <div class="contract-section">
+            <div class="cs-num">§ 03</div>
+            <div class="cs-title">Payment Terms</div>
+            <table class="pay-table">
+              <thead>
+                <tr>
+                  <th>Payment</th>
+                  <th>Amount</th>
+                  <th>Due</th>
+                  <th>Condition</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Deposit (50%)</td>
+                  <td class="val">
+                    $<input
+                      class="inline-field"
+                      placeholder="750"
+                      style="min-width: 60px"
+                    />
+                  </td>
+                  <td>To confirm start</td>
+                  <td>Work begins after receipt</td>
+                </tr>
+                <tr>
+                  <td>Final payment (50%)</td>
+                  <td class="val">
+                    $<input
+                      class="inline-field"
+                      placeholder="750"
+                      style="min-width: 60px"
+                    />
+                  </td>
+                  <td>On launch day</td>
+                  <td>Site goes live after receipt</td>
+                </tr>
+                <tr>
+                  <td><strong>Total Project Value</strong></td>
+                  <td class="val">
+                    $<input
+                      class="inline-field"
+                      placeholder="1,500"
+                      style="min-width: 80px; font-weight: 700"
+                    />
+                  </td>
+                  <td colspan="2" style="color: var(--muted2); font-size: 12px">
+                    Fixed price. No hourly billing. No hidden fees.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="cs-text" style="margin-top: 8px">
+              Payments accepted via: Bank Transfer / UPI / Razorpay / Stripe.
+              Invoices issued via Wave. All prices are fixed — no additional
+              charges unless scope changes are agreed in writing.
+            </div>
+          </div>
+
+          <!-- REVISIONS -->
+          <div class="contract-section">
+            <div class="cs-num">§ 04</div>
+            <div class="cs-title">Revisions</div>
+            <div class="cs-text">
+              This agreement includes <em>2 rounds of revisions</em>. A revision
+              round is defined as one consolidated list of feedback submitted in
+              a single message or document.<br /><br />
+              Additional revision rounds beyond 2 are billed at
+              <strong>$75 per round</strong>, invoiced before implementation.
+              Revisions must be submitted within
+              <strong>5 business days</strong> of the staging link being shared.
+              Revisions not submitted within this window are considered
+              accepted.
+            </div>
+          </div>
+
+          <!-- OWNERSHIP -->
+          <div class="contract-section">
+            <div class="cs-num">§ 05</div>
+            <div class="cs-title">Ownership & Rights</div>
+            <div class="cs-text">
+              Upon receipt of full and final payment, the client owns full
+              rights to the final deliverables including all code, design files,
+              and assets created specifically for this project.<br /><br />
+              <strong>Xenotrix retains the right to:</strong> display the
+              completed work in its portfolio, case studies, and marketing
+              materials, unless the client requests otherwise in writing.
+            </div>
+          </div>
+
+          <!-- CLIENT RESPONSIBILITIES -->
+          <div class="contract-section">
+            <div class="cs-num">§ 06</div>
+            <div class="cs-title">Client Responsibilities</div>
+            <ul class="clause-list">
+              <li>
+                Provide all required content (text, images, logo, brand details)
+                within 48 hours of project kickoff.
+              </li>
+              <li>
+                Be available for a 15-minute review call on Day 4 (staging
+                review) and Day 7 (launch).
+              </li>
+              <li>
+                Provide consolidated feedback — not piecemeal messages spread
+                over several days.
+              </li>
+              <li>
+                Ensure all content submitted is owned by the client or licensed
+                for use. Xenotrix is not liable for third-party copyright issues
+                arising from client-provided materials.
+              </li>
+              <li>
+                Make payments on the agreed schedule. Work pauses if payment is
+                more than 3 days overdue.
+              </li>
+            </ul>
+          </div>
+
+          <!-- CANCELLATION -->
+          <div class="contract-section">
+            <div class="cs-num">§ 07</div>
+            <div class="cs-title">Cancellation</div>
+            <div class="cs-text">
+              The client may cancel this project at any time in writing.
+              Cancellation terms:<br /><br />
+              • <strong>Before work begins:</strong> Full deposit refunded minus
+              a $50 admin fee.<br />
+              • <strong>After work begins (before staging):</strong> 50% deposit
+              is non-refundable.<br />
+              • <strong>After staging is delivered:</strong> Full deposit is
+              non-refundable. No final payment required if client cancels before
+              launch.<br /><br />
+              Xenotrix may cancel the agreement if the client fails to provide
+              required content within 14 days of kickoff or fails to make
+              payments. In this case, all work completed to date is owned by
+              Xenotrix until full payment is received.
+            </div>
+          </div>
+
+          <!-- LIMITATION -->
+          <div class="contract-section">
+            <div class="cs-num">§ 08</div>
+            <div class="cs-title">Limitation of Liability</div>
+            <div class="cs-text">
+              Xenotrix is not liable for indirect, incidental, or consequential
+              damages arising from this project. Total liability in any dispute
+              is limited to the total amount paid by the client under this
+              agreement. Xenotrix does not guarantee specific business outcomes,
+              search engine rankings, or conversion rates.
+            </div>
+          </div>
+
+          <!-- GOVERNING LAW -->
+          <div class="contract-section">
+            <div class="cs-num">§ 09</div>
+            <div class="cs-title">Governing Law & Disputes</div>
+            <div class="cs-text">
+              This agreement is governed by the laws of
+              <input
+                class="inline-field"
+                placeholder="India / your state"
+                style="min-width: 180px"
+              />. Any disputes will first be resolved through direct
+              negotiation. If unresolved within 30 days, both parties agree to
+              binding arbitration before pursuing legal action.
+            </div>
+          </div>
+        </div>
+        <!-- /contract-body -->
+
+        <!-- SIGNATURE -->
+        <div class="sig-block">
+          <div
+            style="
+              font-family: &quot;Space Mono&quot;, monospace;
+              font-size: 10px;
+              color: var(--muted2);
+              margin-bottom: 20px;
+              text-align: center;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+            "
+          >
+            By signing below, both parties agree to the terms of this Service
+            Agreement.
+          </div>
+          <div class="sig-grid">
+            <div class="sig-panel">
+              <div class="sig-label">Xenotrix — Service Provider</div>
+              <div class="sig-line">
+                <input type="text" placeholder="Authorized Signature" />
+              </div>
+              <div class="sig-sub">
+                Name: ___________________________________
+              </div>
+              <div class="sig-date-row">
+                <div class="sig-date-group">
+                  <label>Date</label><input type="date" />
+                </div>
+              </div>
+            </div>
+            <div class="sig-panel">
+              <div class="sig-label">Client</div>
+              <div class="sig-line">
+                <input type="text" placeholder="Client Signature" />
+              </div>
+              <div class="sig-sub" id="clientSigName">
+                Name: ___________________________________
+              </div>
+              <div class="sig-date-row">
+                <div class="sig-date-group">
+                  <label>Date</label><input type="date" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="valid-strip">
+          <span>Xenotrix Digital Agency · xenotrix.com · sk@xenotrix.com</span>
+          <span>·</span>
+          <span class="v-status">Service Agreement — 1 Page</span>
+        </div>
+      </div>
+      <!-- /contract-paper -->
+    </div>
+    <!-- /wrap -->
+
+    <footer>
+      <span>Xenotrix</span> Digital Agency · xenotrix.com · Service Agreement
+      v1.0<br />
+      <span style="color: var(--muted); margin-top: 4px; display: block"
+        >Fill in → Print → Sign → Scan/Photo → Done</span
+      >
+    </footer>
+
+    <script>
+      // Auto set today's date
+      document.getElementById("docDate").valueAsDate = new Date();
+      // Mirror client name to sig block
+      document
+        .getElementById("clientName")
+        .addEventListener("input", function () {
+          document.getElementById("clientSigName").textContent =
+            "Name: " + this.value;
+        });
+    </script>
+  </body>
+</html>
