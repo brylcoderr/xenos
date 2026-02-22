@@ -139,4 +139,30 @@ router.delete('/users/:id', auth, adminOnly, async (req, res) => {
   }
 });
 
+router.post('/seed', async (req, res) => {
+  try {
+    const userCount = await User.countDocuments();
+    if (userCount > 0 && process.env.NODE_ENV === 'production') {
+      return res.status(400).json({ message: 'Database already has users. Seeding disabled for security.' });
+    }
+    
+    // Create admin user
+    const adminUser = new User({
+      name: 'Admin User',
+      email: 'admin@xenotrix.com',
+      password: 'password',
+      role: 'admin',
+      isActive: true
+    });
+    await adminUser.save();
+    
+    res.json({ 
+      message: 'Seed successful', 
+      user: { email: adminUser.email, password: 'password' } 
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;

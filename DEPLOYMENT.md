@@ -54,7 +54,37 @@ Once Vercel gives you your frontend URL, go back to your **Render Web Service se
 
 ---
 
-## 🛠️ Post-Deployment
+## 🛠️ Post-Deployment & Troubleshooting
+
+### 1. Initialize the Database
+
+If you just deployed and can't login, your database is likely empty. You can initialize the first Admin user by sending a `POST` request to your backend:
+
+- **Endpoint**: `https://your-backend.onrender.com/api/auth/seed`
+- **Method**: `POST`
+- **Result**: Creates `admin@xenotrix.com` with password `password`.
+
+### 2. Common Login Issues
+
+- **"Network Error" or 404**: Check your `VITE_API_URL` on Vercel. It MUST end with `/api`.
+  - _Correct:_ `https://xenotrix-backend.onrender.com/api`
+  - _Incorrect:_ `https://xenotrix-backend.onrender.com`
+- **CORS Error**: Ensure `FRONTEND_URL` is set on Render to your exact Vercel URL (e.g., `https://my-agency.vercel.app`).
+- **Mixed Content**: Ensure both Frontend and Backend are using `https`.
+
+### 3. Check System Health
+
+Visit `https://your-backend.onrender.com/api/health` in your browser. It should show:
+
+```json
+{
+  "status": "ok",
+  "database": "connected",
+  "setup": "complete"
+}
+```
+
+If `setup` is `pending_seed`, follow Step 1 above.
 
 - Use your newly deployed URL to access the app!
 - Remember that the free tier of Render "sleeps" after 15 minutes of inactivity; your first request might take 30-60 seconds to wake it up.
