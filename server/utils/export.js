@@ -5,12 +5,18 @@ const path = require('path');
 const templateRenderer = require('./templateRenderer');
 
 async function generatePDF(htmlContent, options = {}) {
-  const browser = await puppeteer.launch({
-    headless: 'new',
-    args: ['--no-sandbox', '--disable-setuid-sandbox']
-  });
+  let browser;
+  try {
+    browser = await puppeteer.launch({
+      headless: 'new',
+      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+    });
 
-  const page = await browser.newPage();
+    const page = await browser.newPage();
+    
+    // Set a timeout for the entire page operation
+    page.setDefaultNavigationTimeout(30000); 
+
     const logoPath = path.join(__dirname, '../../Assets/logo.png');
     let logoDataUri = '';
     try {
@@ -178,17 +184,26 @@ async function generatePDF(htmlContent, options = {}) {
     </html>
   `;
 
-  await page.setContent(fullHTML, { waitUntil: 'networkidle0' });
+    await page.setContent(fullHTML, { waitUntil: 'load' });
+    
+    // Optional: wait for fonts to load or small delay
+    await page.evaluateHandle('document.fonts.ready');
 
-  const pdf = await page.pdf({
-    format: 'A4',
-    margin: { top: '20mm', right: '20mm', bottom: '20mm', left: '20mm' },
-    printBackground: true
-  });
+    const pdf = await page.pdf({
+      format: 'A4',
+      margin: { top: '20mm', right: '20mm', bottom: '20mm', left: '20mm' },
+      printBackground: true
+    });
 
-  await browser.close();
-  return pdf;
+    await browser.close();
+    return pdf;
+  } catch (error) {
+    console.error('PDF Generation Error:', error);
+    if (browser) await browser.close();
+    throw error;
+  }
 }
+
 
 async function generateDOCX(templateType, fields = {}, options = {}) {
   const config = templateRenderer.getTemplateConfig(templateType);

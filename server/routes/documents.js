@@ -202,14 +202,19 @@ router.get('/shared/:shareToken', async (req, res) => {
 
     const templateConfig = templateRenderer.getTemplateConfig(document.templateType);
     
+    const fieldsObj = document.fields instanceof Map 
+      ? Object.fromEntries(document.fields) 
+      : (document.fields || {});
+
     res.json({
       document: {
         _id: document._id,
         title: document.title,
         templateType: document.templateType,
-        fields: Object.fromEntries(document.fields),
+        fields: fieldsObj,
         createdAt: document.createdAt,
-        updatedAt: document.updatedAt
+        updatedAt: document.updatedAt,
+        htmlContent: document.htmlContent
       },
       templateConfig,
       owner: document.owner
@@ -232,21 +237,35 @@ router.get('/:id/export/pdf', auth, async (req, res) => {
       return res.status(403).json({ message: 'Access denied' });
     }
 
-    const htmlContent = templateRenderer.renderTemplate(
-      document.templateType,
-      Object.fromEntries(document.fields),
-      { raw: true }
-    );
+    // Convert fields safely
+    const fieldsObj = document.fields instanceof Map 
+      ? Object.fromEntries(document.fields) 
+      : (document.fields || {});
+
+    let htmlContent;
+    
+    // Preference: use saved htmlContent if it's likely a custom document or edited
+    if (document.htmlContent && (document.templateType === 'custom' || document.templateType === 'proposal-template')) {
+      htmlContent = document.htmlContent;
+    } else {
+      htmlContent = templateRenderer.renderTemplate(
+        document.templateType,
+        fieldsObj,
+        { raw: true }
+      );
+    }
     
     const pdfBuffer = await generatePDF(htmlContent, {
       name: document.title,
-      type: document.templateType
+      type: document.templateType,
+      color: templateRenderer.getTemplateConfig(document.templateType).color
     });
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="${document.title.replace(/[^a-z0-9]/gi, '_')}.pdf"`);
     res.send(pdfBuffer);
   } catch (error) {
+    console.error('PDF Export Route Error:', error);
     res.status(500).json({ message: error.message });
   }
 });
@@ -264,9 +283,14 @@ router.get('/:id/export/docx', auth, async (req, res) => {
       return res.status(403).json({ message: 'Access denied' });
     }
 
+    // Convert fields safely
+    const fieldsObj = document.fields instanceof Map 
+      ? Object.fromEntries(document.fields) 
+      : (document.fields || {});
+
     const docxBuffer = await generateDOCX(
       document.templateType,
-      Object.fromEntries(document.fields),
+      fieldsObj,
       { name: document.title, type: document.templateType }
     );
 
