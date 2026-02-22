@@ -130,7 +130,16 @@ export default function DocumentPreviewPage() {
       await documentsApi.exportPdf(id, `${document.title}.pdf`);
     } catch (error) {
       console.error('PDF Export Error:', error);
-      alert('PDF Export failed\n\nReason: ' + error.message + '\n\nTIP: If the server is overloaded, you can use the "Print" button to save as PDF directly from your browser.');
+      const isBrowserError = error.message.includes('Could not find') || error.message.includes('PDF Engine');
+      
+      alert(
+        `PDF Export failed\n\n` +
+        `Reason: ${error.message}\n\n` +
+        (isBrowserError 
+          ? `NOTE: This is a server-side setup issue. Microsoft Edge uses the same engine as Chrome, so once fixed, it will work perfectly in your browser.\n\n` 
+          : '') +
+        `TIP: You can always use the "Print" button right now to save as PDF directly from Edge.`
+      );
     }
   };
 

@@ -56,7 +56,16 @@ Once Vercel gives you your frontend URL, go back to your **Render Web Service se
 
 ## 🛠️ Post-Deployment & Troubleshooting
 
-### 1. Initialize the Database
+### 1. PDF Export "Could not find Chrome"
+
+If you get a browser error when exporting:
+
+1. Ensure the `postinstall` script in `package.json` is present.
+2. In **Render Dashboard**, go to your service.
+3. Click "Manual Deploy" -> **"Clear Build Cache & Deploy"**.
+   - This is necessary to force Render to run the new browser installation command.
+
+### 2. Initialize the Database
 
 If you just deployed and can't login, your database is likely empty. You can initialize the first Admin user by sending a `POST` request to your backend:
 
