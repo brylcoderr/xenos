@@ -81,7 +81,8 @@ class ApiClient {
     });
 
     if (!response.ok) {
-      throw new Error('Download failed');
+      const errorData = await response.json().catch(() => ({ message: 'Download failed' }));
+      throw new Error(errorData.message || 'Download failed');
     }
 
     const blob = await response.blob();

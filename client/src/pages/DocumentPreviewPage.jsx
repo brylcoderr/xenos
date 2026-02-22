@@ -129,7 +129,8 @@ export default function DocumentPreviewPage() {
     try {
       await documentsApi.exportPdf(id, `${document.title}.pdf`);
     } catch (error) {
-      alert('Export failed: ' + error.message);
+      console.error('PDF Export Error:', error);
+      alert('PDF Export failed\n\nReason: ' + error.message + '\n\nTIP: If the server is overloaded, you can use the "Print" button to save as PDF directly from your browser.');
     }
   };
 

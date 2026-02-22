@@ -222,6 +222,7 @@ router.get('/:id/export/pdf', auth, async (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename="${invoice.invoiceNumber}.pdf"`);
     res.send(pdfBuffer);
   } catch (error) {
+    console.error('Invoice PDF Export Error:', error);
     res.status(500).json({ message: error.message });
   }
 });

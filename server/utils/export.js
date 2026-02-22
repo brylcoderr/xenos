@@ -8,8 +8,16 @@ async function generatePDF(htmlContent, options = {}) {
   let browser;
   try {
     browser = await puppeteer.launch({
-      headless: 'new',
-      args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+      headless: true,
+      args: [
+        '--no-sandbox', 
+        '--disable-setuid-sandbox', 
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--disable-gpu',
+        '--no-zygote',
+        '--single-process'
+      ]
     });
 
     const page = await browser.newPage();
@@ -184,10 +192,20 @@ async function generatePDF(htmlContent, options = {}) {
     </html>
   `;
 
-    await page.setContent(fullHTML, { waitUntil: 'load' });
+    await page.setContent(fullHTML, { 
+      waitUntil: 'domcontentloaded',
+      timeout: 15000 
+    });
     
-    // Optional: wait for fonts to load or small delay
-    await page.evaluateHandle('document.fonts.ready');
+    // Give it 1 second for any scripts/styles that might need a tick
+    await new Promise(r => setTimeout(r, 1000));
+    
+    // Try to wait for fonts but don't crash if it fails
+    try {
+      await page.evaluateHandle('document.fonts.ready');
+    } catch (e) {
+      console.warn('Font loading wait failed/timed out, proceeding with PDF');
+    }
 
     const pdf = await page.pdf({
       format: 'A4',
@@ -198,8 +216,17 @@ async function generatePDF(htmlContent, options = {}) {
     await browser.close();
     return pdf;
   } catch (error) {
-    console.error('PDF Generation Error:', error);
+    console.error('CRITICAL PDF ERROR:', error);
     if (browser) await browser.close();
+    
+    // Provide more specific error messages for missing dependencies
+    if (error.message.includes('Could not find Chromium')) {
+      throw new Error('PDF Engine initialization failed: browser binary missing. Please ensure puppeteer is correctly installed.');
+    }
+    if (error.message.includes('Protocol error') || error.message.includes('Target closed')) {
+      throw new Error('PDF Engine crashed: the browser process died. This is usually due to memory limits (try reducing document complexity).');
+    }
+    
     throw error;
   }
 }
