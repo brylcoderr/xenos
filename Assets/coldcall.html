@@ -1,1124 +1,501 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xenotrix — Cold Call Script & Objection Handler</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg: #06060a;
-        --bg2: #0c0c12;
-        --bg3: #111118;
-        --bg4: #17171f;
-        --border: #1a1a28;
-        --border2: #222233;
-        --green: #39e97b;
-        --green2: #1a8a42;
-        --purple: #9b7cff;
-        --orange: #ff7c3a;
-        --red: #ff4f4f;
-        --blue: #3acdff;
-        --yellow: #ffcc00;
-        --text: #eeeef5;
-        --muted: #55556a;
-        --muted2: #888899;
-      }
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        background: var(--bg);
-        color: var(--text);
-        font-family: "Barlow", sans-serif;
-        font-size: 15px;
-        line-height: 1.6;
-      }
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xenotrix — Cold Call Script & Objection Handler</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500;600;700;900&family=Barlow+Condensed:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06060a;
+  --bg2: #0c0c12;
+  --bg3: #111118;
+  --bg4: #17171f;
+  --border: #1a1a28;
+  --border2: #222233;
+  --green: #39e97b;
+  --green2: #1a8a42;
+  --purple: #9b7cff;
+  --orange: #ff7c3a;
+  --red: #ff4f4f;
+  --blue: #3acdff;
+  --yellow: #ffcc00;
+  --text: #eeeef5;
+  --muted: #55556a;
+  --muted2: #888899;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;line-height:1.6;}
 
-      /* ── HEADER ── */
-      .header {
-        background: var(--bg2);
-        border-bottom: 1px solid var(--border);
-        padding: 18px 32px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
-      .logo {
-        font-family: "Barlow Condensed", sans-serif;
-        font-weight: 900;
-        font-size: 22px;
-        color: var(--green);
-        letter-spacing: 1px;
-      }
-      .logo span {
-        color: var(--muted2);
-        font-weight: 400;
-        font-size: 12px;
-        margin-left: 8px;
-        font-family: "Space Mono", monospace;
-      }
-      .header-tag {
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        color: var(--muted2);
-        border: 1px solid var(--border2);
-        padding: 4px 10px;
-        border-radius: 3px;
-      }
+/* ── HEADER ── */
+.header{
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  padding:18px 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.logo{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:22px;color:var(--green);letter-spacing:1px;}
+.logo span{color:var(--muted2);font-weight:400;font-size:12px;margin-left:8px;font-family:'Space Mono',monospace;}
+.header-tag{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted2);border:1px solid var(--border2);padding:4px 10px;border-radius:3px;}
 
-      /* ── LAYOUT ── */
-      .wrap {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 40px 24px;
-      }
+/* ── LAYOUT ── */
+.wrap{max-width:900px;margin:0 auto;padding:40px 24px;}
 
-      /* ── HERO ── */
-      .hero {
-        text-align: center;
-        padding: 48px 0 40px;
-        border-bottom: 1px solid var(--border);
-        margin-bottom: 48px;
-      }
-      .hero-eyebrow {
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        color: var(--green);
-        letter-spacing: 3px;
-        margin-bottom: 14px;
-        text-transform: uppercase;
-      }
-      .hero h1 {
-        font-family: "Barlow Condensed", sans-serif;
-        font-weight: 900;
-        font-size: 56px;
-        line-height: 1;
-        letter-spacing: -1px;
-        margin-bottom: 12px;
-      }
-      .hero h1 em {
-        color: var(--green);
-        font-style: normal;
-      }
-      .hero p {
-        color: var(--muted2);
-        font-size: 16px;
-        max-width: 520px;
-        margin: 0 auto;
-      }
-      .phase-pills {
-        display: flex;
-        gap: 8px;
-        justify-content: center;
-        margin-top: 24px;
-        flex-wrap: wrap;
-      }
-      .pill {
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        padding: 5px 14px;
-        border-radius: 2px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-      .pill-g {
-        background: rgba(57, 233, 123, 0.1);
-        color: var(--green);
-        border: 1px solid rgba(57, 233, 123, 0.25);
-      }
-      .pill-p {
-        background: rgba(155, 124, 255, 0.1);
-        color: var(--purple);
-        border: 1px solid rgba(155, 124, 255, 0.25);
-      }
-      .pill-o {
-        background: rgba(255, 124, 58, 0.1);
-        color: var(--orange);
-        border: 1px solid rgba(255, 124, 58, 0.25);
-      }
-      .pill-r {
-        background: rgba(255, 79, 79, 0.1);
-        color: var(--red);
-        border: 1px solid rgba(255, 79, 79, 0.25);
-      }
+/* ── HERO ── */
+.hero{text-align:center;padding:48px 0 40px;border-bottom:1px solid var(--border);margin-bottom:48px;}
+.hero-eyebrow{font-family:'Space Mono',monospace;font-size:10px;color:var(--green);letter-spacing:3px;margin-bottom:14px;text-transform:uppercase;}
+.hero h1{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:56px;line-height:1;letter-spacing:-1px;margin-bottom:12px;}
+.hero h1 em{color:var(--green);font-style:normal;}
+.hero p{color:var(--muted2);font-size:16px;max-width:520px;margin:0 auto;}
+.phase-pills{display:flex;gap:8px;justify-content:center;margin-top:24px;flex-wrap:wrap;}
+.pill{font-family:'Space Mono',monospace;font-size:10px;padding:5px 14px;border-radius:2px;text-transform:uppercase;letter-spacing:1px;}
+.pill-g{background:rgba(57,233,123,0.1);color:var(--green);border:1px solid rgba(57,233,123,0.25);}
+.pill-p{background:rgba(155,124,255,0.1);color:var(--purple);border:1px solid rgba(155,124,255,0.25);}
+.pill-o{background:rgba(255,124,58,0.1);color:var(--orange);border:1px solid rgba(255,124,58,0.25);}
+.pill-r{background:rgba(255,79,79,0.1);color:var(--red);border:1px solid rgba(255,79,79,0.25);}
 
-      /* ── SECTION ── */
-      .section {
-        margin-bottom: 52px;
-      }
-      .sec-label {
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        color: var(--purple);
-        letter-spacing: 3px;
-        text-transform: uppercase;
-        margin-bottom: 6px;
-      }
-      .sec-title {
-        font-family: "Barlow Condensed", sans-serif;
-        font-weight: 900;
-        font-size: 30px;
-        letter-spacing: -0.5px;
-        margin-bottom: 4px;
-      }
-      .sec-sub {
-        color: var(--muted2);
-        font-size: 14px;
-        margin-bottom: 24px;
-      }
+/* ── SECTION ── */
+.section{margin-bottom:52px;}
+.sec-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--purple);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;}
+.sec-title{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:30px;letter-spacing:-0.5px;margin-bottom:4px;}
+.sec-sub{color:var(--muted2);font-size:14px;margin-bottom:24px;}
 
-      /* ── SCRIPT BLOCK ── */
-      .script-block {
-        background: var(--bg2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        overflow: hidden;
-        margin-bottom: 16px;
-      }
-      .script-header {
-        background: var(--bg3);
-        padding: 10px 18px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border-bottom: 1px solid var(--border);
-      }
-      .script-phase {
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        color: var(--muted2);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-      .script-title {
-        font-family: "Barlow Condensed", sans-serif;
-        font-weight: 700;
-        font-size: 16px;
-        color: var(--text);
-      }
-      .script-tag {
-        margin-left: auto;
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        padding: 3px 8px;
-        border-radius: 2px;
-      }
-      .tag-g {
-        background: rgba(57, 233, 123, 0.12);
-        color: var(--green);
-        border: 1px solid rgba(57, 233, 123, 0.2);
-      }
-      .tag-p {
-        background: rgba(155, 124, 255, 0.12);
-        color: var(--purple);
-        border: 1px solid rgba(155, 124, 255, 0.2);
-      }
-      .tag-o {
-        background: rgba(255, 124, 58, 0.12);
-        color: var(--orange);
-        border: 1px solid rgba(255, 124, 58, 0.2);
-      }
-      .tag-r {
-        background: rgba(255, 79, 79, 0.12);
-        color: var(--red);
-        border: 1px solid rgba(255, 79, 79, 0.2);
-      }
-      .tag-b {
-        background: rgba(58, 205, 255, 0.12);
-        color: var(--blue);
-        border: 1px solid rgba(58, 205, 255, 0.2);
-      }
-      .tag-y {
-        background: rgba(255, 204, 0, 0.12);
-        color: var(--yellow);
-        border: 1px solid rgba(255, 204, 0, 0.2);
-      }
+/* ── SCRIPT BLOCK ── */
+.script-block{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:16px;}
+.script-header{
+  background:var(--bg3);
+  padding:10px 18px;
+  display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid var(--border);
+}
+.script-phase{font-family:'Space Mono',monospace;font-size:10px;color:var(--muted2);text-transform:uppercase;letter-spacing:1px;}
+.script-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:16px;color:var(--text);}
+.script-tag{margin-left:auto;font-family:'Space Mono',monospace;font-size:9px;padding:3px 8px;border-radius:2px;}
+.tag-g{background:rgba(57,233,123,0.12);color:var(--green);border:1px solid rgba(57,233,123,0.2);}
+.tag-p{background:rgba(155,124,255,0.12);color:var(--purple);border:1px solid rgba(155,124,255,0.2);}
+.tag-o{background:rgba(255,124,58,0.12);color:var(--orange);border:1px solid rgba(255,124,58,0.2);}
+.tag-r{background:rgba(255,79,79,0.12);color:var(--red);border:1px solid rgba(255,79,79,0.2);}
+.tag-b{background:rgba(58,205,255,0.12);color:var(--blue);border:1px solid rgba(58,205,255,0.2);}
+.tag-y{background:rgba(255,204,0,0.12);color:var(--yellow);border:1px solid rgba(255,204,0,0.2);}
 
-      .script-body {
-        padding: 20px 22px;
-      }
-      .script-line {
-        padding: 10px 0;
-        border-bottom: 1px solid var(--border);
-        display: grid;
-        grid-template-columns: 80px 1fr;
-        gap: 12px;
-        align-items: start;
-      }
-      .script-line:last-child {
-        border-bottom: none;
-      }
-      .speaker {
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-top: 2px;
-      }
-      .sp-you {
-        color: var(--green);
-      }
-      .sp-them {
-        color: var(--muted2);
-      }
-      .sp-note {
-        color: var(--yellow);
-      }
-      .speech {
-        font-size: 14px;
-        color: var(--text);
-        line-height: 1.6;
-      }
-      .speech em {
-        color: var(--green);
-        font-style: normal;
-        font-weight: 600;
-      }
-      .speech .bracket {
-        color: var(--purple);
-        font-family: "Space Mono", monospace;
-        font-size: 12px;
-      }
-      .note-text {
-        font-size: 13px;
-        color: var(--yellow);
-        font-style: italic;
-      }
+.script-body{padding:20px 22px;}
+.script-line{
+  padding:10px 0;
+  border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:80px 1fr;gap:12px;
+  align-items:start;
+}
+.script-line:last-child{border-bottom:none;}
+.speaker{font-family:'Space Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+.sp-you{color:var(--green);}
+.sp-them{color:var(--muted2);}
+.sp-note{color:var(--yellow);}
+.speech{font-size:14px;color:var(--text);line-height:1.6;}
+.speech em{color:var(--green);font-style:normal;font-weight:600;}
+.speech .bracket{color:var(--purple);font-family:'Space Mono',monospace;font-size:12px;}
+.note-text{font-size:13px;color:var(--yellow);font-style:italic;}
 
-      /* ── OBJECTION CARDS ── */
-      .obj-grid {
-        display: grid;
-        gap: 14px;
-      }
-      .obj-card {
-        background: var(--bg2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        overflow: hidden;
-      }
-      .obj-card-header {
-        padding: 12px 18px;
-        background: var(--bg3);
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
-        transition: background 0.15s;
-      }
-      .obj-card-header:hover {
-        background: var(--bg4);
-      }
-      .obj-icon {
-        font-size: 16px;
-      }
-      .obj-question {
-        font-family: "Barlow", sans-serif;
-        font-weight: 700;
-        font-size: 15px;
-        color: var(--text);
-      }
-      .obj-expand {
-        margin-left: auto;
-        color: var(--muted2);
-        font-size: 18px;
-        transition: transform 0.2s;
-        font-family: "Space Mono", monospace;
-      }
-      .obj-card.open .obj-expand {
-        transform: rotate(45deg);
-      }
-      .obj-body {
-        display: none;
-        padding: 18px 20px;
-      }
-      .obj-card.open .obj-body {
-        display: block;
-      }
-      .obj-bad {
-        margin-bottom: 12px;
-      }
-      .obj-bad-label {
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        color: var(--red);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin-bottom: 4px;
-      }
-      .obj-bad-text {
-        font-size: 13px;
-        color: var(--muted2);
-        background: rgba(255, 79, 79, 0.05);
-        border-left: 2px solid var(--red);
-        padding: 8px 12px;
-        border-radius: 0 4px 4px 0;
-      }
-      .obj-good-label {
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        color: var(--green);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        margin-bottom: 4px;
-      }
-      .obj-good-text {
-        font-size: 14px;
-        color: var(--text);
-        background: rgba(57, 233, 123, 0.05);
-        border-left: 2px solid var(--green);
-        padding: 10px 12px;
-        border-radius: 0 4px 4px 0;
-        line-height: 1.7;
-      }
-      .obj-good-text em {
-        color: var(--green);
-        font-style: normal;
-        font-weight: 600;
-      }
-      .obj-tip {
-        margin-top: 10px;
-        font-size: 12px;
-        color: var(--muted2);
-        font-family: "Space Mono", monospace;
-      }
-      .obj-tip span {
-        color: var(--yellow);
-      }
+/* ── OBJECTION CARDS ── */
+.obj-grid{display:grid;gap:14px;}
+.obj-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.obj-card-header{
+  padding:12px 18px;
+  background:var(--bg3);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;cursor:pointer;
+  transition:background 0.15s;
+}
+.obj-card-header:hover{background:var(--bg4);}
+.obj-icon{font-size:16px;}
+.obj-question{font-family:'Barlow',sans-serif;font-weight:700;font-size:15px;color:var(--text);}
+.obj-expand{margin-left:auto;color:var(--muted2);font-size:18px;transition:transform 0.2s;font-family:'Space Mono',monospace;}
+.obj-card.open .obj-expand{transform:rotate(45deg);}
+.obj-body{display:none;padding:18px 20px;}
+.obj-card.open .obj-body{display:block;}
+.obj-bad{margin-bottom:12px;}
+.obj-bad-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.obj-bad-text{font-size:13px;color:var(--muted2);background:rgba(255,79,79,0.05);border-left:2px solid var(--red);padding:8px 12px;border-radius:0 4px 4px 0;}
+.obj-good-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--green);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.obj-good-text{font-size:14px;color:var(--text);background:rgba(57,233,123,0.05);border-left:2px solid var(--green);padding:10px 12px;border-radius:0 4px 4px 0;line-height:1.7;}
+.obj-good-text em{color:var(--green);font-style:normal;font-weight:600;}
+.obj-tip{margin-top:10px;font-size:12px;color:var(--muted2);font-family:'Space Mono',monospace;}
+.obj-tip span{color:var(--yellow);}
 
-      /* ── KPI STRIP ── */
-      .kpi-strip {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        margin-bottom: 36px;
-      }
-      .kpi-box {
-        background: var(--bg2);
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        padding: 16px;
-        text-align: center;
-      }
-      .kpi-num {
-        font-family: "Barlow Condensed", sans-serif;
-        font-weight: 900;
-        font-size: 28px;
-        color: var(--green);
-      }
-      .kpi-lbl {
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        color: var(--muted2);
-        text-transform: uppercase;
-        letter-spacing: 0.8px;
-        margin-top: 2px;
-      }
+/* ── KPI STRIP ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:36px;}
+.kpi-box{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px;text-align:center;}
+.kpi-num{font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:28px;color:var(--green);}
+.kpi-lbl{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted2);text-transform:uppercase;letter-spacing:0.8px;margin-top:2px;}
 
-      /* ── CALLOUT ── */
-      .callout {
-        border-left: 3px solid var(--green);
-        background: rgba(57, 233, 123, 0.04);
-        padding: 14px 18px;
-        border-radius: 0 6px 6px 0;
-        margin: 16px 0;
-      }
-      .callout.warn {
-        border-color: var(--yellow);
-        background: rgba(255, 204, 0, 0.04);
-      }
-      .callout.purple {
-        border-color: var(--purple);
-        background: rgba(155, 124, 255, 0.04);
-      }
-      .callout strong {
-        display: block;
-        font-family: "Space Mono", monospace;
-        font-size: 10px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        color: var(--green);
-        margin-bottom: 4px;
-      }
-      .callout.warn strong {
-        color: var(--yellow);
-      }
-      .callout.purple strong {
-        color: var(--purple);
-      }
-      .callout p {
-        font-size: 13px;
-        color: var(--muted2);
-      }
+/* ── CALLOUT ── */
+.callout{border-left:3px solid var(--green);background:rgba(57,233,123,0.04);padding:14px 18px;border-radius:0 6px 6px 0;margin:16px 0;}
+.callout.warn{border-color:var(--yellow);background:rgba(255,204,0,0.04);}
+.callout.purple{border-color:var(--purple);background:rgba(155,124,255,0.04);}
+.callout strong{display:block;font-family:'Space Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:4px;}
+.callout.warn strong{color:var(--yellow);}
+.callout.purple strong{color:var(--purple);}
+.callout p{font-size:13px;color:var(--muted2);}
 
-      /* ── FLOW STEPS ── */
-      .flow {
-        display: flex;
-        gap: 0;
-        margin: 20px 0;
-        flex-wrap: wrap;
-      }
-      .flow-step {
-        flex: 1;
-        min-width: 100px;
-        background: var(--bg3);
-        border: 1px solid var(--border);
-        padding: 14px 12px;
-        text-align: center;
-        position: relative;
-      }
-      .flow-step:not(:last-child)::after {
-        content: "→";
-        position: absolute;
-        right: -12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: var(--green);
-        font-size: 14px;
-        z-index: 1;
-      }
-      .flow-step .fn {
-        font-family: "Barlow Condensed", sans-serif;
-        font-weight: 700;
-        font-size: 15px;
-        color: var(--text);
-      }
-      .flow-step .fd {
-        font-family: "Space Mono", monospace;
-        font-size: 9px;
-        color: var(--muted2);
-        margin-top: 3px;
-      }
+/* ── FLOW STEPS ── */
+.flow{display:flex;gap:0;margin:20px 0;flex-wrap:wrap;}
+.flow-step{
+  flex:1;min-width:100px;
+  background:var(--bg3);
+  border:1px solid var(--border);
+  padding:14px 12px;
+  text-align:center;
+  position:relative;
+}
+.flow-step:not(:last-child)::after{
+  content:'→';
+  position:absolute;right:-12px;top:50%;transform:translateY(-50%);
+  color:var(--green);font-size:14px;z-index:1;
+}
+.flow-step .fn{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;color:var(--text);}
+.flow-step .fd{font-family:'Space Mono',monospace;font-size:9px;color:var(--muted2);margin-top:3px;}
 
-      /* ── CHECKLIST ── */
-      .checklist {
-        list-style: none;
-      }
-      .checklist li {
-        padding: 8px 0;
-        border-bottom: 1px solid var(--border);
-        font-size: 14px;
-        display: flex;
-        gap: 10px;
-        align-items: flex-start;
-      }
-      .checklist li:last-child {
-        border-bottom: none;
-      }
-      .checklist li::before {
-        content: "→";
-        color: var(--green);
-        font-family: "Space Mono", monospace;
-        flex-shrink: 0;
-        margin-top: 1px;
-      }
+/* ── CHECKLIST ── */
+.checklist{list-style:none;}
+.checklist li{padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;display:flex;gap:10px;align-items:flex-start;}
+.checklist li:last-child{border-bottom:none;}
+.checklist li::before{content:'→';color:var(--green);font-family:'Space Mono',monospace;flex-shrink:0;margin-top:1px;}
 
-      footer {
-        text-align: center;
-        padding: 32px 0 48px;
-        border-top: 1px solid var(--border);
-        margin-top: 60px;
-        font-family: "Space Mono", monospace;
-        font-size: 11px;
-        color: var(--muted);
-      }
-      footer span {
-        color: var(--green);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="header">
-      <div class="logo">
-        <img
-          src="logo.png"
-          alt="Logo"
-          style="
-            height: 24px;
-            vertical-align: middle;
-            margin-right: 12px;
-            margin-top: -2px;
-          "
-        />Xenotrix <span>Cold Call Playbook</span>
-      </div>
-      <div class="header-tag">SALES SYSTEM v1.0</div>
+footer{text-align:center;padding:32px 0 48px;border-top:1px solid var(--border);margin-top:60px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted);}
+footer span{color:var(--green);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Xenotrix <span>Cold Call Playbook</span></div>
+  <div class="header-tag">SALES SYSTEM v1.0</div>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Xenotrix · Sales System</div>
+    <h1>Cold Call<br><em>Script & Objections</em></h1>
+    <p>Word-for-word scripts, objection responses, and the exact framework to book discovery calls from cold phone leads.</p>
+    <div class="phase-pills">
+      <span class="pill pill-g">30-Second Opener</span>
+      <span class="pill pill-p">Conversation Flow</span>
+      <span class="pill pill-o">8 Objections</span>
+      <span class="pill pill-r">Closing Lines</span>
     </div>
+  </div>
 
-    <div class="wrap">
-      <!-- HERO -->
-      <div class="hero">
-        <div class="hero-eyebrow">Xenotrix · Sales System</div>
-        <h1>Cold Call<br /><em>Script & Objections</em></h1>
-        <p>
-          Word-for-word scripts, objection responses, and the exact framework to
-          book discovery calls from cold phone leads.
-        </p>
-        <div class="phase-pills">
-          <span class="pill pill-g">30-Second Opener</span>
-          <span class="pill pill-p">Conversation Flow</span>
-          <span class="pill pill-o">8 Objections</span>
-          <span class="pill pill-r">Closing Lines</span>
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi-box"><div class="kpi-num">25+</div><div class="kpi-lbl">Calls / Day</div></div>
+    <div class="kpi-box"><div class="kpi-num">25%</div><div class="kpi-lbl">Answer Rate Target</div></div>
+    <div class="kpi-box"><div class="kpi-num">20%</div><div class="kpi-lbl">Call → Discovery</div></div>
+    <div class="kpi-box"><div class="kpi-num">≤90s</div><div class="kpi-lbl">Opener Max Length</div></div>
+  </div>
+
+  <!-- CALL FLOW -->
+  <div class="section">
+    <div class="sec-label">01 — Framework</div>
+    <div class="sec-title">The 5-Step Call Flow</div>
+    <div class="sec-sub">Every call follows this exact sequence. Never skip steps.</div>
+    <div class="flow">
+      <div class="flow-step"><div class="fn">Hook</div><div class="fd">0–10 sec</div></div>
+      <div class="flow-step"><div class="fn">Confirm</div><div class="fd">10–20 sec</div></div>
+      <div class="flow-step"><div class="fn">Bridge</div><div class="fd">20–45 sec</div></div>
+      <div class="flow-step"><div class="fn">Ask</div><div class="fd">45–60 sec</div></div>
+      <div class="flow-step"><div class="fn">Close</div><div class="fd">60–90 sec</div></div>
+    </div>
+  </div>
+
+  <!-- MAIN SCRIPT -->
+  <div class="section">
+    <div class="sec-label">02 — Main Script</div>
+    <div class="sec-title">The Full Cold Call</div>
+    <div class="sec-sub">Read this out loud 10 times before your first call. Own every word.</div>
+
+    <div class="script-block">
+      <div class="script-header">
+        <div>
+          <div class="script-phase">Phase 1 · Opening</div>
+          <div class="script-title">The 30-Second Opener</div>
         </div>
+        <span class="script-tag tag-g">MEMORIZE THIS</span>
       </div>
-
-      <!-- KPI STRIP -->
-      <div class="kpi-strip">
-        <div class="kpi-box">
-          <div class="kpi-num">25+</div>
-          <div class="kpi-lbl">Calls / Day</div>
+      <div class="script-body">
+        <div class="script-line">
+          <span class="speaker sp-you">YOU</span>
+          <span class="speech">"Hi, is this <span class="bracket">[Name]</span>?"</span>
         </div>
-        <div class="kpi-box">
-          <div class="kpi-num">25%</div>
-          <div class="kpi-lbl">Answer Rate Target</div>
+        <div class="script-line">
+          <span class="speaker sp-them">THEM</span>
+          <span class="speech">Yes / Who is this?</span>
         </div>
-        <div class="kpi-box">
-          <div class="kpi-num">20%</div>
-          <div class="kpi-lbl">Call → Discovery</div>
+        <div class="script-line">
+          <span class="speaker sp-you">YOU</span>
+          <span class="speech">"<em>Great</em> — I will be super quick, I promise. My name is <span class="bracket">[Your Name]</span> from <em>Xenotrix</em>. We help <span class="bracket">[business type — restaurant / clinic / gym]</span> owners get more customers from their website."</span>
         </div>
-        <div class="kpi-box">
-          <div class="kpi-num">≤90s</div>
-          <div class="kpi-lbl">Opener Max Length</div>
+        <div class="script-line">
+          <span class="speaker sp-note">NOTE</span>
+          <span class="note-text">Pause 1 second here. Let them absorb. Do NOT keep talking immediately.</span>
         </div>
-      </div>
-
-      <!-- CALL FLOW -->
-      <div class="section">
-        <div class="sec-label">01 — Framework</div>
-        <div class="sec-title">The 5-Step Call Flow</div>
-        <div class="sec-sub">
-          Every call follows this exact sequence. Never skip steps.
+        <div class="script-line">
+          <span class="speaker sp-you">YOU</span>
+          <span class="speech">"I just checked <span class="bracket">[Company]</span>'s website — I noticed <em>one specific thing</em> that is probably costing you inquiries every week. I am not selling anything right now. I just want to show you what I found on a <em>10-minute call</em>."</span>
         </div>
-        <div class="flow">
-          <div class="flow-step">
-            <div class="fn">Hook</div>
-            <div class="fd">0–10 sec</div>
-          </div>
-          <div class="flow-step">
-            <div class="fn">Confirm</div>
-            <div class="fd">10–20 sec</div>
-          </div>
-          <div class="flow-step">
-            <div class="fn">Bridge</div>
-            <div class="fd">20–45 sec</div>
-          </div>
-          <div class="flow-step">
-            <div class="fn">Ask</div>
-            <div class="fd">45–60 sec</div>
-          </div>
-          <div class="flow-step">
-            <div class="fn">Close</div>
-            <div class="fd">60–90 sec</div>
-          </div>
+        <div class="script-line">
+          <span class="speaker sp-you">YOU</span>
+          <span class="speech">"Are you free <em>Wednesday or Thursday</em> this week — even 10 minutes?"</span>
         </div>
-      </div>
-
-      <!-- MAIN SCRIPT -->
-      <div class="section">
-        <div class="sec-label">02 — Main Script</div>
-        <div class="sec-title">The Full Cold Call</div>
-        <div class="sec-sub">
-          Read this out loud 10 times before your first call. Own every word.
-        </div>
-
-        <div class="script-block">
-          <div class="script-header">
-            <div>
-              <div class="script-phase">Phase 1 · Opening</div>
-              <div class="script-title">The 30-Second Opener</div>
-            </div>
-            <span class="script-tag tag-g">MEMORIZE THIS</span>
-          </div>
-          <div class="script-body">
-            <div class="script-line">
-              <span class="speaker sp-you">YOU</span>
-              <span class="speech"
-                >"Hi, is this <span class="bracket">[Name]</span>?"</span
-              >
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-them">THEM</span>
-              <span class="speech">Yes / Who is this?</span>
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-you">YOU</span>
-              <span class="speech"
-                >"<em>Great</em> — I will be super quick, I promise. My name is
-                <span class="bracket">[Your Name]</span> from <em>Xenotrix</em>.
-                We help
-                <span class="bracket"
-                  >[business type — restaurant / clinic / gym]</span
-                >
-                owners get more customers from their website."</span
-              >
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-note">NOTE</span>
-              <span class="note-text"
-                >Pause 1 second here. Let them absorb. Do NOT keep talking
-                immediately.</span
-              >
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-you">YOU</span>
-              <span class="speech"
-                >"I just checked <span class="bracket">[Company]</span>'s
-                website — I noticed <em>one specific thing</em> that is probably
-                costing you inquiries every week. I am not selling anything
-                right now. I just want to show you what I found on a
-                <em>10-minute call</em>."</span
-              >
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-you">YOU</span>
-              <span class="speech"
-                >"Are you free <em>Wednesday or Thursday</em> this week — even
-                10 minutes?"</span
-              >
-            </div>
-          </div>
-        </div>
-
-        <div class="callout warn">
-          <strong>Critical Rule</strong>
-          <p>
-            Your goal is NOT to sell on this call. Your only goal is to book a
-            15-minute discovery call. The moment you start pitching services,
-            you lose. Stay focused on "I want to show you what I found."
-          </p>
-        </div>
-
-        <div class="script-block" style="margin-top: 20px">
-          <div class="script-header">
-            <div>
-              <div class="script-phase">Phase 2 · If They Say YES</div>
-              <div class="script-title">Booking the Discovery Call</div>
-            </div>
-            <span class="script-tag tag-p">BOOK FAST</span>
-          </div>
-          <div class="script-body">
-            <div class="script-line">
-              <span class="speaker sp-them">THEM</span>
-              <span class="speech">"Sure, what's this about?"</span>
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-you">YOU</span>
-              <span class="speech"
-                >"Perfect. I found that
-                <span class="bracket"
-                  >[specific issue — e.g., your contact form does not work on
-                  mobile / your site takes 9 seconds to load / there is no
-                  WhatsApp button]</span
-                >. A lot of potential customers are leaving without contacting
-                you because of this."</span
-              >
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-you">YOU</span>
-              <span class="speech"
-                >"I can walk you through the fix and what it would look like for
-                <em><span class="bracket">[Company]</span></em> specifically.
-                Takes 15 minutes on a Google Meet. I am sending you a booking
-                link on WhatsApp right now — what is the best number?"</span
-              >
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-note">NOTE</span>
-              <span class="note-text"
-                >Send the Cal.com link on WhatsApp WHILE on the call. Confirm
-                they received it before hanging up.</span
-              >
-            </div>
-          </div>
-        </div>
-
-        <div class="script-block" style="margin-top: 16px">
-          <div class="script-header">
-            <div>
-              <div class="script-phase">Phase 3 · If They Say NO / Busy</div>
-              <div class="script-title">The Soft Exit (Keep the Door Open)</div>
-            </div>
-            <span class="script-tag tag-o">NEVER BURN</span>
-          </div>
-          <div class="script-body">
-            <div class="script-line">
-              <span class="speaker sp-them">THEM</span>
-              <span class="speech"
-                >"I am busy right now / not interested / we already have
-                someone."</span
-              >
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-you">YOU</span>
-              <span class="speech"
-                >"Totally understand — I appreciate you picking up.
-                <em>No pitch, I promise.</em> Can I just send you a quick
-                WhatsApp message with what I found? Takes 2 seconds to read, and
-                if it is useful, great — if not, no problem at all."</span
-              >
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-note">NOTE</span>
-              <span class="note-text"
-                >90% will say yes. Send WhatsApp Template 1 within 5 minutes.
-                This call is not lost — it is warming up.</span
-              >
-            </div>
-          </div>
-        </div>
-
-        <div class="script-block" style="margin-top: 16px">
-          <div class="script-header">
-            <div>
-              <div class="script-phase">Phase 4 · Voicemail</div>
-              <div class="script-title">When Nobody Answers</div>
-            </div>
-            <span class="script-tag tag-b">LEAVE THIS</span>
-          </div>
-          <div class="script-body">
-            <div class="script-line">
-              <span class="speaker sp-you">YOU</span>
-              <span class="speech"
-                >"Hi <span class="bracket">[Name]</span>, this is
-                <span class="bracket">[Your Name]</span> from Xenotrix — that's
-                X-E-N-O-T-R-I-X. I checked your website and found something
-                specific I wanted to share with you. I will send you a quick
-                WhatsApp message — easier than a call. Speak soon."</span
-              >
-            </div>
-            <div class="script-line">
-              <span class="speaker sp-note">NOTE</span>
-              <span class="note-text"
-                >Immediately send WhatsApp Template 2 after every voicemail. Log
-                in CRM as "VM Left". Call back in 48 hours.</span
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- OBJECTION HANDLER -->
-      <div class="section">
-        <div class="sec-label">03 — Objections</div>
-        <div class="sec-title">8 Objections. 8 Exact Responses.</div>
-        <div class="sec-sub">
-          Every objection is a question in disguise. Answer the real question,
-          not the surface one.
-        </div>
-
-        <div class="obj-grid">
-          <div class="obj-card" onclick="this.classList.toggle('open')">
-            <div class="obj-card-header">
-              <span class="obj-icon">💰</span>
-              <span class="obj-question"
-                >"We don't have the budget for this."</span
-              >
-              <span class="obj-expand">+</span>
-            </div>
-            <div class="obj-body">
-              <div class="obj-bad">
-                <div class="obj-bad-label">❌ Wrong Response</div>
-                <div class="obj-bad-text">
-                  "We have flexible pricing and payment plans..." — sounds
-                  desperate.
-                </div>
-              </div>
-              <div class="obj-good-label">✓ Say This Instead</div>
-              <div class="obj-good-text">
-                "That is completely fair — budget is always a real concern. I am
-                not asking you to spend anything today. I just want to show you
-                what is costing you money right now by not having this fixed. If
-                the numbers make sense for your business, we can talk. If not,
-                no hard feelings. <em>15 minutes — what day works?</em>"
-              </div>
-              <div class="obj-tip">
-                <span>INSIGHT:</span> "No budget" usually means "I don't see the
-                value yet." Your job is to make the cost of NOT acting visible.
-              </div>
-            </div>
-          </div>
-
-          <div class="obj-card" onclick="this.classList.toggle('open')">
-            <div class="obj-card-header">
-              <span class="obj-icon">🤔</span>
-              <span class="obj-question"
-                >"We already have a website / web developer."</span
-              >
-              <span class="obj-expand">+</span>
-            </div>
-            <div class="obj-body">
-              <div class="obj-bad">
-                <div class="obj-bad-label">❌ Wrong Response</div>
-                <div class="obj-bad-text">
-                  "We are better than them..." — never compare.
-                </div>
-              </div>
-              <div class="obj-good-label">✓ Say This Instead</div>
-              <div class="obj-good-text">
-                "That is great — most businesses do. I am actually not here to
-                replace anyone. I checked your site specifically and found
-                <em>[specific issue]</em>. Sometimes even good websites have
-                blind spots that cost leads. It would take 10 minutes for me to
-                show you what I found. <em>Worth a look?</em>"
-              </div>
-              <div class="obj-tip">
-                <span>INSIGHT:</span> They said "we have someone" not "our
-                website is perfect." Use their own uncertainty against the
-                objection.
-              </div>
-            </div>
-          </div>
-
-          <div class="obj-card" onclick="this.classList.toggle('open')">
-            <div class="obj-card-header">
-              <span class="obj-icon">⏰</span>
-              <span class="obj-question">"I don't have time right now."</span>
-              <span class="obj-expand">+</span>
-            </div>
-            <div class="obj-body">
-              <div class="obj-good-label">✓ Say This</div>
-              <div class="obj-good-text">
-                "Absolutely — I will not keep you. I will send you a 3-minute
-                video on WhatsApp showing exactly what I found on your site.
-                Watch it when you have 3 minutes. If it is useful, we book a
-                call. <em>Sound fair?</em>"
-              </div>
-              <div class="obj-tip">
-                <span>ACTION:</span> Record a Loom video of their website
-                pointing out the issue. Send it within 5 minutes of the call.
-              </div>
-            </div>
-          </div>
-
-          <div class="obj-card" onclick="this.classList.toggle('open')">
-            <div class="obj-card-header">
-              <span class="obj-icon">❓</span>
-              <span class="obj-question">"How did you get my number?"</span>
-              <span class="obj-expand">+</span>
-            </div>
-            <div class="obj-body">
-              <div class="obj-good-label">✓ Say This</div>
-              <div class="obj-good-text">
-                "Your number is publicly listed with your business — same way
-                customers find you. I do business research every day and I look
-                for businesses where I can genuinely add value. Yours came up
-                because of <em>[specific website issue]</em>. I would not call
-                if I did not have something real to share."
-              </div>
-              <div class="obj-tip">
-                <span>INSIGHT:</span> Be honest and direct. Never apologize.
-                Confidence here builds immediate trust.
-              </div>
-            </div>
-          </div>
-
-          <div class="obj-card" onclick="this.classList.toggle('open')">
-            <div class="obj-card-header">
-              <span class="obj-icon">🙁</span>
-              <span class="obj-question"
-                >"We had a bad experience with a web agency before."</span
-              >
-              <span class="obj-expand">+</span>
-            </div>
-            <div class="obj-body">
-              <div class="obj-good-label">✓ Say This</div>
-              <div class="obj-good-text">
-                "I hear that a lot — and honestly, it is a fair concern. Most
-                agencies overpromise and underdeliver. What specifically went
-                wrong? [...listen...] Here is what we do differently:
-                <em
-                  >fixed price, 7-day delivery, you see the site before you pay
-                  the second half.</em
-                >
-                No surprises. I would rather show you than tell you. Can we do a
-                15-minute call where I walk you through how we work?"
-              </div>
-              <div class="obj-tip">
-                <span>INSIGHT:</span> Let them vent. Do not defend the industry.
-                Position yourself as the exception by asking what went wrong
-                first.
-              </div>
-            </div>
-          </div>
-
-          <div class="obj-card" onclick="this.classList.toggle('open')">
-            <div class="obj-card-header">
-              <span class="obj-icon">📧</span>
-              <span class="obj-question"
-                >"Send me an email / send me information."</span
-              >
-              <span class="obj-expand">+</span>
-            </div>
-            <div class="obj-body">
-              <div class="obj-bad">
-                <div class="obj-bad-label">❌ Wrong Response</div>
-                <div class="obj-bad-text">
-                  "Sure, what is your email?" — you will never hear from them
-                  again.
-                </div>
-              </div>
-              <div class="obj-good-label">✓ Say This Instead</div>
-              <div class="obj-good-text">
-                "Of course — I will send you a short WhatsApp message instead,
-                it is faster than email. But before I do — so I can make it
-                relevant to you specifically —
-                <em
-                  >is the main challenge with your website getting more people
-                  to contact you, or something else?</em
-                >"
-              </div>
-              <div class="obj-tip">
-                <span>INSIGHT:</span> Turn the stall into a micro-discovery. One
-                answer gives you the personalization hook for your follow-up.
-              </div>
-            </div>
-          </div>
-
-          <div class="obj-card" onclick="this.classList.toggle('open')">
-            <div class="obj-card-header">
-              <span class="obj-icon">🤷</span>
-              <span class="obj-question"
-                >"Our website is fine / We don't need one."</span
-              >
-              <span class="obj-expand">+</span>
-            </div>
-            <div class="obj-body">
-              <div class="obj-good-label">✓ Say This</div>
-              <div class="obj-good-text">
-                "That is great to hear. I genuinely found one specific issue
-                though —
-                <em
-                  >[name it: "your PageSpeed score is 38 out of 100" / "your
-                  contact form times out on mobile" / "there is no click-to-call
-                  button"]</em
-                >. Even high-performing sites have one or two blind spots. If I
-                am wrong and your site is solid, I will tell you that on the
-                call and we shake hands. <em>15 minutes — fair enough?</em>"
-              </div>
-              <div class="obj-tip">
-                <span>INSIGHT:</span> Always have a SPECIFIC issue ready for
-                every lead before you call. Vague observations get dismissed.
-                Specific facts get meetings.
-              </div>
-            </div>
-          </div>
-
-          <div class="obj-card" onclick="this.classList.toggle('open')">
-            <div class="obj-card-header">
-              <span class="obj-icon">🚫</span>
-              <span class="obj-question">"Not interested." (Hard no)</span>
-              <span class="obj-expand">+</span>
-            </div>
-            <div class="obj-body">
-              <div class="obj-good-label">✓ Say This</div>
-              <div class="obj-good-text">
-                "Completely respect that. Can I ask one quick question before I
-                go — just for my own learning?
-                <em
-                  >Is it the timing, the budget, or just not a priority right
-                  now?</em
-                >"
-              </div>
-              <div class="obj-tip">
-                <span>INSIGHT:</span> Their answer tells you EXACTLY what to fix
-                in your pitch. Log it in CRM. Send a WhatsApp in 30 days —
-                circumstances change.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- BEFORE YOU CALL -->
-      <div class="section">
-        <div class="sec-label">04 — Prep</div>
-        <div class="sec-title">Before Every Call — 2-Minute Prep</div>
-        <div class="sec-sub">
-          Never call cold blind. 2 minutes of research = 3x higher conversion.
-        </div>
-        <ul class="checklist">
-          <li>
-            Visit their website. Note the load speed (use PageSpeed Insights —
-            free).
-          </li>
-          <li>Check if the contact form works on mobile. Try submitting it.</li>
-          <li>Check if they have a Google Business Profile. Is it complete?</li>
-          <li>
-            Check if there is a WhatsApp or click-to-call button on the
-            homepage.
-          </li>
-          <li>
-            Look at their last Google review date. Old reviews = disengaged from
-            online presence.
-          </li>
-          <li>
-            Write down 1 specific issue to mention. This is your hook — memorize
-            it for the call.
-          </li>
-          <li>
-            Have your Cal.com link ready to paste on WhatsApp immediately after
-            the call.
-          </li>
-        </ul>
-        <div class="callout purple" style="margin-top: 16px">
-          <strong>The Specificity Rule</strong>
-          <p>
-            "I noticed your website has some issues" = ignored. "I noticed your
-            site takes 11 seconds to load on mobile and Google penalizes
-            anything over 3 seconds" = they listen. One specific data point
-            beats any pitch deck.
-          </p>
-        </div>
-      </div>
-
-      <!-- AFTER THE CALL -->
-      <div class="section">
-        <div class="sec-label">05 — After</div>
-        <div class="sec-title">Post-Call Actions (Do These Immediately)</div>
-        <ul class="checklist">
-          <li>
-            <strong>Booked call:</strong> Send WhatsApp confirmation + Cal.com
-            link within 2 minutes. Log status as "Call Booked" in CRM.
-          </li>
-          <li>
-            <strong>Interested but no time:</strong> Send Loom audit video on
-            WhatsApp within 5 minutes. Set follow-up date to tomorrow.
-          </li>
-          <li>
-            <strong>Voicemail:</strong> Send WhatsApp Template 1 immediately.
-            Set follow-up date to +48 hours. Log "VM Left."
-          </li>
-          <li>
-            <strong>Not interested:</strong> Log objection type in Notes. Send
-            nothing today. Schedule a WhatsApp in 30 days.
-          </li>
-          <li>
-            <strong>Wrong number / no answer:</strong> Log and move to next
-            lead. Do not waste time. Volume is the game.
-          </li>
-        </ul>
       </div>
     </div>
 
-    <footer>
-      <span>Xenotrix</span> Digital Agency · xenotrix.com · Cold Call Playbook
-      v1.0<br />
-      <span style="color: var(--muted); margin-top: 4px; display: block"
-        >25 calls/day · 90 days straight · That's your first $10K</span
-      >
-    </footer>
-  </body>
+    <div class="callout warn">
+      <strong>Critical Rule</strong>
+      <p>Your goal is NOT to sell on this call. Your only goal is to book a 15-minute discovery call. The moment you start pitching services, you lose. Stay focused on "I want to show you what I found."</p>
+    </div>
+
+    <div class="script-block" style="margin-top:20px;">
+      <div class="script-header">
+        <div>
+          <div class="script-phase">Phase 2 · If They Say YES</div>
+          <div class="script-title">Booking the Discovery Call</div>
+        </div>
+        <span class="script-tag tag-p">BOOK FAST</span>
+      </div>
+      <div class="script-body">
+        <div class="script-line">
+          <span class="speaker sp-them">THEM</span>
+          <span class="speech">"Sure, what's this about?"</span>
+        </div>
+        <div class="script-line">
+          <span class="speaker sp-you">YOU</span>
+          <span class="speech">"Perfect. I found that <span class="bracket">[specific issue — e.g., your contact form does not work on mobile / your site takes 9 seconds to load / there is no WhatsApp button]</span>. A lot of potential customers are leaving without contacting you because of this."</span>
+        </div>
+        <div class="script-line">
+          <span class="speaker sp-you">YOU</span>
+          <span class="speech">"I can walk you through the fix and what it would look like for <em><span class="bracket">[Company]</span></em> specifically. Takes 15 minutes on a Google Meet. I am sending you a booking link on WhatsApp right now — what is the best number?"</span>
+        </div>
+        <div class="script-line">
+          <span class="speaker sp-note">NOTE</span>
+          <span class="note-text">Send the Cal.com link on WhatsApp WHILE on the call. Confirm they received it before hanging up.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="script-block" style="margin-top:16px;">
+      <div class="script-header">
+        <div>
+          <div class="script-phase">Phase 3 · If They Say NO / Busy</div>
+          <div class="script-title">The Soft Exit (Keep the Door Open)</div>
+        </div>
+        <span class="script-tag tag-o">NEVER BURN</span>
+      </div>
+      <div class="script-body">
+        <div class="script-line">
+          <span class="speaker sp-them">THEM</span>
+          <span class="speech">"I am busy right now / not interested / we already have someone."</span>
+        </div>
+        <div class="script-line">
+          <span class="speaker sp-you">YOU</span>
+          <span class="speech">"Totally understand — I appreciate you picking up. <em>No pitch, I promise.</em> Can I just send you a quick WhatsApp message with what I found? Takes 2 seconds to read, and if it is useful, great — if not, no problem at all."</span>
+        </div>
+        <div class="script-line">
+          <span class="speaker sp-note">NOTE</span>
+          <span class="note-text">90% will say yes. Send WhatsApp Template 1 within 5 minutes. This call is not lost — it is warming up.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="script-block" style="margin-top:16px;">
+      <div class="script-header">
+        <div>
+          <div class="script-phase">Phase 4 · Voicemail</div>
+          <div class="script-title">When Nobody Answers</div>
+        </div>
+        <span class="script-tag tag-b">LEAVE THIS</span>
+      </div>
+      <div class="script-body">
+        <div class="script-line">
+          <span class="speaker sp-you">YOU</span>
+          <span class="speech">"Hi <span class="bracket">[Name]</span>, this is <span class="bracket">[Your Name]</span> from Xenotrix — that's X-E-N-O-T-R-I-X. I checked your website and found something specific I wanted to share with you. I will send you a quick WhatsApp message — easier than a call. Speak soon."</span>
+        </div>
+        <div class="script-line">
+          <span class="speaker sp-note">NOTE</span>
+          <span class="note-text">Immediately send WhatsApp Template 2 after every voicemail. Log in CRM as "VM Left". Call back in 48 hours.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OBJECTION HANDLER -->
+  <div class="section">
+    <div class="sec-label">03 — Objections</div>
+    <div class="sec-title">8 Objections. 8 Exact Responses.</div>
+    <div class="sec-sub">Every objection is a question in disguise. Answer the real question, not the surface one.</div>
+
+    <div class="obj-grid">
+
+      <div class="obj-card" onclick="this.classList.toggle('open')">
+        <div class="obj-card-header">
+          <span class="obj-icon">💰</span>
+          <span class="obj-question">"We don't have the budget for this."</span>
+          <span class="obj-expand">+</span>
+        </div>
+        <div class="obj-body">
+          <div class="obj-bad">
+            <div class="obj-bad-label">❌ Wrong Response</div>
+            <div class="obj-bad-text">"We have flexible pricing and payment plans..." — sounds desperate.</div>
+          </div>
+          <div class="obj-good-label">✓ Say This Instead</div>
+          <div class="obj-good-text">"That is completely fair — budget is always a real concern. I am not asking you to spend anything today. I just want to show you what is costing you money right now by not having this fixed. If the numbers make sense for your business, we can talk. If not, no hard feelings. <em>15 minutes — what day works?</em>"</div>
+          <div class="obj-tip"><span>INSIGHT:</span> "No budget" usually means "I don't see the value yet." Your job is to make the cost of NOT acting visible.</div>
+        </div>
+      </div>
+
+      <div class="obj-card" onclick="this.classList.toggle('open')">
+        <div class="obj-card-header">
+          <span class="obj-icon">🤔</span>
+          <span class="obj-question">"We already have a website / web developer."</span>
+          <span class="obj-expand">+</span>
+        </div>
+        <div class="obj-body">
+          <div class="obj-bad">
+            <div class="obj-bad-label">❌ Wrong Response</div>
+            <div class="obj-bad-text">"We are better than them..." — never compare.</div>
+          </div>
+          <div class="obj-good-label">✓ Say This Instead</div>
+          <div class="obj-good-text">"That is great — most businesses do. I am actually not here to replace anyone. I checked your site specifically and found <em>[specific issue]</em>. Sometimes even good websites have blind spots that cost leads. It would take 10 minutes for me to show you what I found. <em>Worth a look?</em>"</div>
+          <div class="obj-tip"><span>INSIGHT:</span> They said "we have someone" not "our website is perfect." Use their own uncertainty against the objection.</div>
+        </div>
+      </div>
+
+      <div class="obj-card" onclick="this.classList.toggle('open')">
+        <div class="obj-card-header">
+          <span class="obj-icon">⏰</span>
+          <span class="obj-question">"I don't have time right now."</span>
+          <span class="obj-expand">+</span>
+        </div>
+        <div class="obj-body">
+          <div class="obj-good-label">✓ Say This</div>
+          <div class="obj-good-text">"Absolutely — I will not keep you. I will send you a 3-minute video on WhatsApp showing exactly what I found on your site. Watch it when you have 3 minutes. If it is useful, we book a call. <em>Sound fair?</em>"</div>
+          <div class="obj-tip"><span>ACTION:</span> Record a Loom video of their website pointing out the issue. Send it within 5 minutes of the call.</div>
+        </div>
+      </div>
+
+      <div class="obj-card" onclick="this.classList.toggle('open')">
+        <div class="obj-card-header">
+          <span class="obj-icon">❓</span>
+          <span class="obj-question">"How did you get my number?"</span>
+          <span class="obj-expand">+</span>
+        </div>
+        <div class="obj-body">
+          <div class="obj-good-label">✓ Say This</div>
+          <div class="obj-good-text">"Your number is publicly listed with your business — same way customers find you. I do business research every day and I look for businesses where I can genuinely add value. Yours came up because of <em>[specific website issue]</em>. I would not call if I did not have something real to share."</div>
+          <div class="obj-tip"><span>INSIGHT:</span> Be honest and direct. Never apologize. Confidence here builds immediate trust.</div>
+        </div>
+      </div>
+
+      <div class="obj-card" onclick="this.classList.toggle('open')">
+        <div class="obj-card-header">
+          <span class="obj-icon">🙁</span>
+          <span class="obj-question">"We had a bad experience with a web agency before."</span>
+          <span class="obj-expand">+</span>
+        </div>
+        <div class="obj-body">
+          <div class="obj-good-label">✓ Say This</div>
+          <div class="obj-good-text">"I hear that a lot — and honestly, it is a fair concern. Most agencies overpromise and underdeliver. What specifically went wrong? [...listen...] Here is what we do differently: <em>fixed price, 7-day delivery, you see the site before you pay the second half.</em> No surprises. I would rather show you than tell you. Can we do a 15-minute call where I walk you through how we work?"</div>
+          <div class="obj-tip"><span>INSIGHT:</span> Let them vent. Do not defend the industry. Position yourself as the exception by asking what went wrong first.</div>
+        </div>
+      </div>
+
+      <div class="obj-card" onclick="this.classList.toggle('open')">
+        <div class="obj-card-header">
+          <span class="obj-icon">📧</span>
+          <span class="obj-question">"Send me an email / send me information."</span>
+          <span class="obj-expand">+</span>
+        </div>
+        <div class="obj-body">
+          <div class="obj-bad">
+            <div class="obj-bad-label">❌ Wrong Response</div>
+            <div class="obj-bad-text">"Sure, what is your email?" — you will never hear from them again.</div>
+          </div>
+          <div class="obj-good-label">✓ Say This Instead</div>
+          <div class="obj-good-text">"Of course — I will send you a short WhatsApp message instead, it is faster than email. But before I do — so I can make it relevant to you specifically — <em>is the main challenge with your website getting more people to contact you, or something else?</em>"</div>
+          <div class="obj-tip"><span>INSIGHT:</span> Turn the stall into a micro-discovery. One answer gives you the personalization hook for your follow-up.</div>
+        </div>
+      </div>
+
+      <div class="obj-card" onclick="this.classList.toggle('open')">
+        <div class="obj-card-header">
+          <span class="obj-icon">🤷</span>
+          <span class="obj-question">"Our website is fine / We don't need one."</span>
+          <span class="obj-expand">+</span>
+        </div>
+        <div class="obj-body">
+          <div class="obj-good-label">✓ Say This</div>
+          <div class="obj-good-text">"That is great to hear. I genuinely found one specific issue though — <em>[name it: "your PageSpeed score is 38 out of 100" / "your contact form times out on mobile" / "there is no click-to-call button"]</em>. Even high-performing sites have one or two blind spots. If I am wrong and your site is solid, I will tell you that on the call and we shake hands. <em>15 minutes — fair enough?</em>"</div>
+          <div class="obj-tip"><span>INSIGHT:</span> Always have a SPECIFIC issue ready for every lead before you call. Vague observations get dismissed. Specific facts get meetings.</div>
+        </div>
+      </div>
+
+      <div class="obj-card" onclick="this.classList.toggle('open')">
+        <div class="obj-card-header">
+          <span class="obj-icon">🚫</span>
+          <span class="obj-question">"Not interested." (Hard no)</span>
+          <span class="obj-expand">+</span>
+        </div>
+        <div class="obj-body">
+          <div class="obj-good-label">✓ Say This</div>
+          <div class="obj-good-text">"Completely respect that. Can I ask one quick question before I go — just for my own learning? <em>Is it the timing, the budget, or just not a priority right now?</em>"</div>
+          <div class="obj-tip"><span>INSIGHT:</span> Their answer tells you EXACTLY what to fix in your pitch. Log it in CRM. Send a WhatsApp in 30 days — circumstances change.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BEFORE YOU CALL -->
+  <div class="section">
+    <div class="sec-label">04 — Prep</div>
+    <div class="sec-title">Before Every Call — 2-Minute Prep</div>
+    <div class="sec-sub">Never call cold blind. 2 minutes of research = 3x higher conversion.</div>
+    <ul class="checklist">
+      <li>Visit their website. Note the load speed (use PageSpeed Insights — free).</li>
+      <li>Check if the contact form works on mobile. Try submitting it.</li>
+      <li>Check if they have a Google Business Profile. Is it complete?</li>
+      <li>Check if there is a WhatsApp or click-to-call button on the homepage.</li>
+      <li>Look at their last Google review date. Old reviews = disengaged from online presence.</li>
+      <li>Write down 1 specific issue to mention. This is your hook — memorize it for the call.</li>
+      <li>Have your Cal.com link ready to paste on WhatsApp immediately after the call.</li>
+    </ul>
+    <div class="callout purple" style="margin-top:16px;">
+      <strong>The Specificity Rule</strong>
+      <p>"I noticed your website has some issues" = ignored. "I noticed your site takes 11 seconds to load on mobile and Google penalizes anything over 3 seconds" = they listen. One specific data point beats any pitch deck.</p>
+    </div>
+  </div>
+
+  <!-- AFTER THE CALL -->
+  <div class="section">
+    <div class="sec-label">05 — After</div>
+    <div class="sec-title">Post-Call Actions (Do These Immediately)</div>
+    <ul class="checklist">
+      <li><strong>Booked call:</strong> Send WhatsApp confirmation + Cal.com link within 2 minutes. Log status as "Call Booked" in CRM.</li>
+      <li><strong>Interested but no time:</strong> Send Loom audit video on WhatsApp within 5 minutes. Set follow-up date to tomorrow.</li>
+      <li><strong>Voicemail:</strong> Send WhatsApp Template 1 immediately. Set follow-up date to +48 hours. Log "VM Left."</li>
+      <li><strong>Not interested:</strong> Log objection type in Notes. Send nothing today. Schedule a WhatsApp in 30 days.</li>
+      <li><strong>Wrong number / no answer:</strong> Log and move to next lead. Do not waste time. Volume is the game.</li>
+    </ul>
+  </div>
+
+</div>
+
+<footer>
+  <span>Xenotrix</span> Digital Agency · xenotrix.com · Cold Call Playbook v1.0<br>
+  <span style="color:var(--muted);margin-top:4px;display:block;">25 calls/day · 90 days straight · That's your first $10K</span>
+</footer>
+
+</body>
 </html>

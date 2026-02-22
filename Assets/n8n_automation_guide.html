@@ -1,2583 +1,1359 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Xenotrix — n8n Automation Playbook</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Unbounded:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg: #050508;
-        --bg2: #09090f;
-        --bg3: #0e0e18;
-        --bg4: #131320;
-        --bg5: #181826;
-        --bdr: #1c1c2e;
-        --bdr2: #252540;
-        --cyan: #00e5cc;
-        --cyan2: #00b89e;
-        --purple: #b06aff;
-        --blue: #4488ff;
-        --green: #3ddc84;
-        --orange: #ff8c42;
-        --red: #ff5566;
-        --yellow: #ffd166;
-        --white: #f0f0ff;
-        --muted: #606080;
-        --muted2: #404060;
-      }
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        background: var(--bg);
-        color: var(--white);
-        font-family: "DM Sans", sans-serif;
-        font-size: 15px;
-        line-height: 1.65;
-        overflow-x: hidden;
-      }
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xenotrix — n8n Automation Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Unbounded:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #050508;
+  --bg2:    #09090f;
+  --bg3:    #0e0e18;
+  --bg4:    #131320;
+  --bg5:    #181826;
+  --bdr:    #1c1c2e;
+  --bdr2:   #252540;
+  --cyan:   #00e5cc;
+  --cyan2:  #00b89e;
+  --purple: #b06aff;
+  --blue:   #4488ff;
+  --green:  #3ddc84;
+  --orange: #ff8c42;
+  --red:    #ff5566;
+  --yellow: #ffd166;
+  --white:  #f0f0ff;
+  --muted:  #606080;
+  --muted2: #404060;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
 
-      /* ── SCANLINE OVERLAY ── */
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        background: repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 2px,
-          rgba(0, 229, 204, 0.012) 2px,
-          rgba(0, 229, 204, 0.012) 4px
-        );
-        pointer-events: none;
-        z-index: 1000;
-      }
+/* ── SCANLINE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,229,204,0.012) 2px,
+    rgba(0,229,204,0.012) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
 
-      /* ── SIDEBAR ── */
-      .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 240px;
-        background: var(--bg2);
-        border-right: 1px solid var(--bdr);
-        padding: 0;
-        overflow-y: auto;
-        z-index: 90;
-      }
-      .sidebar-header {
-        padding: 22px 20px 18px;
-        border-bottom: 1px solid var(--bdr);
-        background: var(--bg3);
-      }
-      .sidebar-logo {
-        font-family: "Unbounded", sans-serif;
-        font-weight: 900;
-        font-size: 16px;
-        color: var(--cyan);
-        letter-spacing: -0.3px;
-      }
-      .sidebar-logo span {
-        display: block;
-        font-family: "JetBrains Mono", monospace;
-        font-weight: 400;
-        font-size: 9px;
-        color: var(--muted);
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        margin-top: 3px;
-      }
-      .sidebar nav {
-        padding: 12px 0;
-      }
-      .nav-group-label {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 9px;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        color: var(--muted2);
-        padding: 14px 20px 5px;
-      }
-      .sidebar nav a {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 7px 20px;
-        color: var(--muted);
-        text-decoration: none;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 11px;
-        transition: all 0.12s;
-        border-left: 2px solid transparent;
-      }
-      .sidebar nav a:hover {
-        color: var(--cyan);
-        background: rgba(0, 229, 204, 0.04);
-        border-left-color: var(--cyan);
-      }
-      .sidebar nav a .dot {
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background: var(--muted2);
-        flex-shrink: 0;
-        transition: background 0.12s;
-      }
-      .sidebar nav a:hover .dot {
-        background: var(--cyan);
-      }
+/* ── SIDEBAR ── */
+.sidebar {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 240px;
+  background: var(--bg2);
+  border-right: 1px solid var(--bdr);
+  padding: 0;
+  overflow-y: auto;
+  z-index: 90;
+}
+.sidebar-header {
+  padding: 22px 20px 18px;
+  border-bottom: 1px solid var(--bdr);
+  background: var(--bg3);
+}
+.sidebar-logo {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--cyan);
+  letter-spacing: -0.3px;
+}
+.sidebar-logo span {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 400;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+.sidebar nav { padding: 12px 0; }
+.nav-group-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted2);
+  padding: 14px 20px 5px;
+}
+.sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 20px;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  transition: all 0.12s;
+  border-left: 2px solid transparent;
+}
+.sidebar nav a:hover {
+  color: var(--cyan);
+  background: rgba(0,229,204,0.04);
+  border-left-color: var(--cyan);
+}
+.sidebar nav a .dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--muted2);
+  flex-shrink: 0;
+  transition: background 0.12s;
+}
+.sidebar nav a:hover .dot { background: var(--cyan); }
 
-      /* ── MAIN ── */
-      .main {
-        margin-left: 240px;
-        max-width: 940px;
-        padding: 0 44px 80px;
-      }
+/* ── MAIN ── */
+.main {
+  margin-left: 240px;
+  max-width: 940px;
+  padding: 0 44px 80px;
+}
 
-      /* ── HERO ── */
-      .hero {
-        padding: 56px 0 48px;
-        border-bottom: 1px solid var(--bdr);
-        margin-bottom: 56px;
-        position: relative;
-      }
-      .hero-tag {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 10px;
-        color: var(--cyan);
-        letter-spacing: 3px;
-        text-transform: uppercase;
-        margin-bottom: 16px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .hero-tag::before {
-        content: "";
-        width: 20px;
-        height: 1px;
-        background: var(--cyan);
-      }
-      .hero h1 {
-        font-family: "Unbounded", sans-serif;
-        font-weight: 900;
-        font-size: 46px;
-        line-height: 1.05;
-        letter-spacing: -2px;
-        margin-bottom: 12px;
-      }
-      .hero h1 em {
-        color: var(--cyan);
-        font-style: normal;
-      }
-      .hero p {
-        color: var(--muted);
-        font-size: 16px;
-        max-width: 540px;
-        line-height: 1.7;
-      }
-      .hero-grid {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 12px;
-        margin-top: 36px;
-      }
-      .hero-stat {
-        background: var(--bg3);
-        border: 1px solid var(--bdr);
-        border-radius: 6px;
-        padding: 16px 14px;
-      }
-      .hero-stat .num {
-        font-family: "Unbounded", sans-serif;
-        font-size: 24px;
-        font-weight: 900;
-        color: var(--cyan);
-        line-height: 1;
-      }
-      .hero-stat .lbl {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 9px;
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-top: 5px;
-      }
+/* ── HERO ── */
+.hero {
+  padding: 56px 0 48px;
+  border-bottom: 1px solid var(--bdr);
+  margin-bottom: 56px;
+  position: relative;
+}
+.hero-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--cyan);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.hero-tag::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--cyan);
+}
+.hero h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: 46px;
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 12px;
+}
+.hero h1 em {
+  color: var(--cyan);
+  font-style: normal;
+}
+.hero p {
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 540px;
+  line-height: 1.7;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 36px;
+}
+.hero-stat {
+  background: var(--bg3);
+  border: 1px solid var(--bdr);
+  border-radius: 6px;
+  padding: 16px 14px;
+}
+.hero-stat .num {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--cyan);
+  line-height: 1;
+}
+.hero-stat .lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 5px;
+}
 
-      /* ── SECTION ── */
-      .section {
-        margin-bottom: 64px;
-      }
-      .sec-eyebrow {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 9px;
-        color: var(--cyan);
-        letter-spacing: 3px;
-        text-transform: uppercase;
-        margin-bottom: 6px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-      }
-      .sec-eyebrow::before {
-        content: "//";
-        opacity: 0.5;
-      }
-      .sec-title {
-        font-family: "Unbounded", sans-serif;
-        font-weight: 900;
-        font-size: 26px;
-        letter-spacing: -0.5px;
-        margin-bottom: 6px;
-      }
-      .sec-sub {
-        color: var(--muted);
-        font-size: 13px;
-        margin-bottom: 24px;
-        max-width: 580px;
-      }
-      .sec-divider {
-        height: 1px;
-        background: var(--bdr);
-        margin: 8px 0 24px;
-      }
+/* ── SECTION ── */
+.section { margin-bottom: 64px; }
+.sec-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--cyan);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.sec-eyebrow::before { content: '//'; opacity: 0.5; }
+.sec-title {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+.sec-sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 24px;
+  max-width: 580px;
+}
+.sec-divider {
+  height: 1px;
+  background: var(--bdr);
+  margin: 8px 0 24px;
+}
 
-      /* ── AUTOMATION CARDS ── */
-      .auto-card {
-        background: var(--bg3);
-        border: 1px solid var(--bdr);
-        border-radius: 10px;
-        margin-bottom: 20px;
-        overflow: hidden;
-        transition: border-color 0.2s;
-      }
-      .auto-card:hover {
-        border-color: var(--bdr2);
-      }
-      .auto-header {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        padding: 16px 20px;
-        background: var(--bg4);
-        border-bottom: 1px solid var(--bdr);
-        cursor: pointer;
-      }
-      .auto-icon {
-        font-size: 20px;
-        width: 38px;
-        height: 38px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--bg3);
-        border: 1px solid var(--bdr2);
-        border-radius: 6px;
-        flex-shrink: 0;
-      }
-      .auto-meta {
-        flex: 1;
-      }
-      .auto-name {
-        font-family: "Unbounded", sans-serif;
-        font-weight: 700;
-        font-size: 14px;
-        margin-bottom: 2px;
-      }
-      .auto-desc {
-        font-size: 12px;
-        color: var(--muted);
-      }
-      .auto-badges {
-        display: flex;
-        gap: 6px;
-        align-items: center;
-        flex-wrap: wrap;
-      }
-      .badge {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 9px;
-        padding: 3px 8px;
-        border-radius: 3px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-      .b-cyan {
-        background: rgba(0, 229, 204, 0.1);
-        color: var(--cyan);
-        border: 1px solid rgba(0, 229, 204, 0.2);
-      }
-      .b-purple {
-        background: rgba(176, 106, 255, 0.1);
-        color: var(--purple);
-        border: 1px solid rgba(176, 106, 255, 0.2);
-      }
-      .b-blue {
-        background: rgba(68, 136, 255, 0.1);
-        color: var(--blue);
-        border: 1px solid rgba(68, 136, 255, 0.2);
-      }
-      .b-green {
-        background: rgba(61, 220, 132, 0.1);
-        color: var(--green);
-        border: 1px solid rgba(61, 220, 132, 0.2);
-      }
-      .b-orange {
-        background: rgba(255, 140, 66, 0.1);
-        color: var(--orange);
-        border: 1px solid rgba(255, 140, 66, 0.2);
-      }
-      .b-red {
-        background: rgba(255, 85, 102, 0.1);
-        color: var(--red);
-        border: 1px solid rgba(255, 85, 102, 0.2);
-      }
-      .b-yellow {
-        background: rgba(255, 209, 102, 0.1);
-        color: var(--yellow);
-        border: 1px solid rgba(255, 209, 102, 0.2);
-      }
+/* ── AUTOMATION CARDS ── */
+.auto-card {
+  background: var(--bg3);
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.auto-card:hover { border-color: var(--bdr2); }
+.auto-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: var(--bg4);
+  border-bottom: 1px solid var(--bdr);
+  cursor: pointer;
+}
+.auto-icon {
+  font-size: 20px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg3);
+  border: 1px solid var(--bdr2);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.auto-meta { flex: 1; }
+.auto-name {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+.auto-desc { font-size: 12px; color: var(--muted); }
+.auto-badges { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 3px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.b-cyan   { background: rgba(0,229,204,0.1);  color: var(--cyan);   border: 1px solid rgba(0,229,204,0.2); }
+.b-purple { background: rgba(176,106,255,0.1); color: var(--purple); border: 1px solid rgba(176,106,255,0.2); }
+.b-blue   { background: rgba(68,136,255,0.1);  color: var(--blue);   border: 1px solid rgba(68,136,255,0.2); }
+.b-green  { background: rgba(61,220,132,0.1);  color: var(--green);  border: 1px solid rgba(61,220,132,0.2); }
+.b-orange { background: rgba(255,140,66,0.1);  color: var(--orange); border: 1px solid rgba(255,140,66,0.2); }
+.b-red    { background: rgba(255,85,102,0.1);  color: var(--red);    border: 1px solid rgba(255,85,102,0.2); }
+.b-yellow { background: rgba(255,209,102,0.1); color: var(--yellow); border: 1px solid rgba(255,209,102,0.2); }
 
-      .auto-toggle {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 16px;
-        color: var(--muted);
-        transition:
-          transform 0.2s,
-          color 0.15s;
-      }
-      .auto-card.open .auto-toggle {
-        transform: rotate(90deg);
-        color: var(--cyan);
-      }
+.auto-toggle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  color: var(--muted);
+  transition: transform 0.2s, color 0.15s;
+}
+.auto-card.open .auto-toggle { transform: rotate(90deg); color: var(--cyan); }
 
-      .auto-body {
-        display: none;
-        padding: 22px 22px 20px;
-      }
-      .auto-card.open .auto-body {
-        display: block;
-      }
+.auto-body { display: none; padding: 22px 22px 20px; }
+.auto-card.open .auto-body { display: block; }
 
-      /* ── FLOW DIAGRAM ── */
-      .flow-diagram {
-        display: flex;
-        align-items: center;
-        gap: 0;
-        margin: 16px 0 20px;
-        flex-wrap: wrap;
-      }
-      .flow-node {
-        background: var(--bg5);
-        border: 1px solid var(--bdr2);
-        border-radius: 6px;
-        padding: 8px 14px;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 11px;
-        color: var(--white);
-        text-align: center;
-        min-width: 90px;
-      }
-      .flow-node.trigger {
-        border-color: var(--cyan);
-        color: var(--cyan);
-      }
-      .flow-node.action {
-        border-color: var(--purple);
-        color: var(--purple);
-      }
-      .flow-node.output {
-        border-color: var(--green);
-        color: var(--green);
-      }
-      .flow-node.condition {
-        border-color: var(--yellow);
-        color: var(--yellow);
-      }
-      .flow-node.http {
-        border-color: var(--blue);
-        color: var(--blue);
-      }
-      .flow-arrow {
-        color: var(--muted2);
-        font-size: 14px;
-        padding: 0 6px;
-        font-family: "JetBrains Mono", monospace;
-      }
-      .flow-label {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 9px;
-        color: var(--muted);
-        text-align: center;
-        margin-top: 3px;
-        display: block;
-      }
+/* ── FLOW DIAGRAM ── */
+.flow-diagram {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 16px 0 20px;
+  flex-wrap: wrap;
+}
+.flow-node {
+  background: var(--bg5);
+  border: 1px solid var(--bdr2);
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--white);
+  text-align: center;
+  min-width: 90px;
+}
+.flow-node.trigger { border-color: var(--cyan); color: var(--cyan); }
+.flow-node.action  { border-color: var(--purple); color: var(--purple); }
+.flow-node.output  { border-color: var(--green); color: var(--green); }
+.flow-node.condition { border-color: var(--yellow); color: var(--yellow); }
+.flow-node.http { border-color: var(--blue); color: var(--blue); }
+.flow-arrow {
+  color: var(--muted2);
+  font-size: 14px;
+  padding: 0 6px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.flow-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 3px;
+  display: block;
+}
 
-      /* ── STEP LIST ── */
-      .step-list {
-        list-style: none;
-        margin: 14px 0;
-      }
-      .step-list li {
-        display: grid;
-        grid-template-columns: 26px 1fr;
-        gap: 10px;
-        padding: 9px 0;
-        border-bottom: 1px solid var(--bdr);
-        align-items: flex-start;
-        font-size: 13px;
-      }
-      .step-list li:last-child {
-        border-bottom: none;
-      }
-      .step-num {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 10px;
-        color: var(--cyan);
-        font-weight: 700;
-        padding-top: 1px;
-      }
-      .step-text {
-        color: var(--white);
-        line-height: 1.55;
-      }
-      .step-text strong {
-        color: var(--cyan);
-      }
-      .step-text code {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 11px;
-        background: var(--bg5);
-        border: 1px solid var(--bdr2);
-        padding: 1px 5px;
-        border-radius: 3px;
-        color: var(--yellow);
-      }
+/* ── STEP LIST ── */
+.step-list { list-style: none; margin: 14px 0; }
+.step-list li {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--bdr);
+  align-items: flex-start;
+  font-size: 13px;
+}
+.step-list li:last-child { border-bottom: none; }
+.step-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--cyan);
+  font-weight: 700;
+  padding-top: 1px;
+}
+.step-text { color: var(--white); line-height: 1.55; }
+.step-text strong { color: var(--cyan); }
+.step-text code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  background: var(--bg5);
+  border: 1px solid var(--bdr2);
+  padding: 1px 5px;
+  border-radius: 3px;
+  color: var(--yellow);
+}
 
-      /* ── CODE BLOCK ── */
-      .code-block {
-        background: var(--bg);
-        border: 1px solid var(--bdr2);
-        border-radius: 8px;
-        padding: 16px 18px;
-        margin: 14px 0;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 12px;
-        line-height: 1.8;
-        color: var(--white);
-        position: relative;
-        overflow-x: auto;
-      }
-      .code-block::before {
-        content: attr(data-label);
-        position: absolute;
-        top: -9px;
-        left: 14px;
-        background: var(--bg);
-        padding: 0 7px;
-        font-size: 9px;
-        color: var(--muted);
-        letter-spacing: 1px;
-        text-transform: uppercase;
-        border: 1px solid var(--bdr2);
-        border-radius: 3px;
-      }
-      .code-block .c-key {
-        color: var(--cyan);
-      }
-      .code-block .c-val {
-        color: var(--yellow);
-      }
-      .code-block .c-str {
-        color: var(--green);
-      }
-      .code-block .c-comment {
-        color: var(--muted);
-      }
-      .code-block .c-node {
-        color: var(--purple);
-      }
+/* ── CODE BLOCK ── */
+.code-block {
+  background: var(--bg);
+  border: 1px solid var(--bdr2);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 14px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.8;
+  color: var(--white);
+  position: relative;
+  overflow-x: auto;
+}
+.code-block::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -9px; left: 14px;
+  background: var(--bg);
+  padding: 0 7px;
+  font-size: 9px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: 1px solid var(--bdr2);
+  border-radius: 3px;
+}
+.code-block .c-key   { color: var(--cyan); }
+.code-block .c-val   { color: var(--yellow); }
+.code-block .c-str   { color: var(--green); }
+.code-block .c-comment { color: var(--muted); }
+.code-block .c-node  { color: var(--purple); }
 
-      /* ── CALLOUT ── */
-      .callout {
-        border-left: 2px solid var(--cyan);
-        background: rgba(0, 229, 204, 0.04);
-        border-radius: 0 6px 6px 0;
-        padding: 12px 16px;
-        margin: 16px 0;
-        font-size: 13px;
-      }
-      .callout.warn {
-        border-color: var(--yellow);
-        background: rgba(255, 209, 102, 0.04);
-      }
-      .callout.tip {
-        border-color: var(--purple);
-        background: rgba(176, 106, 255, 0.04);
-      }
-      .callout.ok {
-        border-color: var(--green);
-        background: rgba(61, 220, 132, 0.04);
-      }
-      .callout strong {
-        display: block;
-        font-family: "JetBrains Mono", monospace;
-        font-size: 9px;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: var(--cyan);
-        margin-bottom: 4px;
-      }
-      .callout.warn strong {
-        color: var(--yellow);
-      }
-      .callout.tip strong {
-        color: var(--purple);
-      }
-      .callout.ok strong {
-        color: var(--green);
-      }
-      .callout p {
-        color: var(--muted);
-        line-height: 1.6;
-      }
+/* ── CALLOUT ── */
+.callout {
+  border-left: 2px solid var(--cyan);
+  background: rgba(0,229,204,0.04);
+  border-radius: 0 6px 6px 0;
+  padding: 12px 16px;
+  margin: 16px 0;
+  font-size: 13px;
+}
+.callout.warn  { border-color: var(--yellow); background: rgba(255,209,102,0.04); }
+.callout.tip   { border-color: var(--purple); background: rgba(176,106,255,0.04); }
+.callout.ok    { border-color: var(--green); background: rgba(61,220,132,0.04); }
+.callout strong {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--cyan);
+  margin-bottom: 4px;
+}
+.callout.warn strong  { color: var(--yellow); }
+.callout.tip strong   { color: var(--purple); }
+.callout.ok strong    { color: var(--green); }
+.callout p { color: var(--muted); line-height: 1.6; }
 
-      /* ── NODE TABLE ── */
-      .node-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 14px 0;
-      }
-      .node-table th {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 9px;
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        color: var(--muted);
-        padding: 8px 12px;
-        border-bottom: 1px solid var(--bdr);
-        text-align: left;
-      }
-      .node-table td {
-        padding: 10px 12px;
-        border-bottom: 1px solid var(--bdr);
-        font-size: 13px;
-        vertical-align: top;
-      }
-      .node-table tr:last-child td {
-        border-bottom: none;
-      }
-      .node-table .nd {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 11px;
-        color: var(--cyan);
-      }
-      .node-table .nb {
-        font-size: 12px;
-        color: var(--muted);
-      }
+/* ── NODE TABLE ── */
+.node-table { width: 100%; border-collapse: collapse; margin: 14px 0; }
+.node-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--bdr);
+  text-align: left;
+}
+.node-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--bdr);
+  font-size: 13px;
+  vertical-align: top;
+}
+.node-table tr:last-child td { border-bottom: none; }
+.node-table .nd {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--cyan);
+}
+.node-table .nb {
+  font-size: 12px;
+  color: var(--muted);
+}
 
-      /* ── WORKFLOW CATEGORY ── */
-      .wf-category {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 16px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid var(--bdr);
-      }
-      .wf-cat-icon {
-        font-size: 22px;
-      }
-      .wf-cat-name {
-        font-family: "Unbounded", sans-serif;
-        font-weight: 700;
-        font-size: 16px;
-      }
-      .wf-cat-count {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 10px;
-        color: var(--muted);
-        margin-left: auto;
-        background: var(--bg4);
-        border: 1px solid var(--bdr);
-        padding: 3px 8px;
-        border-radius: 3px;
-      }
+/* ── WORKFLOW CATEGORY ── */
+.wf-category {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--bdr);
+}
+.wf-cat-icon { font-size: 22px; }
+.wf-cat-name {
+  font-family: 'Unbounded', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+.wf-cat-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+  background: var(--bg4);
+  border: 1px solid var(--bdr);
+  padding: 3px 8px;
+  border-radius: 3px;
+}
 
-      /* ── TIME SAVE PILL ── */
-      .time-save {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        background: rgba(61, 220, 132, 0.08);
-        border: 1px solid rgba(61, 220, 132, 0.2);
-        color: var(--green);
-        font-family: "JetBrains Mono", monospace;
-        font-size: 10px;
-        padding: 4px 10px;
-        border-radius: 3px;
-        margin-bottom: 8px;
-      }
-      .time-save::before {
-        content: "⏱";
-        font-size: 11px;
-      }
+/* ── TIME SAVE PILL ── */
+.time-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(61,220,132,0.08);
+  border: 1px solid rgba(61,220,132,0.2);
+  color: var(--green);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 8px;
+}
+.time-save::before { content: '⏱'; font-size: 11px; }
 
-      /* ── CREDENTIALS TABLE ── */
-      .cred-row {
-        display: grid;
-        grid-template-columns: 140px 1fr auto;
-        gap: 12px;
-        padding: 10px 14px;
-        border-bottom: 1px solid var(--bdr);
-        align-items: center;
-        background: var(--bg4);
-        font-size: 13px;
-      }
-      .cred-row:first-child {
-        border-radius: 8px 8px 0 0;
-      }
-      .cred-row:last-child {
-        border-bottom: none;
-        border-radius: 0 0 8px 8px;
-      }
-      .cred-row.header {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 9px;
-        color: var(--muted);
-        text-transform: uppercase;
-        letter-spacing: 1.5px;
-        background: var(--bg5);
-        border-radius: 8px 8px 0 0;
-        border-bottom: 1px solid var(--bdr2);
-      }
-      .cred-name {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 11px;
-        color: var(--purple);
-      }
-      .cred-how {
-        color: var(--muted);
-        font-size: 12px;
-      }
+/* ── CREDENTIALS TABLE ── */
+.cred-row {
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--bdr);
+  align-items: center;
+  background: var(--bg4);
+  font-size: 13px;
+}
+.cred-row:first-child { border-radius: 8px 8px 0 0; }
+.cred-row:last-child  { border-bottom: none; border-radius: 0 0 8px 8px; }
+.cred-row.header {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  background: var(--bg5);
+  border-radius: 8px 8px 0 0;
+  border-bottom: 1px solid var(--bdr2);
+}
+.cred-name { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--purple); }
+.cred-how  { color: var(--muted); font-size: 12px; }
+.cred-badge { }
 
-      /* ── CHECKLIST ── */
-      .auto-checklist {
-        list-style: none;
-      }
-      .auto-checklist li {
-        display: flex;
-        gap: 10px;
-        align-items: flex-start;
-        padding: 7px 0;
-        border-bottom: 1px solid var(--bdr);
-        font-size: 13px;
-        color: var(--muted);
-      }
-      .auto-checklist li:last-child {
-        border-bottom: none;
-      }
-      .auto-checklist li::before {
-        content: "→";
-        color: var(--cyan);
-        font-family: "JetBrains Mono", monospace;
-        flex-shrink: 0;
-        margin-top: 1px;
-      }
+/* ── CHECKLIST ── */
+.auto-checklist { list-style: none; }
+.auto-checklist li {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 7px 0; border-bottom: 1px solid var(--bdr);
+  font-size: 13px; color: var(--muted);
+}
+.auto-checklist li:last-child { border-bottom: none; }
+.auto-checklist li::before {
+  content: '→'; color: var(--cyan);
+  font-family: 'JetBrains Mono', monospace;
+  flex-shrink: 0; margin-top: 1px;
+}
 
-      /* ── FOOTER ── */
-      footer {
-        margin-top: 80px;
-        padding: 32px 0;
-        border-top: 1px solid var(--bdr);
-        font-family: "JetBrains Mono", monospace;
-        font-size: 11px;
-        color: var(--muted);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      footer span {
-        color: var(--cyan);
-      }
+/* ── FOOTER ── */
+footer {
+  margin-top: 80px;
+  padding: 32px 0;
+  border-top: 1px solid var(--bdr);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+footer span { color: var(--cyan); }
 
-      /* ── SCROLLBAR ── */
-      ::-webkit-scrollbar {
-        width: 5px;
-      }
-      ::-webkit-scrollbar-track {
-        background: var(--bg);
-      }
-      ::-webkit-scrollbar-thumb {
-        background: var(--bdr2);
-        border-radius: 3px;
-      }
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--bdr2); border-radius: 3px; }
 
-      @media (max-width: 860px) {
-        .sidebar {
-          display: none;
-        }
-        .main {
-          margin-left: 0;
-          padding: 24px 18px 60px;
-        }
-        .hero h1 {
-          font-size: 30px;
-        }
-        .hero-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-logo">
-          <img
-            src="logo.png"
-            alt="Logo"
-            style="
-              height: 20px;
-              vertical-align: middle;
-              margin-right: 8px;
-              margin-top: -2px;
-            "
-          />Xenotrix <span>n8n Automation Playbook</span>
-        </div>
-      </div>
-      <nav>
-        <div class="nav-group-label">Start Here</div>
-        <a href="javascript:void(0)" onclick="scrollToSection('overview')"
-          ><span class="dot"></span> Overview</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('credentials')"
-          ><span class="dot"></span> Connect Credentials</a
-        >
+@media (max-width: 860px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; padding: 24px 18px 60px; }
+  .hero h1 { font-size: 30px; }
+  .hero-grid { grid-template-columns: repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
 
-        <div class="nav-group-label">Sales Automations</div>
-        <a href="javascript:void(0)" onclick="scrollToSection('wf1')"
-          ><span class="dot"></span> WA Follow-up Sequence</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('wf2')"
-          ><span class="dot"></span> Daily Lead Reminder</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('wf3')"
-          ><span class="dot"></span> New Booking Alert</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('wf4')"
-          ><span class="dot"></span> Lead Enrichment</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('wf5')"
-          ><span class="dot"></span> Proposal Auto-send</a
-        >
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">Xenotrix <span>n8n Automation Playbook</span></div>
+  </div>
+  <nav>
+    <div class="nav-group-label">Start Here</div>
+    <a href="#overview"><span class="dot"></span> Overview</a>
+    <a href="#credentials"><span class="dot"></span> Connect Credentials</a>
 
-        <div class="nav-group-label">Delivery Automations</div>
-        <a href="javascript:void(0)" onclick="scrollToSection('wf6')"
-          ><span class="dot"></span> Project Status Sync</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('wf7')"
-          ><span class="dot"></span> Client Update Email</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('wf8')"
-          ><span class="dot"></span> Invoice Reminder</a
-        >
+    <div class="nav-group-label">Sales Automations</div>
+    <a href="#wf1"><span class="dot"></span> WA Follow-up Sequence</a>
+    <a href="#wf2"><span class="dot"></span> Daily Lead Reminder</a>
+    <a href="#wf3"><span class="dot"></span> New Booking Alert</a>
+    <a href="#wf4"><span class="dot"></span> Lead Enrichment</a>
+    <a href="#wf5"><span class="dot"></span> Proposal Auto-send</a>
 
-        <div class="nav-group-label">Operations</div>
-        <a href="javascript:void(0)" onclick="scrollToSection('wf9')"
-          ><span class="dot"></span> Weekly KPI Report</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('wf10')"
-          ><span class="dot"></span> Retainer Renewal Ping</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('wf11')"
-          ><span class="dot"></span> New Website Lead Capture</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('wf12')"
-          ><span class="dot"></span> Daily Standup Summary</a
-        >
+    <div class="nav-group-label">Delivery Automations</div>
+    <a href="#wf6"><span class="dot"></span> Project Status Sync</a>
+    <a href="#wf7"><span class="dot"></span> Client Update Email</a>
+    <a href="#wf8"><span class="dot"></span> Invoice Reminder</a>
 
-        <div class="nav-group-label">Reference</div>
-        <a href="javascript:void(0)" onclick="scrollToSection('priority')"
-          ><span class="dot"></span> Build Order</a
-        >
-        <a href="javascript:void(0)" onclick="scrollToSection('nodes')"
-          ><span class="dot"></span> Free Node Reference</a
-        >
-      </nav>
-    </aside>
+    <div class="nav-group-label">Operations</div>
+    <a href="#wf9"><span class="dot"></span> Weekly KPI Report</a>
+    <a href="#wf10"><span class="dot"></span> Retainer Renewal Ping</a>
+    <a href="#wf11"><span class="dot"></span> New Website Lead Capture</a>
+    <a href="#wf12"><span class="dot"></span> Daily Standup Summary</a>
 
-    <!-- MAIN -->
-    <main class="main">
-      <!-- HERO -->
-      <div class="hero" id="overview">
-        <div class="hero-tag">Xenotrix · n8n Automation Playbook · 2025</div>
-        <h1>12 Free Automations<br /><em>That Replace a Team</em></h1>
-        <p>
-          You have n8n running on Railway. This guide shows you exactly which
-          automations to build, in what order, with step-by-step node
-          configuration for each one.
-        </p>
-        <div class="hero-grid">
-          <div class="hero-stat">
-            <div class="num">12</div>
-            <div class="lbl">Workflows</div>
-          </div>
-          <div class="hero-stat">
-            <div class="num">4hr</div>
-            <div class="lbl">Saved / Day</div>
-          </div>
-          <div class="hero-stat">
-            <div class="num">$0</div>
-            <div class="lbl">Total Cost</div>
-          </div>
-          <div class="hero-stat">
-            <div class="num">3 days</div>
-            <div class="lbl">To Build All</div>
-          </div>
-        </div>
-      </div>
+    <div class="nav-group-label">Reference</div>
+    <a href="#priority"><span class="dot"></span> Build Order</a>
+    <a href="#nodes"><span class="dot"></span> Free Node Reference</a>
+  </nav>
+</aside>
 
-      <!-- CREDENTIALS SETUP -->
-      <div class="section" id="credentials">
-        <div class="sec-eyebrow">Step 0 — Before Anything</div>
-        <div class="sec-title">Connect Your Credentials First</div>
-        <div class="sec-sub">
-          Every automation below uses these connections. Set them up once in n8n
-          and every workflow can use them. Go to: n8n Settings → Credentials →
-          Add Credential.
-        </div>
-        <div class="sec-divider"></div>
+<!-- MAIN -->
+<main class="main">
 
-        <div class="cred-row header">
-          <span>Service</span><span>How to Connect in n8n</span
-          ><span>Used For</span>
-        </div>
-        <div class="cred-row">
-          <span class="cred-name">Google Sheets</span>
-          <span class="cred-how"
-            >Credentials → New → Google Sheets OAuth2 → Sign in with
-            Google</span
-          >
-          <span><span class="badge b-cyan">CRM</span></span>
-        </div>
-        <div class="cred-row">
-          <span class="cred-name">Gmail</span>
-          <span class="cred-how"
-            >Credentials → New → Gmail OAuth2 → Sign in with Google (same
-            account)</span
-          >
-          <span><span class="badge b-blue">Email</span></span>
-        </div>
-        <div class="cred-row">
-          <span class="cred-name">Telegram Bot</span>
-          <span class="cred-how"
-            >Create bot via @BotFather on Telegram → copy token → paste in n8n
-            Telegram credential</span
-          >
-          <span><span class="badge b-purple">Alerts</span></span>
-        </div>
-        <div class="cred-row">
-          <span class="cred-name">Webhook (built-in)</span>
-          <span class="cred-how"
-            >No credential needed — n8n generates the URL for you
-            automatically</span
-          >
-          <span><span class="badge b-green">Triggers</span></span>
-        </div>
-        <div class="cred-row">
-          <span class="cred-name">HTTP Request (built-in)</span>
-          <span class="cred-how"
-            >No credential needed — used for calling any API including WhatsApp
-            Cloud API</span
-          >
-          <span><span class="badge b-orange">APIs</span></span>
-        </div>
-        <div class="cred-row">
-          <span class="cred-name">WhatsApp Cloud API</span>
-          <span class="cred-how"
-            >Meta for Developers → create app → WhatsApp → copy Access Token +
-            Phone ID</span
-          >
-          <span><span class="badge b-green">WhatsApp</span></span>
-        </div>
+<!-- HERO -->
+<div class="hero" id="overview">
+  <div class="hero-tag">Xenotrix · n8n Automation Playbook · 2025</div>
+  <h1>12 Free Automations<br><em>That Replace a Team</em></h1>
+  <p>You have n8n running on Railway. This guide shows you exactly which automations to build, in what order, with step-by-step node configuration for each one.</p>
+  <div class="hero-grid">
+    <div class="hero-stat">
+      <div class="num">12</div>
+      <div class="lbl">Workflows</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">4hr</div>
+      <div class="lbl">Saved / Day</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">$0</div>
+      <div class="lbl">Total Cost</div>
+    </div>
+    <div class="hero-stat">
+      <div class="num">3 days</div>
+      <div class="lbl">To Build All</div>
+    </div>
+  </div>
+</div>
 
-        <div class="callout warn" style="margin-top: 16px">
-          <strong>WhatsApp Cloud API — Free Setup</strong>
-          <p>
-            Go to developers.facebook.com → Create App → Business → Add WhatsApp
-            product. You get 1,000 free conversations/month. This is your
-            automation WhatsApp channel separate from your manual WhatsApp
-            Business app. Use it for automated follow-ups only.
-          </p>
-        </div>
+<!-- CREDENTIALS SETUP -->
+<div class="section" id="credentials">
+  <div class="sec-eyebrow">Step 0 — Before Anything</div>
+  <div class="sec-title">Connect Your Credentials First</div>
+  <div class="sec-sub">Every automation below uses these connections. Set them up once in n8n and every workflow can use them. Go to: n8n Settings → Credentials → Add Credential.</div>
+  <div class="sec-divider"></div>
 
-        <div class="callout tip">
-          <strong>Telegram as Free Alert Channel</strong>
-          <p>
-            Telegram Bot API is completely free with no limits. Create a bot
-            with @BotFather in 2 minutes. Use it to receive instant alerts on
-            your phone whenever something important happens — new lead replied,
-            booking made, payment received. It is faster and more reliable than
-            email alerts to yourself.
-          </p>
-        </div>
-      </div>
+  <div class="cred-row header">
+    <span>Service</span><span>How to Connect in n8n</span><span>Used For</span>
+  </div>
+  <div class="cred-row">
+    <span class="cred-name">Google Sheets</span>
+    <span class="cred-how">Credentials → New → Google Sheets OAuth2 → Sign in with Google</span>
+    <span><span class="badge b-cyan">CRM</span></span>
+  </div>
+  <div class="cred-row">
+    <span class="cred-name">Gmail</span>
+    <span class="cred-how">Credentials → New → Gmail OAuth2 → Sign in with Google (same account)</span>
+    <span><span class="badge b-blue">Email</span></span>
+  </div>
+  <div class="cred-row">
+    <span class="cred-name">Telegram Bot</span>
+    <span class="cred-how">Create bot via @BotFather on Telegram → copy token → paste in n8n Telegram credential</span>
+    <span><span class="badge b-purple">Alerts</span></span>
+  </div>
+  <div class="cred-row">
+    <span class="cred-name">Webhook (built-in)</span>
+    <span class="cred-how">No credential needed — n8n generates the URL for you automatically</span>
+    <span><span class="badge b-green">Triggers</span></span>
+  </div>
+  <div class="cred-row">
+    <span class="cred-name">HTTP Request (built-in)</span>
+    <span class="cred-how">No credential needed — used for calling any API including WhatsApp Cloud API</span>
+    <span><span class="badge b-orange">APIs</span></span>
+  </div>
+  <div class="cred-row">
+    <span class="cred-name">WhatsApp Cloud API</span>
+    <span class="cred-how">Meta for Developers → create app → WhatsApp → copy Access Token + Phone ID</span>
+    <span><span class="badge b-green">WhatsApp</span></span>
+  </div>
 
-      <!-- ══════════════════════════════════════════════════════
+  <div class="callout warn" style="margin-top:16px;">
+    <strong>WhatsApp Cloud API — Free Setup</strong>
+    <p>Go to developers.facebook.com → Create App → Business → Add WhatsApp product. You get 1,000 free conversations/month. This is your automation WhatsApp channel separate from your manual WhatsApp Business app. Use it for automated follow-ups only.</p>
+  </div>
+
+  <div class="callout tip">
+    <strong>Telegram as Free Alert Channel</strong>
+    <p>Telegram Bot API is completely free with no limits. Create a bot with @BotFather in 2 minutes. Use it to receive instant alerts on your phone whenever something important happens — new lead replied, booking made, payment received. It is faster and more reliable than email alerts to yourself.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
      SALES AUTOMATIONS
 ══════════════════════════════════════════════════════ -->
-      <div class="section">
-        <div class="wf-category">
-          <span class="wf-cat-icon">📤</span>
-          <span class="wf-cat-name">Sales Automations</span>
-          <span class="wf-cat-count">5 workflows</span>
-        </div>
+<div class="section">
+  <div class="wf-category">
+    <span class="wf-cat-icon">📤</span>
+    <span class="wf-cat-name">Sales Automations</span>
+    <span class="wf-cat-count">5 workflows</span>
+  </div>
 
-        <!-- WF1 -->
-        <div class="auto-card" id="wf1">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">📱</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-01 · WhatsApp Follow-up Sequence</div>
-              <div class="auto-desc">
-                Auto-send follow-up messages to leads that did not reply after
-                48 hours
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-cyan">DAILY</span>
-              <span class="badge b-green">HIGH IMPACT</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Saves 1.5 hours/day — replaces manual follow-up checking
-            </div>
+  <!-- WF1 -->
+  <div class="auto-card" id="wf1">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">📱</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-01 · WhatsApp Follow-up Sequence</div>
+        <div class="auto-desc">Auto-send follow-up messages to leads that did not reply after 48 hours</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-cyan">DAILY</span>
+        <span class="badge b-green">HIGH IMPACT</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Saves 1.5 hours/day — replaces manual follow-up checking</div>
 
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Schedule<br />Trigger</div>
-                <span class="flow-label">9AM daily</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Google<br />Sheets</div>
-                <span class="flow-label">Read leads</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node condition">IF node<br />Filter</div>
-                <span class="flow-label">No reply 48h+</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node http">HTTP<br />Request</div>
-                <span class="flow-label">Send WhatsApp</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Google<br />Sheets</div>
-                <span class="flow-label">Update status</span>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  >Add <strong>Schedule Trigger</strong> node → Set to run every
-                  day at <code>9:00 AM</code> → Mode: Every Day</span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  >Add <strong>Google Sheets</strong> node → Operation: Read
-                  Rows → Sheet: your CRM sheet → Select all columns</span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  >Add <strong>IF node</strong> → Condition 1:
-                  <code>Status</code> equals <code>Contacted</code> → Condition
-                  2: <code>Last Contact Date</code> is more than
-                  <code>48</code> hours ago → Combine: AND</span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  >Add <strong>HTTP Request</strong> node on TRUE branch → URL:
-                  <code
-                    >https://graph.facebook.com/v18.0/YOUR_PHONE_ID/messages</code
-                  >
-                  → Method: POST → Auth: Bearer token (your WhatsApp
-                  token)</span
-                >
-              </li>
-              <li>
-                <span class="step-num">05</span
-                ><span class="step-text">Set request body as JSON:</span>
-              </li>
-            </ul>
-
-            <div class="code-block" data-label="WhatsApp API Body">
-              <span class="c-key">{</span>
-              <span class="c-key">"messaging_product"</span>:
-              <span class="c-str">"whatsapp"</span>,
-              <span class="c-key">"to"</span>:
-              <span class="c-val">{{ $json.Phone }}</span>,
-              <span class="c-comment">// from your Sheets row</span>
-              <span class="c-key">"type"</span>:
-              <span class="c-str">"text"</span>,
-              <span class="c-key">"text"</span>: <span class="c-key">{</span>
-              <span class="c-key">"body"</span>:
-              <span class="c-str"
-                >"Hey {{ $json.Name }}, following up on my message from earlier
-                this week. We only have 2 client spots open this month — wanted
-                to give you first look. Free 15-min call:
-                xenotrix.com/book"</span
-              >
-              <span class="c-key">}</span>
-              <span class="c-key">}</span>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">06</span
-                ><span class="step-text"
-                  >Add second <strong>Google Sheets</strong> node → Operation:
-                  Update Row → Set Status to <code>Follow Up</code> → Set Last
-                  Contact to <code>today</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">07</span
-                ><span class="step-text"
-                  >Add <strong>Telegram</strong> node (optional) → Send yourself
-                  a message:
-                  <code
-                    >"Sent follow-up to {{ $json.Name }} ({{ $json.Company
-                    }})"</code
-                  ></span
-                >
-              </li>
-            </ul>
-
-            <div class="callout ok">
-              <strong>Result</strong>
-              <p>
-                Every morning at 9AM, n8n scans your sheet, finds all
-                "Contacted" leads older than 48 hours, sends them a follow-up
-                WhatsApp automatically, and logs it. Zero manual effort.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- WF2 -->
-        <div class="auto-card" id="wf2">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">🔔</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-02 · Daily Lead Reminder</div>
-              <div class="auto-desc">
-                Every morning, get a summary of who to follow up with today on
-                Telegram
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-purple">DAILY</span>
-              <span class="badge b-cyan">QUICK BUILD</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Saves 20 min/day — replaces manually scanning your CRM every
-              morning
-            </div>
-
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Schedule<br />8:30 AM</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Google<br />Sheets</div>
-                <span class="flow-label">Read CRM</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node condition">
-                  Filter:<br />Follow Up = Today
-                </div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Aggregate<br />Items</div>
-                <span class="flow-label">Build list</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node output">Telegram<br />Message</div>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  ><strong>Schedule Trigger</strong> → Every day at
-                  <code>8:30 AM</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  ><strong>Google Sheets</strong> → Read all rows from CRM
-                  sheet</span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>Filter node</strong> → Keep rows where
-                  <code>Follow Up Date</code> equals today (<code
-                    >{{ $today.format('YYYY-MM-DD') }}</code
-                  >)</span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>Aggregate</strong> node → Aggregate all items into
-                  one → creates a list of today's follow-ups</span
-                >
-              </li>
-              <li>
-                <span class="step-num">05</span
-                ><span class="step-text"
-                  ><strong>Telegram</strong> node → Send to your chat ID:</span
-                >
-              </li>
-            </ul>
-
-            <div class="code-block" data-label="Telegram Message Template">
-              <span class="c-comment"
-                >// Message body (use Code node to build this string)</span
-              >
-              <span class="c-str"
-                >"🔔 DAILY FOLLOW-UPS — {{ $today.format('DD MMM') }}\n\n"</span
-              >
-              <span class="c-comment">// Loop through items and append:</span>
-              <span class="c-str"
-                >"→ {{ item.Name }} | {{ item.Company }} | {{ item.Status
-                }}\n"</span
-              >
-              <span class="c-str">" Phone: {{ item.Phone }}\n\n"</span>
-              <span class="c-str"
-                >"Total: {{ items.length }} leads to contact today."</span
-              >
-            </div>
-
-            <div class="callout">
-              <strong>Pro Tip</strong>
-              <p>
-                Add a second filter branch: leads where Status = "Call Booked"
-                and the booking date is today. This gives you a separate "CALLS
-                TODAY" section in the same morning message.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- WF3 -->
-        <div class="auto-card" id="wf3">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">📅</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-03 · New Booking Alert + CRM Log</div>
-              <div class="auto-desc">
-                When someone books via Cal.com — instant Telegram alert +
-                auto-logged in Google Sheets
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-orange">WEBHOOK</span>
-              <span class="badge b-green">HIGH VALUE</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Saves 15 min/booking — no manual CRM entry for new bookings ever
-              again
-            </div>
-
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Webhook<br />Cal.com</div>
-                <span class="flow-label">booking.created</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Telegram<br />Alert</div>
-                <span class="flow-label">Instant ping</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Google<br />Sheets</div>
-                <span class="flow-label">Add/Update row</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node output">Gmail<br />Confirm</div>
-                <span class="flow-label">Send prep email</span>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  ><strong>Webhook node</strong> → Copy the webhook URL → Go to
-                  Cal.com → Settings → Webhooks → Paste URL → Trigger:
-                  <code>BOOKING_CREATED</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  ><strong>Telegram node</strong> → Send:
-                  <code
-                    >"🗓 NEW BOOKING!\n{{ $json.body.attendees[0].name }} — {{
-                    $json.body.attendees[0].email }}\nTime: {{
-                    $json.body.startTime }}\nTopic: {{ $json.body.title
-                    }}"</code
-                  ></span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>Google Sheets</strong> → Append Row → Map: Name,
-                  Email, Phone (from booking form), Date, Status =
-                  <code>Call Booked</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>Gmail node</strong> → Send to the booker's email →
-                  Subject: "Your call with Xenotrix is confirmed" → Body:
-                  include time, Google Meet link (Cal.com sends this), and
-                  "Please have your website open when we start."</span
-                >
-              </li>
-            </ul>
-
-            <div class="callout warn">
-              <strong>Cal.com Webhook Setup</strong>
-              <p>
-                In your Cal.com booking form, add a required phone number field.
-                This ensures the phone number is captured in the webhook payload
-                and auto-logged to your CRM. Go to: Event Type → Advanced →
-                Custom Inputs → Add Phone field.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- WF4 -->
-        <div class="auto-card" id="wf4">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">🔍</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-04 · Lead Enrichment Pipeline</div>
-              <div class="auto-desc">
-                New lead added to sheet → auto-check their website for issues →
-                log findings
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-blue">TRIGGER</span>
-              <span class="badge b-purple">RESEARCH</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Saves 2 min per lead — 50 leads/day = 100 min saved daily
-            </div>
-
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Google<br />Sheets Trigger</div>
-                <span class="flow-label">New row added</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node http">
-                  HTTP Request<br />PageSpeed API
-                </div>
-                <span class="flow-label">Check their site</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Code<br />Node</div>
-                <span class="flow-label">Extract score</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node output">Google<br />Sheets</div>
-                <span class="flow-label">Update notes</span>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  ><strong>Google Sheets Trigger</strong> → Trigger: Row Added →
-                  Poll every 5 minutes → Sheet: CRM Leads</span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  ><strong>IF node</strong> → Only proceed if
-                  <code>Website URL</code> column is not empty</span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>HTTP Request</strong> → URL:
-                  <code
-                    >https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={{
-                    $json.Website }}&strategy=mobile</code
-                  >
-                  → No API key needed (free)</span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>Code node</strong> → Extract the mobile performance
-                  score:
-                  <code
-                    >return [{ score:
-                    items[0].json.lighthouseResult.categories.performance.score
-                    * 100 }]</code
-                  ></span
-                >
-              </li>
-              <li>
-                <span class="step-num">05</span
-                ><span class="step-text"
-                  ><strong>Google Sheets</strong> → Update Row → Write to Notes
-                  column:
-                  <code>"Mobile PageSpeed: {{ $json.score }}/100"</code> — now
-                  you have a hook before every call</span
-                >
-              </li>
-              <li>
-                <span class="step-num">06</span
-                ><span class="step-text"
-                  >Add <strong>IF node</strong>: if score is less than
-                  <code>50</code> → Tag lead as <code>HOT</code> in a Priority
-                  column — these get called first</span
-                >
-              </li>
-            </ul>
-
-            <div class="callout ok">
-              <strong>Result</strong>
-              <p>
-                Every new lead you add automatically gets their website speed
-                checked. When you call them you already know: "Your site scores
-                31/100 on mobile — Google recommends 90+." That specific number
-                closes calls.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- WF5 -->
-        <div class="auto-card" id="wf5">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">📄</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-05 · Post-Call Proposal Trigger</div>
-              <div class="auto-desc">
-                Update CRM status to "Proposal Needed" → auto-send reminder +
-                email template to yourself
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-cyan">TRIGGER</span>
-              <span class="badge b-yellow">SALES</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Saves 10 min/call — reminds you with pre-filled context within 5
-              min of call ending
-            </div>
-
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Sheets<br />Trigger</div>
-                <span class="flow-label">Status changed</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node condition">
-                  IF: Status =<br />"Proposal Needed"
-                </div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node output">Gmail<br />Draft</div>
-                <span class="flow-label">Create draft</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Telegram<br />Alert</div>
-                <span class="flow-label">Action reminder</span>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  ><strong>Google Sheets Trigger</strong> → Watch column:
-                  <code>Status</code> → Poll every 2 minutes</span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  ><strong>IF node</strong> → Status equals
-                  <code>Proposal Needed</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>Gmail node</strong> → Create Draft → To: client's
-                  email → Subject:
-                  <code>"Xenotrix Proposal — {{ $json.Company }}"</code> → Body:
-                  your proposal email template with client name
-                  auto-filled</span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>Telegram node</strong> → Send to yourself:
-                  <code
-                    >"🚨 PROPOSAL DUE in 2 hours!\nClient: {{ $json.Name }} — {{
-                    $json.Company }}\nPhone: {{ $json.Phone }}\nDraft email
-                    created in Gmail. Send within 2 hours."</code
-                  ></span
-                >
-              </li>
-            </ul>
-
-            <div class="callout">
-              <strong>The 2-Hour Rule</strong>
-              <p>
-                Proposals sent within 2 hours of a discovery call have a 60%
-                higher close rate than proposals sent the next day. This
-                automation makes sure you never forget and always have the draft
-                ready to fill in and send.
-              </p>
-            </div>
-          </div>
-        </div>
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Schedule<br>Trigger</div><span class="flow-label">9AM daily</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Google<br>Sheets</div><span class="flow-label">Read leads</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node condition">IF node<br>Filter</div><span class="flow-label">No reply 48h+</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node http">HTTP<br>Request</div><span class="flow-label">Send WhatsApp</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Google<br>Sheets</div><span class="flow-label">Update status</span></div>
       </div>
 
-      <!-- ══════════════════════════════════════════════════════
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text">Add <strong>Schedule Trigger</strong> node → Set to run every day at <code>9:00 AM</code> → Mode: Every Day</span></li>
+        <li><span class="step-num">02</span><span class="step-text">Add <strong>Google Sheets</strong> node → Operation: Read Rows → Sheet: your CRM sheet → Select all columns</span></li>
+        <li><span class="step-num">03</span><span class="step-text">Add <strong>IF node</strong> → Condition 1: <code>Status</code> equals <code>Contacted</code> → Condition 2: <code>Last Contact Date</code> is more than <code>48</code> hours ago → Combine: AND</span></li>
+        <li><span class="step-num">04</span><span class="step-text">Add <strong>HTTP Request</strong> node on TRUE branch → URL: <code>https://graph.facebook.com/v18.0/YOUR_PHONE_ID/messages</code> → Method: POST → Auth: Bearer token (your WhatsApp token)</span></li>
+        <li><span class="step-num">05</span><span class="step-text">Set request body as JSON:</span></li>
+      </ul>
+
+      <div class="code-block" data-label="WhatsApp API Body">
+<span class="c-key">{</span>
+  <span class="c-key">"messaging_product"</span>: <span class="c-str">"whatsapp"</span>,
+  <span class="c-key">"to"</span>: <span class="c-val">{{ $json.Phone }}</span>,  <span class="c-comment">// from your Sheets row</span>
+  <span class="c-key">"type"</span>: <span class="c-str">"text"</span>,
+  <span class="c-key">"text"</span>: <span class="c-key">{</span>
+    <span class="c-key">"body"</span>: <span class="c-str">"Hey {{ $json.Name }}, following up on my message from earlier this week. We only have 2 client spots open this month — wanted to give you first look. Free 15-min call: xenotrix.com/book"</span>
+  <span class="c-key">}</span>
+<span class="c-key">}</span></div>
+
+      <ul class="step-list">
+        <li><span class="step-num">06</span><span class="step-text">Add second <strong>Google Sheets</strong> node → Operation: Update Row → Set Status to <code>Follow Up</code> → Set Last Contact to <code>today</code></span></li>
+        <li><span class="step-num">07</span><span class="step-text">Add <strong>Telegram</strong> node (optional) → Send yourself a message: <code>"Sent follow-up to {{ $json.Name }} ({{ $json.Company }})"</code></span></li>
+      </ul>
+
+      <div class="callout ok">
+        <strong>Result</strong>
+        <p>Every morning at 9AM, n8n scans your sheet, finds all "Contacted" leads older than 48 hours, sends them a follow-up WhatsApp automatically, and logs it. Zero manual effort.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WF2 -->
+  <div class="auto-card" id="wf2">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">🔔</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-02 · Daily Lead Reminder</div>
+        <div class="auto-desc">Every morning, get a summary of who to follow up with today on Telegram</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-purple">DAILY</span>
+        <span class="badge b-cyan">QUICK BUILD</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Saves 20 min/day — replaces manually scanning your CRM every morning</div>
+
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Schedule<br>8:30 AM</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Google<br>Sheets</div><span class="flow-label">Read CRM</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node condition">Filter:<br>Follow Up = Today</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Aggregate<br>Items</div><span class="flow-label">Build list</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node output">Telegram<br>Message</div></div>
+      </div>
+
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text"><strong>Schedule Trigger</strong> → Every day at <code>8:30 AM</code></span></li>
+        <li><span class="step-num">02</span><span class="step-text"><strong>Google Sheets</strong> → Read all rows from CRM sheet</span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>Filter node</strong> → Keep rows where <code>Follow Up Date</code> equals today (<code>{{ $today.format('YYYY-MM-DD') }}</code>)</span></li>
+        <li><span class="step-num">04</span><span class="step-text"><strong>Aggregate</strong> node → Aggregate all items into one → creates a list of today's follow-ups</span></li>
+        <li><span class="step-num">05</span><span class="step-text"><strong>Telegram</strong> node → Send to your chat ID:</span></li>
+      </ul>
+
+      <div class="code-block" data-label="Telegram Message Template">
+<span class="c-comment">// Message body (use Code node to build this string)</span>
+<span class="c-str">"🔔 DAILY FOLLOW-UPS — {{ $today.format('DD MMM') }}\n\n"</span>
+<span class="c-comment">// Loop through items and append:</span>
+<span class="c-str">"→ {{ item.Name }} | {{ item.Company }} | {{ item.Status }}\n"</span>
+<span class="c-str">"   Phone: {{ item.Phone }}\n\n"</span>
+<span class="c-str">"Total: {{ items.length }} leads to contact today."</span></div>
+
+      <div class="callout">
+        <strong>Pro Tip</strong>
+        <p>Add a second filter branch: leads where Status = "Call Booked" and the booking date is today. This gives you a separate "CALLS TODAY" section in the same morning message.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WF3 -->
+  <div class="auto-card" id="wf3">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">📅</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-03 · New Booking Alert + CRM Log</div>
+        <div class="auto-desc">When someone books via Cal.com — instant Telegram alert + auto-logged in Google Sheets</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-orange">WEBHOOK</span>
+        <span class="badge b-green">HIGH VALUE</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Saves 15 min/booking — no manual CRM entry for new bookings ever again</div>
+
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Webhook<br>Cal.com</div><span class="flow-label">booking.created</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Telegram<br>Alert</div><span class="flow-label">Instant ping</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Google<br>Sheets</div><span class="flow-label">Add/Update row</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node output">Gmail<br>Confirm</div><span class="flow-label">Send prep email</span></div>
+      </div>
+
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text"><strong>Webhook node</strong> → Copy the webhook URL → Go to Cal.com → Settings → Webhooks → Paste URL → Trigger: <code>BOOKING_CREATED</code></span></li>
+        <li><span class="step-num">02</span><span class="step-text"><strong>Telegram node</strong> → Send: <code>"🗓 NEW BOOKING!\n{{ $json.body.attendees[0].name }} — {{ $json.body.attendees[0].email }}\nTime: {{ $json.body.startTime }}\nTopic: {{ $json.body.title }}"</code></span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>Google Sheets</strong> → Append Row → Map: Name, Email, Phone (from booking form), Date, Status = <code>Call Booked</code></span></li>
+        <li><span class="step-num">04</span><span class="step-text"><strong>Gmail node</strong> → Send to the booker's email → Subject: "Your call with Xenotrix is confirmed" → Body: include time, Google Meet link (Cal.com sends this), and "Please have your website open when we start."</span></li>
+      </ul>
+
+      <div class="callout warn">
+        <strong>Cal.com Webhook Setup</strong>
+        <p>In your Cal.com booking form, add a required phone number field. This ensures the phone number is captured in the webhook payload and auto-logged to your CRM. Go to: Event Type → Advanced → Custom Inputs → Add Phone field.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WF4 -->
+  <div class="auto-card" id="wf4">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">🔍</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-04 · Lead Enrichment Pipeline</div>
+        <div class="auto-desc">New lead added to sheet → auto-check their website for issues → log findings</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-blue">TRIGGER</span>
+        <span class="badge b-purple">RESEARCH</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Saves 2 min per lead — 50 leads/day = 100 min saved daily</div>
+
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Google<br>Sheets Trigger</div><span class="flow-label">New row added</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node http">HTTP Request<br>PageSpeed API</div><span class="flow-label">Check their site</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Code<br>Node</div><span class="flow-label">Extract score</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node output">Google<br>Sheets</div><span class="flow-label">Update notes</span></div>
+      </div>
+
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text"><strong>Google Sheets Trigger</strong> → Trigger: Row Added → Poll every 5 minutes → Sheet: CRM Leads</span></li>
+        <li><span class="step-num">02</span><span class="step-text"><strong>IF node</strong> → Only proceed if <code>Website URL</code> column is not empty</span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>HTTP Request</strong> → URL: <code>https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url={{ $json.Website }}&strategy=mobile</code> → No API key needed (free)</span></li>
+        <li><span class="step-num">04</span><span class="step-text"><strong>Code node</strong> → Extract the mobile performance score: <code>return [{ score: items[0].json.lighthouseResult.categories.performance.score * 100 }]</code></span></li>
+        <li><span class="step-num">05</span><span class="step-text"><strong>Google Sheets</strong> → Update Row → Write to Notes column: <code>"Mobile PageSpeed: {{ $json.score }}/100"</code> — now you have a hook before every call</span></li>
+        <li><span class="step-num">06</span><span class="step-text">Add <strong>IF node</strong>: if score is less than <code>50</code> → Tag lead as <code>HOT</code> in a Priority column — these get called first</span></li>
+      </ul>
+
+      <div class="callout ok">
+        <strong>Result</strong>
+        <p>Every new lead you add automatically gets their website speed checked. When you call them you already know: "Your site scores 31/100 on mobile — Google recommends 90+." That specific number closes calls.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WF5 -->
+  <div class="auto-card" id="wf5">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">📄</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-05 · Post-Call Proposal Trigger</div>
+        <div class="auto-desc">Update CRM status to "Proposal Needed" → auto-send reminder + email template to yourself</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-cyan">TRIGGER</span>
+        <span class="badge b-yellow">SALES</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Saves 10 min/call — reminds you with pre-filled context within 5 min of call ending</div>
+
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Sheets<br>Trigger</div><span class="flow-label">Status changed</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node condition">IF: Status =<br>"Proposal Needed"</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node output">Gmail<br>Draft</div><span class="flow-label">Create draft</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Telegram<br>Alert</div><span class="flow-label">Action reminder</span></div>
+      </div>
+
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text"><strong>Google Sheets Trigger</strong> → Watch column: <code>Status</code> → Poll every 2 minutes</span></li>
+        <li><span class="step-num">02</span><span class="step-text"><strong>IF node</strong> → Status equals <code>Proposal Needed</code></span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>Gmail node</strong> → Create Draft → To: client's email → Subject: <code>"Xenotrix Proposal — {{ $json.Company }}"</code> → Body: your proposal email template with client name auto-filled</span></li>
+        <li><span class="step-num">04</span><span class="step-text"><strong>Telegram node</strong> → Send to yourself: <code>"🚨 PROPOSAL DUE in 2 hours!\nClient: {{ $json.Name }} — {{ $json.Company }}\nPhone: {{ $json.Phone }}\nDraft email created in Gmail. Send within 2 hours."</code></span></li>
+      </ul>
+
+      <div class="callout">
+        <strong>The 2-Hour Rule</strong>
+        <p>Proposals sent within 2 hours of a discovery call have a 60% higher close rate than proposals sent the next day. This automation makes sure you never forget and always have the draft ready to fill in and send.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
      DELIVERY AUTOMATIONS
 ══════════════════════════════════════════════════════ -->
-      <div class="section">
-        <div class="wf-category">
-          <span class="wf-cat-icon">🛠</span>
-          <span class="wf-cat-name">Delivery Automations</span>
-          <span class="wf-cat-count">3 workflows</span>
-        </div>
+<div class="section">
+  <div class="wf-category">
+    <span class="wf-cat-icon">🛠</span>
+    <span class="wf-cat-name">Delivery Automations</span>
+    <span class="wf-cat-count">3 workflows</span>
+  </div>
 
-        <!-- WF6 -->
-        <div class="auto-card" id="wf6">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">📊</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-06 · Project Status Sync</div>
-              <div class="auto-desc">
-                GitHub push or Vercel deploy → auto-update Notion project status
-                + alert team on Telegram
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-purple">WEBHOOK</span>
-              <span class="badge b-blue">DEV OPS</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Saves 10 min/deploy — no manual status updates across tools
-            </div>
+  <!-- WF6 -->
+  <div class="auto-card" id="wf6">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">📊</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-06 · Project Status Sync</div>
+        <div class="auto-desc">GitHub push or Vercel deploy → auto-update Notion project status + alert team on Telegram</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-purple">WEBHOOK</span>
+        <span class="badge b-blue">DEV OPS</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Saves 10 min/deploy — no manual status updates across tools</div>
 
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Webhook<br />GitHub Push</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Code Node<br />Extract info</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node http">Notion API<br />Update page</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node output">Telegram<br />Deploy alert</div>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  ><strong>Webhook node</strong> → Copy URL → GitHub repo →
-                  Settings → Webhooks → Add → Paste URL → Events:
-                  <code>push</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  ><strong>Code node</strong> → Extract: repo name, commit
-                  message, branch, pusher from <code>$json.body</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>HTTP Request</strong> → Notion API → PATCH
-                  <code>https://api.notion.com/v1/pages/PAGE_ID</code> → Header:
-                  <code>Authorization: Bearer YOUR_NOTION_TOKEN</code> → Body:
-                  update Last Updated property to today</span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>Telegram node</strong> →
-                  <code
-                    >"🚀 DEPLOY: {{ repo }}\nBranch: {{ branch }}\nCommit: {{
-                    message }}\nBy: {{ pusher }}"</code
-                  ></span
-                >
-              </li>
-            </ul>
-
-            <div class="callout tip">
-              <strong>Notion Integration Token</strong>
-              <p>
-                Get it free at notion.so/my-integrations → Create integration →
-                Copy token. Then share your Notion database with the
-                integration. Takes 3 minutes.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- WF7 -->
-        <div class="auto-card" id="wf7">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">📧</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-07 · Client Progress Update Email</div>
-              <div class="auto-desc">
-                Every 2 days during active projects, auto-send a progress update
-                email to keep clients informed
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-blue">SCHEDULED</span>
-              <span class="badge b-green">CLIENT TRUST</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Saves 20 min per update — eliminates "any updates?" client
-              messages
-            </div>
-
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Schedule<br />Every 2 Days</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Notion<br />Read DB</div>
-                <span class="flow-label">Active projects</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node condition">
-                  Filter:<br />Status = Active
-                </div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node output">Gmail<br />Send</div>
-                <span class="flow-label">Progress email</span>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  ><strong>Schedule Trigger</strong> → Every 2 days at
-                  <code>3:00 PM</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  ><strong>HTTP Request</strong> → Notion API → POST to query
-                  your Projects database → Filter: Status equals
-                  <code>In Progress</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>Split In Batches</strong> → Process one project at a
-                  time</span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>Gmail node</strong> → Send to client email → Subject:
-                  <code
-                    >"{{ ProjectName }} — Progress Update Day {{ DayNumber
-                    }}"</code
-                  ></span
-                >
-              </li>
-            </ul>
-
-            <div class="code-block" data-label="Email Body Template">
-              Hi {{ ClientName }}, Quick progress update on your {{ ProjectName
-              }} project:
-
-              <span class="c-str">TODAY'S PROGRESS:</span>
-              - {{ completed_today }}
-              <span class="c-comment"
-                >// fill this in Notion before sending</span
-              >
-
-              <span class="c-str">NEXT 48 HOURS:</span>
-              - {{ next_steps }}
-
-              <span class="c-str">STATUS:</span> On Track for {{ DeadlineDate }}
-              launch. Any questions? Reply here or WhatsApp: [your number] —
-              Xenotrix Team
-            </div>
-          </div>
-        </div>
-
-        <!-- WF8 -->
-        <div class="auto-card" id="wf8">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">💸</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-08 · Invoice Overdue Reminder</div>
-              <div class="auto-desc">
-                Invoice unpaid after 3 days → auto WhatsApp reminder to client +
-                alert to you
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-red">PAYMENT</span>
-              <span class="badge b-yellow">CRITICAL</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Recovers unpaid invoices faster — most small agencies lose money
-              by forgetting to chase
-            </div>
-
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Schedule<br />Daily 10AM</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Google<br />Sheets</div>
-                <span class="flow-label">Read invoices</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node condition">
-                  IF: Unpaid<br />3+ days old
-                </div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node http">WhatsApp<br />Reminder</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node output">Telegram<br />Alert you</div>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  >Create an <strong>Invoices sheet</strong> in Google Sheets:
-                  columns — Client Name, Phone, Amount, Invoice Date, Status
-                  (Paid/Unpaid), Invoice URL</span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  ><strong>Schedule Trigger</strong> → Daily at
-                  <code>10:00 AM</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>Google Sheets</strong> → Read Invoices sheet → All
-                  rows</span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>IF node</strong> → Status equals
-                  <code>Unpaid</code> AND Invoice Date is more than 3 days
-                  ago</span
-                >
-              </li>
-              <li>
-                <span class="step-num">05</span
-                ><span class="step-text"
-                  ><strong>HTTP Request</strong> → WhatsApp Cloud API → Message:
-                  <code
-                    >"Hi {{ $json.ClientName }}, just a friendly reminder that
-                    invoice #{{ $json.InvoiceNum }} for ${{ $json.Amount }} is
-                    due. You can pay here: {{ $json.InvoiceURL }}. Let me know
-                    if you need anything!"</code
-                  ></span
-                >
-              </li>
-              <li>
-                <span class="step-num">06</span
-                ><span class="step-text"
-                  ><strong>Telegram</strong> → Alert yourself:
-                  <code
-                    >"⚠️ OVERDUE: {{ ClientName }} owes ${{ Amount }} — reminder
-                    sent"</code
-                  ></span
-                >
-              </li>
-              <li>
-                <span class="step-num">07</span
-                ><span class="step-text"
-                  ><strong>Google Sheets</strong> → Update row → Set
-                  <code>Reminder Sent</code> column to today (so it doesn't send
-                  again tomorrow)</span
-                >
-              </li>
-            </ul>
-          </div>
-        </div>
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Webhook<br>GitHub Push</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Code Node<br>Extract info</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node http">Notion API<br>Update page</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node output">Telegram<br>Deploy alert</div></div>
       </div>
 
-      <!-- ══════════════════════════════════════════════════════
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text"><strong>Webhook node</strong> → Copy URL → GitHub repo → Settings → Webhooks → Add → Paste URL → Events: <code>push</code></span></li>
+        <li><span class="step-num">02</span><span class="step-text"><strong>Code node</strong> → Extract: repo name, commit message, branch, pusher from <code>$json.body</code></span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>HTTP Request</strong> → Notion API → PATCH <code>https://api.notion.com/v1/pages/PAGE_ID</code> → Header: <code>Authorization: Bearer YOUR_NOTION_TOKEN</code> → Body: update Last Updated property to today</span></li>
+        <li><span class="step-num">04</span><span class="step-text"><strong>Telegram node</strong> → <code>"🚀 DEPLOY: {{ repo }}\nBranch: {{ branch }}\nCommit: {{ message }}\nBy: {{ pusher }}"</code></span></li>
+      </ul>
+
+      <div class="callout tip">
+        <strong>Notion Integration Token</strong>
+        <p>Get it free at notion.so/my-integrations → Create integration → Copy token. Then share your Notion database with the integration. Takes 3 minutes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WF7 -->
+  <div class="auto-card" id="wf7">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">📧</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-07 · Client Progress Update Email</div>
+        <div class="auto-desc">Every 2 days during active projects, auto-send a progress update email to keep clients informed</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-blue">SCHEDULED</span>
+        <span class="badge b-green">CLIENT TRUST</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Saves 20 min per update — eliminates "any updates?" client messages</div>
+
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Schedule<br>Every 2 Days</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Notion<br>Read DB</div><span class="flow-label">Active projects</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node condition">Filter:<br>Status = Active</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node output">Gmail<br>Send</div><span class="flow-label">Progress email</span></div>
+      </div>
+
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text"><strong>Schedule Trigger</strong> → Every 2 days at <code>3:00 PM</code></span></li>
+        <li><span class="step-num">02</span><span class="step-text"><strong>HTTP Request</strong> → Notion API → POST to query your Projects database → Filter: Status equals <code>In Progress</code></span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>Split In Batches</strong> → Process one project at a time</span></li>
+        <li><span class="step-num">04</span><span class="step-text"><strong>Gmail node</strong> → Send to client email → Subject: <code>"{{ ProjectName }} — Progress Update Day {{ DayNumber }}"</code></span></li>
+      </ul>
+
+      <div class="code-block" data-label="Email Body Template">
+Hi {{ ClientName }},
+
+Quick progress update on your {{ ProjectName }} project:
+
+<span class="c-str">TODAY'S PROGRESS:</span>
+- {{ completed_today }}  <span class="c-comment">// fill this in Notion before sending</span>
+
+<span class="c-str">NEXT 48 HOURS:</span>
+- {{ next_steps }}
+
+<span class="c-str">STATUS:</span> On Track for {{ DeadlineDate }} launch.
+
+Any questions? Reply here or WhatsApp: [your number]
+
+— Xenotrix Team</div>
+    </div>
+  </div>
+
+  <!-- WF8 -->
+  <div class="auto-card" id="wf8">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">💸</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-08 · Invoice Overdue Reminder</div>
+        <div class="auto-desc">Invoice unpaid after 3 days → auto WhatsApp reminder to client + alert to you</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-red">PAYMENT</span>
+        <span class="badge b-yellow">CRITICAL</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Recovers unpaid invoices faster — most small agencies lose money by forgetting to chase</div>
+
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Schedule<br>Daily 10AM</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Google<br>Sheets</div><span class="flow-label">Read invoices</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node condition">IF: Unpaid<br>3+ days old</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node http">WhatsApp<br>Reminder</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node output">Telegram<br>Alert you</div></div>
+      </div>
+
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text">Create an <strong>Invoices sheet</strong> in Google Sheets: columns — Client Name, Phone, Amount, Invoice Date, Status (Paid/Unpaid), Invoice URL</span></li>
+        <li><span class="step-num">02</span><span class="step-text"><strong>Schedule Trigger</strong> → Daily at <code>10:00 AM</code></span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>Google Sheets</strong> → Read Invoices sheet → All rows</span></li>
+        <li><span class="step-num">04</span><span class="step-text"><strong>IF node</strong> → Status equals <code>Unpaid</code> AND Invoice Date is more than 3 days ago</span></li>
+        <li><span class="step-num">05</span><span class="step-text"><strong>HTTP Request</strong> → WhatsApp Cloud API → Message: <code>"Hi {{ $json.ClientName }}, just a friendly reminder that invoice #{{ $json.InvoiceNum }} for ${{ $json.Amount }} is due. You can pay here: {{ $json.InvoiceURL }}. Let me know if you need anything!"</code></span></li>
+        <li><span class="step-num">06</span><span class="step-text"><strong>Telegram</strong> → Alert yourself: <code>"⚠️ OVERDUE: {{ ClientName }} owes ${{ Amount }} — reminder sent"</code></span></li>
+        <li><span class="step-num">07</span><span class="step-text"><strong>Google Sheets</strong> → Update row → Set <code>Reminder Sent</code> column to today (so it doesn't send again tomorrow)</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
      OPERATIONS AUTOMATIONS
 ══════════════════════════════════════════════════════ -->
-      <div class="section">
-        <div class="wf-category">
-          <span class="wf-cat-icon">⚙️</span>
-          <span class="wf-cat-name">Operations Automations</span>
-          <span class="wf-cat-count">4 workflows</span>
-        </div>
+<div class="section">
+  <div class="wf-category">
+    <span class="wf-cat-icon">⚙️</span>
+    <span class="wf-cat-name">Operations Automations</span>
+    <span class="wf-cat-count">4 workflows</span>
+  </div>
 
-        <!-- WF9 -->
-        <div class="auto-card" id="wf9">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">📈</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-09 · Weekly KPI Report</div>
-              <div class="auto-desc">
-                Every Sunday, auto-calculate your week's outreach numbers and
-                send to Telegram
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-green">WEEKLY</span>
-              <span class="badge b-cyan">ANALYTICS</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Saves 30 min/week — replaces manual Sunday review ritual
-            </div>
+  <!-- WF9 -->
+  <div class="auto-card" id="wf9">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">📈</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-09 · Weekly KPI Report</div>
+        <div class="auto-desc">Every Sunday, auto-calculate your week's outreach numbers and send to Telegram</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-green">WEEKLY</span>
+        <span class="badge b-cyan">ANALYTICS</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Saves 30 min/week — replaces manual Sunday review ritual</div>
 
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Schedule<br />Sun 7PM</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Google<br />Sheets</div>
-                <span class="flow-label">Read CRM</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Code<br />Node</div>
-                <span class="flow-label">Calculate KPIs</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node output">Telegram<br />Report</div>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  ><strong>Schedule Trigger</strong> → Every Sunday at
-                  <code>7:00 PM</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  ><strong>Google Sheets</strong> → Read all rows from CRM →
-                  Filter by <code>Last Contact</code> in last 7 days</span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>Code node</strong> → Calculate metrics:</span
-                >
-              </li>
-            </ul>
-
-            <div class="code-block" data-label="Code Node — KPI Calculator">
-              <span class="c-comment">// Calculate this week's numbers</span>
-              const items = $input.all(); const total = items.length; const
-              replied = items.filter(i =>
-              <span class="c-val"
-                >['Replied','Call Booked','Proposal Sent','Closed']</span
-              >.includes(i.json.Status)).length; const calls = items.filter(i =>
-              i.json.Status ===
-              <span class="c-str">'Call Booked'</span>).length; const proposals
-              = items.filter(i => i.json.Status ===
-              <span class="c-str">'Proposal Sent'</span>).length; const closed =
-              items.filter(i => i.json.Status ===
-              <span class="c-str">'Closed'</span>).length; const revenue =
-              items.filter(i => i.json.Status ===
-              <span class="c-str">'Closed'</span>).reduce((s,i) => s +
-              Number(i.json.DealValue||0), 0); return [{
-              <span class="c-key"
-                >total, replied, calls, proposals, closed, revenue, replyRate:
-                ((replied/total)*100).toFixed(1), closeRate:
-                ((closed/proposals)*100).toFixed(1) || 0</span
-              >
-              }];
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>Telegram node</strong> → Send formatted report with
-                  all metrics + comparison to targets</span
-                >
-              </li>
-            </ul>
-
-            <div class="code-block" data-label="Weekly Report Message">
-              <span class="c-str">📊 XENOTRIX WEEKLY REPORT</span>
-              <span class="c-str"
-                >Week ending: {{ $today.format('DD MMM YYYY') }}</span
-              >
-
-              <span class="c-str">OUTREACH</span>
-              Contacted: {{ total }} leads Replied: {{ replied }} ({{ replyRate
-              }}%) — Target: 12%+
-
-              <span class="c-str">PIPELINE</span>
-              Calls booked: {{ calls }} Proposals sent: {{ proposals }} Deals
-              closed: {{ closed }} Close rate: {{ closeRate }}% — Target: 25%+
-
-              <span class="c-str">REVENUE</span>
-              This week: ${{ revenue }} MRR target gap: {{ target - mrr }}
-
-              <span class="c-str">NEXT WEEK FOCUS:</span>
-              {{ closeRate &lt; 25 ? "Improve proposal quality" : "Scale
-              outreach volume" }}
-            </div>
-          </div>
-        </div>
-
-        <!-- WF10 -->
-        <div class="auto-card" id="wf10">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">🔄</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-10 · Retainer Renewal Ping</div>
-              <div class="auto-desc">
-                7 days before a retainer expires, auto-send a WhatsApp renewal
-                message to the client
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-yellow">RECURRING</span>
-              <span class="badge b-green">REVENUE</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Protects MRR — retainers that lapse are 3x harder to re-sell than
-              retainers that renew
-            </div>
-
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Schedule<br />Daily 9AM</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Google<br />Sheets</div>
-                <span class="flow-label">Read retainers</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node condition">
-                  IF: Expiry<br />= 7 days away
-                </div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node http">WhatsApp<br />Renewal msg</div>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  >Create a <strong>Retainers sheet</strong>: Client Name,
-                  Phone, Email, Monthly Value, Start Date, Renewal Date,
-                  Status</span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  ><strong>Schedule Trigger</strong> → Daily at
-                  <code>9:00 AM</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>Google Sheets</strong> → Read Retainers where Status
-                  = <code>Active</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>IF node</strong> → Renewal Date equals
-                  <code>today + 7 days</code> (<code
-                    >{{ $today.plus(7, 'days').format('YYYY-MM-DD') }}</code
-                  >)</span
-                >
-              </li>
-              <li>
-                <span class="step-num">05</span
-                ><span class="step-text"
-                  ><strong>HTTP Request</strong> → WhatsApp API → Message:
-                  <code
-                    >"Hi {{ Name }}, your Xenotrix maintenance plan renews in 7
-                    days on {{ RenewalDate }}. Everything has been running
-                    smoothly — shall we continue? Reply YES to auto-renew or let
-                    me know if anything has changed. — Xenotrix Team"</code
-                  ></span
-                >
-              </li>
-              <li>
-                <span class="step-num">06</span
-                ><span class="step-text"
-                  ><strong>Gmail</strong> → Send renewal invoice to their email
-                  → Amount: their monthly retainer value</span
-                >
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- WF11 -->
-        <div class="auto-card" id="wf11">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">🌐</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-11 · Website Lead Capture to CRM</div>
-              <div class="auto-desc">
-                Someone fills your Botpress chatbot → instantly added to Google
-                Sheets CRM + Telegram alert
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-cyan">WEBHOOK</span>
-              <span class="badge b-orange">INBOUND</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Every inbound lead captured instantly — none fall through the
-              cracks while you sleep
-            </div>
-
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Webhook<br />Botpress</div>
-                <span class="flow-label">Form submit</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Google<br />Sheets</div>
-                <span class="flow-label">Append lead</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node output">Telegram<br />Hot lead alert</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node http">WhatsApp<br />Auto-reply</div>
-                <span class="flow-label">Instant response</span>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  ><strong>Webhook node</strong> → Copy URL → In Botpress:
-                  Integrations → Webhook → Set your n8n webhook URL as the
-                  outgoing webhook for lead capture flow</span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  ><strong>Google Sheets</strong> → Append Row → Map: Name,
-                  Phone, Project Type, Source = <code>Website Chatbot</code>,
-                  Status = <code>New</code>, Date = today</span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>Telegram node</strong> →
-                  <code
-                    >"🔥 HOT INBOUND LEAD!\nName: {{ Name }}\nPhone: {{ Phone
-                    }}\nInterest: {{ ProjectType }}\nSource: xenotrix.com
-                    chatbot\nCALL WITHIN 30 MINUTES — response rate drops 90%
-                    after 1 hour"</code
-                  ></span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>HTTP Request</strong> → WhatsApp API → Send instant
-                  reply to their phone:
-                  <code
-                    >"Hi {{ Name }}! Got your message on our website. I'm on it
-                    — expect a call from us within the hour. In the meantime,
-                    book a slot here if you prefer: xenotrix.com/book — Xenotrix
-                    Team"</code
-                  ></span
-                >
-              </li>
-            </ul>
-
-            <div class="callout warn">
-              <strong>Speed-to-Lead Rule</strong>
-              <p>
-                Responding to an inbound lead within 5 minutes gives you a 21x
-                higher chance of qualifying them vs responding after 30 minutes.
-                This automation sends the WhatsApp instantly so the lead feels
-                attended to even while you are sleeping.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- WF12 -->
-        <div class="auto-card" id="wf12">
-          <div
-            class="auto-header"
-            onclick="this.parentElement.classList.toggle('open')"
-          >
-            <div class="auto-icon">☀️</div>
-            <div class="auto-meta">
-              <div class="auto-name">WF-12 · Daily Team Standup Summary</div>
-              <div class="auto-desc">
-                Every morning, compile open tasks + today's calls + overdue
-                follow-ups into one Telegram message
-              </div>
-            </div>
-            <div class="auto-badges">
-              <span class="badge b-purple">DAILY OPS</span>
-              <span class="badge b-blue">TEAM</span>
-            </div>
-            <span class="auto-toggle">▶</span>
-          </div>
-          <div class="auto-body">
-            <div class="time-save">
-              Replaces a 15-min standup meeting — both devs get the same brief
-              on their phones at 8AM
-            </div>
-
-            <div class="flow-diagram">
-              <div>
-                <div class="flow-node trigger">Schedule<br />8:00 AM</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Sheets:<br />CRM + Projects</div>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node action">Merge<br />+ Code</div>
-                <span class="flow-label">Compile data</span>
-              </div>
-              <span class="flow-arrow">→</span>
-              <div>
-                <div class="flow-node output">Telegram<br />Group</div>
-                <span class="flow-label">Daily brief</span>
-              </div>
-            </div>
-
-            <ul class="step-list">
-              <li>
-                <span class="step-num">01</span
-                ><span class="step-text"
-                  ><strong>Schedule Trigger</strong> → Every weekday at
-                  <code>8:00 AM</code></span
-                >
-              </li>
-              <li>
-                <span class="step-num">02</span
-                ><span class="step-text"
-                  >Run two <strong>Google Sheets</strong> nodes in parallel: one
-                  reads CRM (today's follow-ups), one reads Notion/Sheets
-                  Projects (active project deadlines)</span
-                >
-              </li>
-              <li>
-                <span class="step-num">03</span
-                ><span class="step-text"
-                  ><strong>Merge node</strong> → Combine both outputs into one
-                  data set</span
-                >
-              </li>
-              <li>
-                <span class="step-num">04</span
-                ><span class="step-text"
-                  ><strong>Code node</strong> → Build the standup message string
-                  from merged data</span
-                >
-              </li>
-              <li>
-                <span class="step-num">05</span
-                ><span class="step-text"
-                  ><strong>Telegram node</strong> → Send to your team group chat
-                  (create a Telegram group, add your bot to it)</span
-                >
-              </li>
-            </ul>
-
-            <div class="code-block" data-label="Daily Standup Message">
-              <span class="c-str">☀️ XENOTRIX DAILY BRIEF — {{ date }}</span>
-
-              <span class="c-str">📞 CALLS TODAY:</span>
-              {{ calls_today.map(c => `→ ${c.Name} @
-              ${c.BookingTime}`).join('\n') || 'None' }}
-
-              <span class="c-str">📤 FOLLOW-UPS DUE:</span>
-              {{ followups.map(f => `→ ${f.Name} (${f.Company}) —
-              ${f.Status}`).join('\n') || 'None' }}
-
-              <span class="c-str">🛠 ACTIVE PROJECTS:</span>
-              {{ projects.map(p => `→ ${p.Name} — Day ${p.Day}/${p.TotalDays} |
-              ${p.Status}`).join('\n') || 'None' }}
-
-              <span class="c-str">⚠️ OVERDUE:</span>
-              {{ overdue.length > 0 ? overdue.map(o => `→ ${o.Name} —
-              ${o.DaysOverdue} days late`).join('\n') : 'Nothing overdue' }}
-
-              <span class="c-str">Target today: 80 WA messages + 25 calls</span>
-            </div>
-          </div>
-        </div>
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Schedule<br>Sun 7PM</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Google<br>Sheets</div><span class="flow-label">Read CRM</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Code<br>Node</div><span class="flow-label">Calculate KPIs</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node output">Telegram<br>Report</div></div>
       </div>
 
-      <!-- BUILD PRIORITY -->
-      <div class="section" id="priority">
-        <div class="sec-eyebrow">Reference</div>
-        <div class="sec-title">Build These In Order</div>
-        <div class="sec-sub">
-          Build the highest-impact automations first. Each one builds on the
-          last. Do not skip around.
-        </div>
-        <div class="sec-divider"></div>
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text"><strong>Schedule Trigger</strong> → Every Sunday at <code>7:00 PM</code></span></li>
+        <li><span class="step-num">02</span><span class="step-text"><strong>Google Sheets</strong> → Read all rows from CRM → Filter by <code>Last Contact</code> in last 7 days</span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>Code node</strong> → Calculate metrics:</span></li>
+      </ul>
 
-        <ul class="step-list">
-          <li>
-            <span class="step-num">Day 1</span
-            ><span class="step-text"
-              ><strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf2')"
-                  >WF-02 Daily Lead Reminder</a
-                ></strong
-              >
-              — Easiest to build, immediate daily value. Start here to learn
-              n8n.</span
-            >
-          </li>
-          <li>
-            <span class="step-num">Day 1</span
-            ><span class="step-text"
-              ><strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf3')"
-                  >WF-03 New Booking Alert</a
-                ></strong
-              >
-              — Critical. Set up Calendly/Cal.com webhook. Never miss a
-              booking.</span
-            >
-          </li>
-          <li>
-            <span class="step-num">Day 2</span
-            ><span class="step-text"
-              ><strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf11')"
-                  >WF-11 Website Lead Capture</a
-                ></strong
-              >
-              — Connect Botpress to CRM. Your 24/7 inbound channel is now
-              live.</span
-            >
-          </li>
-          <li>
-            <span class="step-num">Day 2</span
-            ><span class="step-text"
-              ><strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf1')"
-                  >WF-01 WhatsApp Follow-up Sequence</a
-                ></strong
-              >
-              — Requires WhatsApp Cloud API setup (30 min). Highest daily time
-              savings.</span
-            >
-          </li>
-          <li>
-            <span class="step-num">Day 3</span
-            ><span class="step-text"
-              ><strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf4')"
-                  >WF-04 Lead Enrichment</a
-                ></strong
-              >
-              — Auto PageSpeed check. Gives you call hooks before you even
-              dial.</span
-            >
-          </li>
-          <li>
-            <span class="step-num">Day 3</span
-            ><span class="step-text"
-              ><strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf9')"
-                  >WF-09 Weekly KPI Report</a
-                ></strong
-              >
-              — Build once, data shows up every Sunday automatically.</span
-            >
-          </li>
-          <li>
-            <span class="step-num">Week 2</span
-            ><span class="step-text"
-              ><strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf8')"
-                  >WF-08 Invoice Reminders</a
-                ></strong
-              >
-              +
-              <strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf10')"
-                  >WF-10 Retainer Renewal</a
-                ></strong
-              >
-              — Build after you have first clients paying.</span
-            >
-          </li>
-          <li>
-            <span class="step-num">Week 2</span
-            ><span class="step-text"
-              ><strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf5')"
-                  >WF-05</a
-                ></strong
-              >,
-              <strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf6')"
-                  >06</a
-                ></strong
-              >,
-              <strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf7')"
-                  >07</a
-                ></strong
-              >,
-              <strong
-                ><a href="javascript:void(0)" onclick="scrollToSection('wf12')"
-                  >12</a
-                ></strong
-              >
-              — Remaining delivery and ops workflows once project pipeline is
-              active.</span
-            >
-          </li>
-        </ul>
+      <div class="code-block" data-label="Code Node — KPI Calculator">
+<span class="c-comment">// Calculate this week's numbers</span>
+const items = $input.all();
+const total = items.length;
+const replied = items.filter(i => <span class="c-val">['Replied','Call Booked','Proposal Sent','Closed']</span>.includes(i.json.Status)).length;
+const calls = items.filter(i => i.json.Status === <span class="c-str">'Call Booked'</span>).length;
+const proposals = items.filter(i => i.json.Status === <span class="c-str">'Proposal Sent'</span>).length;
+const closed = items.filter(i => i.json.Status === <span class="c-str">'Closed'</span>).length;
+const revenue = items.filter(i => i.json.Status === <span class="c-str">'Closed'</span>).reduce((s,i) => s + Number(i.json.DealValue||0), 0);
+
+return [{ <span class="c-key">total, replied, calls, proposals, closed, revenue,
+  replyRate: ((replied/total)*100).toFixed(1),
+  closeRate: ((closed/proposals)*100).toFixed(1) || 0</span>
+}];</div>
+
+      <ul class="step-list">
+        <li><span class="step-num">04</span><span class="step-text"><strong>Telegram node</strong> → Send formatted report with all metrics + comparison to targets</span></li>
+      </ul>
+
+      <div class="code-block" data-label="Weekly Report Message">
+<span class="c-str">📊 XENOTRIX WEEKLY REPORT</span>
+<span class="c-str">Week ending: {{ $today.format('DD MMM YYYY') }}</span>
+
+<span class="c-str">OUTREACH</span>
+Contacted: {{ total }} leads
+Replied:   {{ replied }} ({{ replyRate }}%) — Target: 12%+
+
+<span class="c-str">PIPELINE</span>
+Calls booked: {{ calls }}
+Proposals sent: {{ proposals }}
+Deals closed: {{ closed }}
+Close rate: {{ closeRate }}% — Target: 25%+
+
+<span class="c-str">REVENUE</span>
+This week: ${{ revenue }}
+MRR target gap: {{ target - mrr }}
+
+<span class="c-str">NEXT WEEK FOCUS:</span>
+{{ closeRate &lt; 25 ? "Improve proposal quality" : "Scale outreach volume" }}</div>
+    </div>
+  </div>
+
+  <!-- WF10 -->
+  <div class="auto-card" id="wf10">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">🔄</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-10 · Retainer Renewal Ping</div>
+        <div class="auto-desc">7 days before a retainer expires, auto-send a WhatsApp renewal message to the client</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-yellow">RECURRING</span>
+        <span class="badge b-green">REVENUE</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Protects MRR — retainers that lapse are 3x harder to re-sell than retainers that renew</div>
+
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Schedule<br>Daily 9AM</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Google<br>Sheets</div><span class="flow-label">Read retainers</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node condition">IF: Expiry<br>= 7 days away</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node http">WhatsApp<br>Renewal msg</div></div>
       </div>
 
-      <!-- FREE NODE REFERENCE -->
-      <div class="section" id="nodes">
-        <div class="sec-eyebrow">Reference</div>
-        <div class="sec-title">Free Nodes Used in This Guide</div>
-        <div class="sec-sub">
-          All nodes below are free and built into n8n. No paid integrations
-          required.
-        </div>
-        <div class="sec-divider"></div>
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text">Create a <strong>Retainers sheet</strong>: Client Name, Phone, Email, Monthly Value, Start Date, Renewal Date, Status</span></li>
+        <li><span class="step-num">02</span><span class="step-text"><strong>Schedule Trigger</strong> → Daily at <code>9:00 AM</code></span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>Google Sheets</strong> → Read Retainers where Status = <code>Active</code></span></li>
+        <li><span class="step-num">04</span><span class="step-text"><strong>IF node</strong> → Renewal Date equals <code>today + 7 days</code> (<code>{{ $today.plus(7, 'days').format('YYYY-MM-DD') }}</code>)</span></li>
+        <li><span class="step-num">05</span><span class="step-text"><strong>HTTP Request</strong> → WhatsApp API → Message: <code>"Hi {{ Name }}, your Xenotrix maintenance plan renews in 7 days on {{ RenewalDate }}. Everything has been running smoothly — shall we continue? Reply YES to auto-renew or let me know if anything has changed. — Xenotrix Team"</code></span></li>
+        <li><span class="step-num">06</span><span class="step-text"><strong>Gmail</strong> → Send renewal invoice to their email → Amount: their monthly retainer value</span></li>
+      </ul>
+    </div>
+  </div>
 
-        <table class="node-table">
-          <thead>
-            <tr>
-              <th>Node</th>
-              <th>What It Does</th>
-              <th>Used In</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="nd">Schedule Trigger</td>
-              <td>Run workflow at set time intervals</td>
-              <td class="nb">WF-01,02,07,08,09,10,12</td>
-            </tr>
-            <tr>
-              <td class="nd">Webhook</td>
-              <td>Receive data from any external service</td>
-              <td class="nb">WF-03,04,06,11</td>
-            </tr>
-            <tr>
-              <td class="nd">Google Sheets</td>
-              <td>Read/write/update your CRM and data sheets</td>
-              <td class="nb">All workflows</td>
-            </tr>
-            <tr>
-              <td class="nd">Gmail</td>
-              <td>Send and draft emails from your Gmail</td>
-              <td class="nb">WF-03,05,07,10</td>
-            </tr>
-            <tr>
-              <td class="nd">Telegram</td>
-              <td>Send instant messages to your phone via bot</td>
-              <td class="nb">WF-01,02,03,06,09,11,12</td>
-            </tr>
-            <tr>
-              <td class="nd">HTTP Request</td>
-              <td>Call any API — WhatsApp, Notion, PageSpeed, etc.</td>
-              <td class="nb">WF-01,04,06,07,10,11</td>
-            </tr>
-            <tr>
-              <td class="nd">IF (Conditional)</td>
-              <td>Branch workflow based on conditions</td>
-              <td class="nb">WF-01,02,04,05,08,10</td>
-            </tr>
-            <tr>
-              <td class="nd">Code Node</td>
-              <td>Write custom JavaScript for complex logic</td>
-              <td class="nb">WF-04,09,12</td>
-            </tr>
-            <tr>
-              <td class="nd">Set Node</td>
-              <td>Transform and rename data fields</td>
-              <td class="nb">WF-03,06,08</td>
-            </tr>
-            <tr>
-              <td class="nd">Merge Node</td>
-              <td>Combine data from multiple branches</td>
-              <td class="nb">WF-12</td>
-            </tr>
-            <tr>
-              <td class="nd">Split in Batches</td>
-              <td>Process large lists one item at a time</td>
-              <td class="nb">WF-07,08</td>
-            </tr>
-            <tr>
-              <td class="nd">Filter Node</td>
-              <td>Keep only items matching a condition</td>
-              <td class="nb">WF-02,07,09</td>
-            </tr>
-          </tbody>
-        </table>
+  <!-- WF11 -->
+  <div class="auto-card" id="wf11">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">🌐</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-11 · Website Lead Capture to CRM</div>
+        <div class="auto-desc">Someone fills your Botpress chatbot → instantly added to Google Sheets CRM + Telegram alert</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-cyan">WEBHOOK</span>
+        <span class="badge b-orange">INBOUND</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Every inbound lead captured instantly — none fall through the cracks while you sleep</div>
 
-        <div class="callout ok" style="margin-top: 20px">
-          <strong>Total Free External APIs Used</strong>
-          <p>
-            Google PageSpeed API (free, no key), WhatsApp Cloud API (1,000 free
-            conversations/month), Notion API (free), Cal.com Webhooks (free),
-            GitHub Webhooks (free), Botpress Webhooks (free). Every single
-            external service in this guide has a free tier that covers
-            Xenotrix's needs for the first 12 months.
-          </p>
-        </div>
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Webhook<br>Botpress</div><span class="flow-label">Form submit</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Google<br>Sheets</div><span class="flow-label">Append lead</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node output">Telegram<br>Hot lead alert</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node http">WhatsApp<br>Auto-reply</div><span class="flow-label">Instant response</span></div>
       </div>
 
-      <footer>
-        <span>Xenotrix</span> · n8n Automation Playbook · xenotrix.com
-        <span style="color: var(--muted)"
-          >12 workflows · $0 cost · 4 hours saved daily</span
-        >
-      </footer>
-    </main>
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text"><strong>Webhook node</strong> → Copy URL → In Botpress: Integrations → Webhook → Set your n8n webhook URL as the outgoing webhook for lead capture flow</span></li>
+        <li><span class="step-num">02</span><span class="step-text"><strong>Google Sheets</strong> → Append Row → Map: Name, Phone, Project Type, Source = <code>Website Chatbot</code>, Status = <code>New</code>, Date = today</span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>Telegram node</strong> → <code>"🔥 HOT INBOUND LEAD!\nName: {{ Name }}\nPhone: {{ Phone }}\nInterest: {{ ProjectType }}\nSource: xenotrix.com chatbot\nCALL WITHIN 30 MINUTES — response rate drops 90% after 1 hour"</code></span></li>
+        <li><span class="step-num">04</span><span class="step-text"><strong>HTTP Request</strong> → WhatsApp API → Send instant reply to their phone: <code>"Hi {{ Name }}! Got your message on our website. I'm on it — expect a call from us within the hour. In the meantime, book a slot here if you prefer: xenotrix.com/book — Xenotrix Team"</code></span></li>
+      </ul>
 
-    <script>
-      // Helper for cross-iframe safe scrolling and auto-expanding cards
-      function scrollToSection(id) {
-        const el = document.getElementById(id);
-        if (el) {
-          // If it's an automation card, expand it
-          if (el.classList.contains("auto-card")) {
-            // Close all other cards first
-            document.querySelectorAll(".auto-card").forEach((c) => {
-              c.classList.remove("open");
-            });
-            el.classList.add("open");
-          }
+      <div class="callout warn">
+        <strong>Speed-to-Lead Rule</strong>
+        <p>Responding to an inbound lead within 5 minutes gives you a 21x higher chance of qualifying them vs responding after 30 minutes. This automation sends the WhatsApp instantly so the lead feels attended to even while you are sleeping.</p>
+      </div>
+    </div>
+  </div>
 
-          // Smooth scroll
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
+  <!-- WF12 -->
+  <div class="auto-card" id="wf12">
+    <div class="auto-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="auto-icon">☀️</div>
+      <div class="auto-meta">
+        <div class="auto-name">WF-12 · Daily Team Standup Summary</div>
+        <div class="auto-desc">Every morning, compile open tasks + today's calls + overdue follow-ups into one Telegram message</div>
+      </div>
+      <div class="auto-badges">
+        <span class="badge b-purple">DAILY OPS</span>
+        <span class="badge b-blue">TEAM</span>
+      </div>
+      <span class="auto-toggle">▶</span>
+    </div>
+    <div class="auto-body">
+      <div class="time-save">Replaces a 15-min standup meeting — both devs get the same brief on their phones at 8AM</div>
 
-          // Update active link styling
-          document.querySelectorAll(".sidebar nav a").forEach((link) => {
-            link.style.color = "";
-            if (link.getAttribute("onclick")?.includes(`'${id}'`)) {
-              link.style.color = "var(--cyan)";
-            }
-          });
-        }
-      }
+      <div class="flow-diagram">
+        <div><div class="flow-node trigger">Schedule<br>8:00 AM</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Sheets:<br>CRM + Projects</div></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node action">Merge<br>+ Code</div><span class="flow-label">Compile data</span></div>
+        <span class="flow-arrow">→</span>
+        <div><div class="flow-node output">Telegram<br>Group</div><span class="flow-label">Daily brief</span></div>
+      </div>
 
-      window.addEventListener("load", () => {
-        // Open first card by default if no preference
-        const firstCard = document.querySelector(".auto-card");
-        if (firstCard) firstCard.classList.add("open");
+      <ul class="step-list">
+        <li><span class="step-num">01</span><span class="step-text"><strong>Schedule Trigger</strong> → Every weekday at <code>8:00 AM</code></span></li>
+        <li><span class="step-num">02</span><span class="step-text">Run two <strong>Google Sheets</strong> nodes in parallel: one reads CRM (today's follow-ups), one reads Notion/Sheets Projects (active project deadlines)</span></li>
+        <li><span class="step-num">03</span><span class="step-text"><strong>Merge node</strong> → Combine both outputs into one data set</span></li>
+        <li><span class="step-num">04</span><span class="step-text"><strong>Code node</strong> → Build the standup message string from merged data</span></li>
+        <li><span class="step-num">05</span><span class="step-text"><strong>Telegram node</strong> → Send to your team group chat (create a Telegram group, add your bot to it)</span></li>
+      </ul>
 
-        // Initial highlights
-        document.querySelectorAll(".sidebar nav a").forEach((link) => {
-          link.addEventListener("click", function () {
-            document.querySelectorAll(".sidebar nav a").forEach((l) => {
-              l.style.color = "";
-            });
-            this.style.color = "var(--cyan)";
-          });
-        });
-      });
-    </script>
-  </body>
+      <div class="code-block" data-label="Daily Standup Message">
+<span class="c-str">☀️ XENOTRIX DAILY BRIEF — {{ date }}</span>
+
+<span class="c-str">📞 CALLS TODAY:</span>
+{{ calls_today.map(c => `→ ${c.Name} @ ${c.BookingTime}`).join('\n') || 'None' }}
+
+<span class="c-str">📤 FOLLOW-UPS DUE:</span>
+{{ followups.map(f => `→ ${f.Name} (${f.Company}) — ${f.Status}`).join('\n') || 'None' }}
+
+<span class="c-str">🛠 ACTIVE PROJECTS:</span>
+{{ projects.map(p => `→ ${p.Name} — Day ${p.Day}/${p.TotalDays} | ${p.Status}`).join('\n') || 'None' }}
+
+<span class="c-str">⚠️ OVERDUE:</span>
+{{ overdue.length > 0 ? overdue.map(o => `→ ${o.Name} — ${o.DaysOverdue} days late`).join('\n') : 'Nothing overdue' }}
+
+<span class="c-str">Target today: 80 WA messages + 25 calls</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- BUILD PRIORITY -->
+<div class="section" id="priority">
+  <div class="sec-eyebrow">Reference</div>
+  <div class="sec-title">Build These In Order</div>
+  <div class="sec-sub">Build the highest-impact automations first. Each one builds on the last. Do not skip around.</div>
+  <div class="sec-divider"></div>
+
+  <ul class="step-list">
+    <li><span class="step-num">Day 1</span><span class="step-text"><strong>WF-02 Daily Lead Reminder</strong> — Easiest to build, immediate daily value. Start here to learn n8n.</span></li>
+    <li><span class="step-num">Day 1</span><span class="step-text"><strong>WF-03 New Booking Alert</strong> — Critical. Set up Calendly/Cal.com webhook. Never miss a booking.</span></li>
+    <li><span class="step-num">Day 2</span><span class="step-text"><strong>WF-11 Website Lead Capture</strong> — Connect Botpress to CRM. Your 24/7 inbound channel is now live.</span></li>
+    <li><span class="step-num">Day 2</span><span class="step-text"><strong>WF-01 WhatsApp Follow-up Sequence</strong> — Requires WhatsApp Cloud API setup (30 min). Highest daily time savings.</span></li>
+    <li><span class="step-num">Day 3</span><span class="step-text"><strong>WF-04 Lead Enrichment</strong> — Auto PageSpeed check. Gives you call hooks before you even dial.</span></li>
+    <li><span class="step-num">Day 3</span><span class="step-text"><strong>WF-09 Weekly KPI Report</strong> — Build once, data shows up every Sunday automatically.</span></li>
+    <li><span class="step-num">Week 2</span><span class="step-text"><strong>WF-08 Invoice Reminders + WF-10 Retainer Renewal</strong> — Build after you have first clients paying.</span></li>
+    <li><span class="step-num">Week 2</span><span class="step-text"><strong>WF-05, 06, 07, 12</strong> — Remaining delivery and ops workflows once project pipeline is active.</span></li>
+  </ul>
+</div>
+
+<!-- FREE NODE REFERENCE -->
+<div class="section" id="nodes">
+  <div class="sec-eyebrow">Reference</div>
+  <div class="sec-title">Free Nodes Used in This Guide</div>
+  <div class="sec-sub">All nodes below are free and built into n8n. No paid integrations required.</div>
+  <div class="sec-divider"></div>
+
+  <table class="node-table">
+    <thead>
+      <tr><th>Node</th><th>What It Does</th><th>Used In</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="nd">Schedule Trigger</td><td>Run workflow at set time intervals</td><td class="nb">WF-01,02,07,08,09,10,12</td></tr>
+      <tr><td class="nd">Webhook</td><td>Receive data from any external service</td><td class="nb">WF-03,04,06,11</td></tr>
+      <tr><td class="nd">Google Sheets</td><td>Read/write/update your CRM and data sheets</td><td class="nb">All workflows</td></tr>
+      <tr><td class="nd">Gmail</td><td>Send and draft emails from your Gmail</td><td class="nb">WF-03,05,07,10</td></tr>
+      <tr><td class="nd">Telegram</td><td>Send instant messages to your phone via bot</td><td class="nb">WF-01,02,03,06,09,11,12</td></tr>
+      <tr><td class="nd">HTTP Request</td><td>Call any API — WhatsApp, Notion, PageSpeed, etc.</td><td class="nb">WF-01,04,06,07,10,11</td></tr>
+      <tr><td class="nd">IF (Conditional)</td><td>Branch workflow based on conditions</td><td class="nb">WF-01,02,04,05,08,10</td></tr>
+      <tr><td class="nd">Code Node</td><td>Write custom JavaScript for complex logic</td><td class="nb">WF-04,09,12</td></tr>
+      <tr><td class="nd">Set Node</td><td>Transform and rename data fields</td><td class="nb">WF-03,06,08</td></tr>
+      <tr><td class="nd">Merge Node</td><td>Combine data from multiple branches</td><td class="nb">WF-12</td></tr>
+      <tr><td class="nd">Split in Batches</td><td>Process large lists one item at a time</td><td class="nb">WF-07,08</td></tr>
+      <tr><td class="nd">Filter Node</td><td>Keep only items matching a condition</td><td class="nb">WF-02,07,09</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout ok" style="margin-top:20px;">
+    <strong>Total Free External APIs Used</strong>
+    <p>Google PageSpeed API (free, no key), WhatsApp Cloud API (1,000 free conversations/month), Notion API (free), Cal.com Webhooks (free), GitHub Webhooks (free), Botpress Webhooks (free). Every single external service in this guide has a free tier that covers Xenotrix's needs for the first 12 months.</p>
+  </div>
+</div>
+
+<footer>
+  <span>Xenotrix</span> · n8n Automation Playbook · xenotrix.com
+  <span style="color:var(--muted)">12 workflows · $0 cost · 4 hours saved daily</span>
+</footer>
+
+</main>
+
+<script>
+// Open first card by default
+document.querySelector('.auto-card').classList.add('open');
+</script>
+</body>
 </html>

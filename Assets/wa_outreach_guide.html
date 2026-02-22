@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xenotrix — WhatsApp Outreach Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:    #060609;
+  --bg2:   #0b0b10;
+  --bg3:   #10101a;
+  --bg4:   #151520;
+  --bg5:   #1a1a28;
+  --bdr:   #1e1e30;
+  --bdr2:  #282840;
+  --green: #25d366;
+  --cyan:  #00e5cc;
+  --amber: #f59e0b;
+  --rose:  #f43f5e;
+  --violet:#a855f7;
+  --blue:  #3b82f6;
+  --white: #eeeef8;
+  --slate: #8888aa;
+  --dim:   #505068;
+  --dimmer:#2a2a3a;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--white);
+  font-family:'Inter',sans-serif;font-size:14px;line-height:1.7;
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(37,211,102,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(37,211,102,.025) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+
+/* sidebar */
+.sidebar{
+  position:fixed;left:0;top:0;bottom:0;width:220px;
+  background:var(--bg2);border-right:1px solid var(--bdr);
+  overflow-y:auto;z-index:50;
+}
+.sb-top{padding:18px 16px 14px;border-bottom:1px solid var(--bdr);}
+.sb-logo{font-family:'Syne',sans-serif;font-weight:900;font-size:16px;color:var(--green);}
+.sb-sub{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--dim);letter-spacing:1.5px;text-transform:uppercase;margin-top:3px;}
+.sb-nav{padding:8px 0 20px;}
+.sb-grp{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--dimmer);letter-spacing:2px;text-transform:uppercase;padding:12px 16px 4px;}
+.sb-a{display:flex;align-items:center;gap:7px;padding:6px 16px;color:var(--dim);text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:10px;transition:all .12s;border-left:2px solid transparent;}
+.sb-a:hover{color:var(--green);background:rgba(37,211,102,.04);border-left-color:var(--green);}
+.sb-eta{
+  margin:0 10px 16px;padding:12px;
+  background:var(--bg3);border:1px solid var(--bdr);border-radius:8px;
+}
+.sb-eta .t{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.eta-row{display:flex;justify-content:space-between;font-size:11px;padding:3px 0;}
+.eta-row .v{font-family:'JetBrains Mono',monospace;color:var(--green);font-weight:700;}
+
+/* main */
+.main{margin-left:220px;max-width:900px;padding:0 38px 80px;position:relative;z-index:1;}
+
+/* hero */
+.hero{padding:48px 0 40px;border-bottom:1px solid var(--bdr);margin-bottom:48px;}
+.pill{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.2);
+  color:var(--green);font-family:'JetBrains Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  padding:4px 12px;border-radius:20px;margin-bottom:16px;
+}
+h1{font-family:'Syne',sans-serif;font-weight:900;font-size:44px;line-height:1.02;letter-spacing:-2px;margin-bottom:12px;}
+h1 .hl{color:var(--green);}
+.sub{color:var(--slate);font-size:15px;max-width:500px;line-height:1.75;margin-bottom:28px;}
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.stat{background:var(--bg3);border:1px solid var(--bdr);border-radius:8px;padding:14px 12px;}
+.stat .n{font-family:'Syne',sans-serif;font-weight:900;font-size:24px;color:var(--green);line-height:1;}
+.stat .l{font-family:'JetBrains Mono',monospace;font-size:8.5px;color:var(--dim);text-transform:uppercase;letter-spacing:.8px;margin-top:4px;}
+
+/* section */
+.sec{margin-bottom:56px;}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);letter-spacing:3px;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.eyebrow::before{content:'//';color:var(--dimmer);}
+.sec-title{font-family:'Syne',sans-serif;font-weight:900;font-size:24px;letter-spacing:-.5px;margin-bottom:5px;}
+.sec-sub{color:var(--dim);font-size:13px;max-width:560px;margin-bottom:20px;}
+hr.div{border:none;border-top:1px solid var(--bdr);margin-bottom:20px;}
+
+/* phase cards */
+.phase{
+  background:var(--bg3);border:1px solid var(--bdr);
+  border-radius:10px;margin-bottom:14px;overflow:hidden;
+}
+.phase-hdr{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 18px;background:var(--bg4);
+  border-bottom:1px solid var(--bdr);
+  cursor:pointer;user-select:none;
+}
+.phase-num{
+  width:30px;height:30px;border-radius:50%;
+  background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--green);
+  font-weight:700;flex-shrink:0;
+}
+.phase-info{flex:1;}
+.phase-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:1px;}
+.phase-desc{font-size:11px;color:var(--dim);}
+.phase-time{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--amber);background:rgba(245,158,11,.08);
+  border:1px solid rgba(245,158,11,.2);padding:3px 8px;border-radius:3px;
+}
+.chev{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--dim);transition:transform .2s,color .15s;}
+.phase.open .chev{transform:rotate(90deg);color:var(--green);}
+.phase-body{display:none;padding:18px 20px 16px;}
+.phase.open .phase-body{display:block;}
+
+/* steps */
+.steps{list-style:none;}
+.steps li{
+  display:grid;grid-template-columns:28px 1fr;gap:8px;
+  padding:9px 0;border-bottom:1px solid var(--bdr);
+  align-items:flex-start;
+}
+.steps li:last-child{border-bottom:none;}
+.sn{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--green);font-weight:700;padding-top:2px;}
+.st{font-size:13px;color:var(--white);line-height:1.6;}
+.st strong{color:var(--cyan);}
+.st code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--amber);background:var(--bg5);border:1px solid var(--bdr2);padding:1px 5px;border-radius:3px;}
+.st .note{display:block;font-size:11px;color:var(--dim);margin-top:3px;}
+
+/* screenshot hint */
+.screen-hint{
+  background:var(--bg5);border:1px solid var(--bdr2);border-radius:8px;
+  padding:12px 16px;margin:12px 0;
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--slate);
+  display:flex;align-items:center;gap:10px;
+}
+.screen-hint::before{content:'📍';font-size:16px;}
+
+/* callout */
+.callout{padding:12px 16px;border-radius:0 7px 7px 0;border-left:2.5px solid var(--green);background:rgba(37,211,102,.04);margin:14px 0;font-size:13px;}
+.callout.warn{border-color:var(--amber);background:rgba(245,158,11,.04);}
+.callout.danger{border-color:var(--rose);background:rgba(244,63,94,.04);}
+.callout.tip{border-color:var(--violet);background:rgba(168,85,247,.04);}
+.callout strong{display:block;font-family:'JetBrains Mono',monospace;font-size:8.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--green);margin-bottom:4px;}
+.callout.warn strong{color:var(--amber);}
+.callout.danger strong{color:var(--rose);}
+.callout.tip strong{color:var(--violet);}
+.callout p{color:var(--slate);line-height:1.65;}
+
+/* code block */
+.code{
+  background:var(--bg);border:1px solid var(--bdr2);border-radius:8px;
+  padding:14px 16px;margin:12px 0;position:relative;
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  line-height:1.9;overflow-x:auto;white-space:pre-wrap;
+}
+.code::before{
+  content:attr(data-l);position:absolute;top:-9px;left:12px;
+  background:var(--bg);padding:0 7px;font-size:8.5px;
+  color:var(--dim);letter-spacing:1px;text-transform:uppercase;
+  border:1px solid var(--bdr2);border-radius:3px;
+}
+.ck{color:var(--cyan);}
+.cv{color:var(--amber);}
+.cs{color:var(--green);}
+.cc{color:var(--dim);font-style:italic;}
+.cp{color:var(--violet);}
+
+/* flow */
+.flow{display:flex;align-items:flex-start;gap:0;margin:8px 0 16px;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;}
+.fn{text-align:center;flex-shrink:0;}
+.fb{padding:6px 11px;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:10px;line-height:1.4;white-space:nowrap;border:1px solid;}
+.fb-t{border-color:var(--green);color:var(--green);background:rgba(37,211,102,.07);}
+.fb-a{border-color:var(--violet);color:var(--violet);background:rgba(168,85,247,.07);}
+.fb-c{border-color:var(--amber);color:var(--amber);background:rgba(245,158,11,.07);}
+.fb-o{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,204,.07);}
+.fb-h{border-color:var(--blue);color:var(--blue);background:rgba(59,130,246,.07);}
+.fl{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--dim);margin-top:3px;}
+.fa{color:var(--dimmer);font-size:12px;padding:0 4px;margin-top:10px;flex-shrink:0;font-family:'JetBrains Mono',monospace;}
+
+/* message preview */
+.msg-preview{
+  background:var(--bg5);border:1px solid var(--bdr2);border-radius:10px;
+  padding:16px 18px;margin:12px 0;position:relative;
+}
+.msg-preview::before{
+  content:'WHATSAPP MESSAGE PREVIEW';position:absolute;top:-9px;left:12px;
+  background:var(--bg5);padding:0 8px;
+  font-family:'JetBrains Mono',monospace;font-size:8.5px;
+  color:var(--green);letter-spacing:1px;
+  border:1px solid rgba(37,211,102,.25);border-radius:3px;
+}
+.msg-bubble{
+  background:#0a1a0f;border:1px solid rgba(37,211,102,.15);border-radius:8px;
+  padding:12px 16px;font-size:13px;line-height:1.7;color:#d4f5e0;
+  font-family:'Inter',sans-serif;max-width:360px;
+}
+.msg-bubble .var{color:var(--amber);font-family:'JetBrains Mono',monospace;font-size:11px;}
+.msg-meta{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);margin-top:8px;}
+
+/* tag */
+.tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:8.5px;padding:2px 8px;border-radius:3px;text-transform:uppercase;letter-spacing:.5px;}
+.t-green{background:rgba(37,211,102,.09);color:var(--green);border:1px solid rgba(37,211,102,.2);}
+.t-amber{background:rgba(245,158,11,.09);color:var(--amber);border:1px solid rgba(245,158,11,.2);}
+.t-rose{background:rgba(244,63,94,.09);color:var(--rose);border:1px solid rgba(244,63,94,.2);}
+.t-violet{background:rgba(168,85,247,.09);color:var(--violet);border:1px solid rgba(168,85,247,.2);}
+.t-cyan{background:rgba(0,229,204,.09);color:var(--cyan);border:1px solid rgba(0,229,204,.2);}
+
+/* checklist */
+.checklist{list-style:none;}
+.checklist li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--bdr);font-size:13px;}
+.checklist li:last-child{border-bottom:none;}
+.checklist li::before{content:'→';color:var(--green);font-family:'JetBrains Mono',monospace;flex-shrink:0;margin-top:1px;}
+
+/* footer */
+footer{margin-top:60px;padding:24px 0;border-top:1px solid var(--bdr);display:flex;justify-content:space-between;align-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);}
+footer .b{color:var(--green);}
+
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:3px;}
+
+@media(max-width:780px){
+  .sidebar{display:none;}
+  .main{margin-left:0;padding:20px 16px 60px;}
+  h1{font-size:28px;}
+  .stat-row{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-top">
+    <div class="sb-logo">Xenotrix</div>
+    <div class="sb-sub">WhatsApp Outreach Setup</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-grp">Part 1 — API Setup</div>
+    <a class="sb-a" href="#meta-app">① Create Meta App</a>
+    <a class="sb-a" href="#wa-product">② Add WhatsApp</a>
+    <a class="sb-a" href="#get-token">③ Get Token + Phone ID</a>
+    <a class="sb-a" href="#test">④ Send Test Message</a>
+    <div class="sb-grp">Part 2 — n8n Workflow</div>
+    <a class="sb-a" href="#template">⑤ Message Template</a>
+    <a class="sb-a" href="#workflow">⑥ Build n8n Workflow</a>
+    <a class="sb-a" href="#csv">⑦ Load Your CSV Data</a>
+    <a class="sb-a" href="#throttle">⑧ Safe Send Rate</a>
+    <div class="sb-grp">Resources</div>
+    <a class="sb-a" href="#rules">Ban-Safe Rules</a>
+    <a class="sb-a" href="#json">n8n Workflow JSON</a>
+  </nav>
+  <div class="sb-eta">
+    <div class="t">Time Estimate</div>
+    <div class="eta-row">API setup<span class="v">45 min</span></div>
+    <div class="eta-row">n8n workflow<span class="v">30 min</span></div>
+    <div class="eta-row">First batch sent<span class="v">Today</span></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="pill">Xenotrix · WhatsApp Cloud API + n8n · Free</div>
+  <h1>Send Personalized<br><span class="hl">WhatsApp Audits</span><br>at Scale.</h1>
+  <p>Your CSV has business names, phones, and websites. This guide wires WhatsApp Cloud API to n8n so each business gets a personalized audit offer — automatically, for free.</p>
+  <div class="stat-row">
+    <div class="stat"><div class="n">1,000</div><div class="l">Free msgs/month</div></div>
+    <div class="stat"><div class="n">$0</div><div class="l">API cost</div></div>
+    <div class="stat"><div class="n">80/day</div><div class="l">Safe send rate</div></div>
+    <div class="stat"><div class="n">45 min</div><div class="l">To first message</div></div>
+  </div>
+</div>
+
+<!-- ═══════ PART 1: META APP SETUP ═══════ -->
+<div class="sec" id="meta-app">
+  <div class="eyebrow">Part 1 — Step 1</div>
+  <div class="sec-title">Create Your Meta Developer App</div>
+  <div class="sec-sub">This is the foundation. Takes about 10 minutes. You need a Facebook account — use your personal one.</div>
+  <hr class="div">
+
+  <div class="phase open" id="p1">
+    <div class="phase-hdr" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-num">1</div>
+      <div class="phase-info">
+        <div class="phase-name">Create Meta Developer Account + App</div>
+        <div class="phase-desc">developers.facebook.com → create app of type "Business"</div>
+      </div>
+      <span class="phase-time">~10 min</span>
+      <span class="chev">▶</span>
+    </div>
+    <div class="phase-body">
+      <ul class="steps">
+        <li><span class="sn">01</span><span class="st">Go to <code>developers.facebook.com</code> → click <strong>My Apps</strong> → click <strong>Create App</strong></span></li>
+        <li><span class="sn">02</span><span class="st">Select use case: <strong>"Other"</strong> → click Next</span></li>
+        <li><span class="sn">03</span><span class="st">Select app type: <strong>"Business"</strong> → click Next</span></li>
+        <li><span class="sn">04</span><span class="st">App name: <code>Xenotrix Outreach</code> → Contact email: your email → click <strong>Create App</strong></span></li>
+        <li><span class="sn">05</span><span class="st">Facebook will ask you to re-enter your password → do it</span></li>
+        <li><span class="sn">06</span><span class="st">You land on the App Dashboard. Keep this tab open.</span></li>
+      </ul>
+      <div class="screen-hint">You should now see a dashboard with "Add products to your app" section at the bottom</div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 2 -->
+<div class="sec" id="wa-product">
+  <div class="eyebrow">Part 1 — Step 2</div>
+  <div class="sec-title">Add WhatsApp to Your App</div>
+  <hr class="div">
+
+  <div class="phase">
+    <div class="phase-hdr" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-num">2</div>
+      <div class="phase-info">
+        <div class="phase-name">Connect WhatsApp Product</div>
+        <div class="phase-desc">Find WhatsApp in the products list and set up</div>
+      </div>
+      <span class="phase-time">~5 min</span>
+      <span class="chev">▶</span>
+    </div>
+    <div class="phase-body">
+      <ul class="steps">
+        <li><span class="sn">01</span><span class="st">On the App Dashboard → scroll down to <strong>"Add products to your app"</strong></span></li>
+        <li><span class="sn">02</span><span class="st">Find <strong>WhatsApp</strong> → click <strong>Set Up</strong></span></li>
+        <li><span class="sn">03</span><span class="st">You'll be asked to connect a Meta Business Account → if you don't have one, click <strong>Create new business account</strong> → Business name: <code>Xenotrix</code> → follow prompts</span></li>
+        <li><span class="sn">04</span><span class="st">Click <strong>Continue</strong> — you'll land on the WhatsApp API Setup page</span></li>
+        <li><span class="sn">05</span><span class="st">In the left sidebar you'll now see <strong>WhatsApp → API Setup</strong>. Click it.</span></li>
+      </ul>
+      <div class="screen-hint">You should see "Step 1: Select phone numbers" with a test number already provided by Meta</div>
+      <div class="callout">
+        <strong>Free Test Number</strong>
+        <p>Meta gives you a free test phone number to start. It can send messages to up to 5 verified recipient numbers. Use this to test your workflow before connecting your real business number.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="sec" id="get-token">
+  <div class="eyebrow">Part 1 — Step 3</div>
+  <div class="sec-title">Get Your Token + Phone Number ID</div>
+  <div class="sec-sub">These two values are what n8n needs to send messages. Copy both and save them somewhere safe.</div>
+  <hr class="div">
+
+  <div class="phase">
+    <div class="phase-hdr" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-num">3</div>
+      <div class="phase-info">
+        <div class="phase-name">Copy Access Token and Phone Number ID</div>
+        <div class="phase-desc">From WhatsApp → API Setup page</div>
+      </div>
+      <span class="phase-time">~5 min</span>
+      <span class="chev">▶</span>
+    </div>
+    <div class="phase-body">
+      <ul class="steps">
+        <li><span class="sn">01</span><span class="st">On <strong>WhatsApp → API Setup</strong> page, find the section <strong>"Step 2: Send messages with the API"</strong></span></li>
+        <li><span class="sn">02</span><span class="st">You'll see a panel with:<br>
+          — <strong>Phone number ID</strong> (looks like: <code>123456789012345</code>)<br>
+          — <strong>Temporary access token</strong> (long string starting with EAA...)
+          <span class="note">⚠️ The temporary token expires in 24 hours. We'll create a permanent one next.</span>
+        </span></li>
+        <li><span class="sn">03</span><span class="st">Copy the <strong>Phone number ID</strong> → paste it in a notepad. Label it: <code>PHONE_NUMBER_ID</code></span></li>
+        <li><span class="sn">04</span><span class="st">To get a <strong>permanent token</strong>: Go to <strong>Business Settings</strong> (business.facebook.com) → Users → System Users → Add System User → Name: <code>xenotrix-bot</code> → Role: Admin → Save</span></li>
+        <li><span class="sn">05</span><span class="st">Click on the system user → <strong>Generate New Token</strong> → App: select your app → Permissions: check <code>whatsapp_business_messaging</code> + <code>whatsapp_business_management</code> → Generate Token</span></li>
+        <li><span class="sn">06</span><span class="st">Copy this token immediately → paste in notepad. Label it: <code>WA_ACCESS_TOKEN</code><span class="note">This token does not expire. Treat it like a password.</span></span></li>
+      </ul>
+      <div class="callout warn">
+        <strong>Also Copy Your WhatsApp Business Account ID</strong>
+        <p>Go to WhatsApp → API Setup → top of the page. You'll see your <strong>WhatsApp Business Account ID</strong>. Copy it too — you need it for creating message templates. Label it: <code>WABA_ID</code></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 4 -->
+<div class="sec" id="test">
+  <div class="eyebrow">Part 1 — Step 4</div>
+  <div class="sec-title">Send Your First Test Message</div>
+  <div class="sec-sub">Verify the API works before building the automation. Takes 2 minutes.</div>
+  <hr class="div">
+
+  <div class="phase">
+    <div class="phase-hdr" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-num">4</div>
+      <div class="phase-info">
+        <div class="phase-name">Test the API with a curl command</div>
+        <div class="phase-desc">Send a test message to your own number to confirm everything works</div>
+      </div>
+      <span class="phase-time">~5 min</span>
+      <span class="chev">▶</span>
+    </div>
+    <div class="phase-body">
+      <ul class="steps">
+        <li><span class="sn">01</span><span class="st">On the WhatsApp API Setup page, scroll to <strong>"Send a test message"</strong></span></li>
+        <li><span class="sn">02</span><span class="st">Enter your personal WhatsApp number in international format: <code>91XXXXXXXXXX</code> (India: 91 + 10 digit number, no spaces)</span></li>
+        <li><span class="sn">03</span><span class="st">Click <strong>Send Message</strong> — you should receive a WhatsApp message within seconds</span></li>
+        <li><span class="sn">04</span><span class="st">If you want to test via terminal on your Railway n8n server, run:</span></li>
+      </ul>
+      <div class="code" data-l="Test via Terminal">curl -X POST \
+  https://graph.facebook.com/v18.0/<span class="cv">YOUR_PHONE_NUMBER_ID</span>/messages \
+  -H 'Authorization: Bearer <span class="cv">YOUR_ACCESS_TOKEN</span>' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "messaging_product": "whatsapp",
+    "to": "<span class="cv">91XXXXXXXXXX</span>",
+    "type": "text",
+    "text": { "body": "Test from Xenotrix n8n automation!" }
+  }'</div>
+      <ul class="steps">
+        <li><span class="sn">05</span><span class="st">You'll get a JSON response with <code>"message_status": "accepted"</code> — this means it worked</span></li>
+      </ul>
+      <div class="callout">
+        <strong>Message Received?</strong>
+        <p>If you got the WhatsApp message, your API is ready. Move to Part 2. If not, double-check that your phone number is added as a "recipient" in Meta — test accounts can only message pre-verified numbers until you go live.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ PART 2: MESSAGE TEMPLATE ═══════ -->
+<div class="sec" id="template">
+  <div class="eyebrow">Part 2 — Step 5</div>
+  <div class="sec-title">Create Your Message Template</div>
+  <div class="sec-sub">WhatsApp Cloud API requires approved templates for outbound messages. Here's the exact template to submit for the website audit offer.</div>
+  <hr class="div">
+
+  <div class="phase">
+    <div class="phase-hdr" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-num">5</div>
+      <div class="phase-info">
+        <div class="phase-name">Submit "website_audit_offer" Template</div>
+        <div class="phase-desc">WhatsApp → Message Templates → Create → paste exact content below</div>
+      </div>
+      <span class="phase-time">~10 min + review time</span>
+      <span class="chev">▶</span>
+    </div>
+    <div class="phase-body">
+      <ul class="steps">
+        <li><span class="sn">01</span><span class="st">Go to <strong>WhatsApp → Message Templates</strong> in your Meta App dashboard</span></li>
+        <li><span class="sn">02</span><span class="st">Click <strong>Create Template</strong></span></li>
+        <li><span class="sn">03</span><span class="st">Category: <strong>Marketing</strong> → Template Name: <code>website_audit_offer</code> (lowercase, underscores only) → Language: <strong>English</strong></span></li>
+        <li><span class="sn">04</span><span class="st">In the Body section, paste exactly:</span></li>
+      </ul>
+
+      <div class="msg-preview">
+        <div class="msg-bubble">
+          Hi <span class="var">{{1}}</span> 👋<br><br>
+          I looked at <span class="var">{{2}}</span>'s website and spotted a few things that could be costing you enquiries.<br><br>
+          I'm from <strong>Xenotrix</strong> — we build fast websites for local businesses. Can I send you a <strong>free 5-minute audit</strong> of your site?<br><br>
+          No cost. No pitch. Just reply <strong>YES</strong> and I'll send it over.<br><br>
+          — Xenotrix.com
+        </div>
+        <div class="msg-meta">Variables: {{1}} = contact name, {{2}} = business name</div>
+      </div>
+
+      <ul class="steps">
+        <li><span class="sn">05</span><span class="st">In the <strong>Sample content</strong> field, Meta needs sample values:<br>
+          {{1}}: <code>Rajesh</code><br>
+          {{2}}: <code>Spice Garden Restaurant</code>
+        </span></li>
+        <li><span class="sn">06</span><span class="st">Click <strong>Submit</strong> — Meta will review within <strong>a few minutes to 24 hours</strong></span></li>
+        <li><span class="sn">07</span><span class="st">While it's under review, go ahead and build the n8n workflow — just don't activate it until status shows <strong>"Approved"</strong></span></li>
+      </ul>
+
+      <div class="callout warn">
+        <strong>Template Approval Tips</strong>
+        <p>Keep the body exactly as written above — do not include URLs, phone numbers, or prices in the template body. These trigger rejection. The word "free" is fine. "Audit" is fine. If rejected, the most common fix is removing promotional language and resubmitting.</p>
+      </div>
+
+      <div class="callout tip">
+        <strong>Alternative While Waiting for Approval</strong>
+        <p>You can send plain text messages (not templates) to numbers that have messaged YOU first. So: send a manual WhatsApp to a prospect from your business number, they reply, then you can automate follow-ups to them without a template. Use this for your first 20 leads while the template is reviewed.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ PART 2: N8N WORKFLOW ═══════ -->
+<div class="sec" id="workflow">
+  <div class="eyebrow">Part 2 — Step 6</div>
+  <div class="sec-title">Build the n8n Outreach Workflow</div>
+  <div class="sec-sub">This workflow reads your CSV data from Google Sheets, filters leads with phone numbers, and sends personalized WhatsApp messages — throttled to stay safe.</div>
+  <hr class="div">
+
+  <div class="flow">
+    <div class="fn"><div class="fb fb-t">Manual Trigger</div><div class="fl">Start batch</div></div>
+    <span class="fa">→</span>
+    <div class="fn"><div class="fb fb-a">Google Sheets</div><div class="fl">Read leads</div></div>
+    <span class="fa">→</span>
+    <div class="fn"><div class="fb fb-c">IF: Has Phone</div><div class="fl">Filter empties</div></div>
+    <span class="fa">→</span>
+    <div class="fn"><div class="fb fb-a">Split in Batches</div><div class="fl">5 at a time</div></div>
+    <span class="fa">→</span>
+    <div class="fn"><div class="fb fb-a">Wait Node</div><div class="fl">30 sec gap</div></div>
+    <span class="fa">→</span>
+    <div class="fn"><div class="fb fb-h">HTTP Request</div><div class="fl">Send WhatsApp</div></div>
+    <span class="fa">→</span>
+    <div class="fn"><div class="fb fb-o">Sheets Update</div><div class="fl">Mark sent</div></div>
+  </div>
+
+  <div class="phase">
+    <div class="phase-hdr" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-num">6</div>
+      <div class="phase-info">
+        <div class="phase-name">Step-by-Step Node Configuration</div>
+        <div class="phase-desc">Build each node exactly as described below</div>
+      </div>
+      <span class="phase-time">~30 min</span>
+      <span class="chev">▶</span>
+    </div>
+    <div class="phase-body">
+      <ul class="steps">
+        <li><span class="sn">01</span><span class="st"><strong>Manual Trigger node</strong> — drag it in. This means you click "Execute Workflow" to start each batch manually. This gives you control over when messages go out.</span></li>
+        <li><span class="sn">02</span><span class="st"><strong>Google Sheets node</strong> → Operation: Read Rows → Credential: your Google Sheets OAuth2 → Spreadsheet: your leads file → Sheet: Sheet1 → Return All Rows: ON<span class="note">First upload your CSV to Google Sheets. Import → upload your file → it becomes a sheet.</span></span></li>
+        <li><span class="sn">03</span><span class="st"><strong>IF node</strong> → Condition: <code>Phone</code> column is <strong>not empty</strong> → True branch continues, False branch ends<span class="note">This filters out rows with no phone number — like "Shri Chhappan Bhog" in your data.</span></span></li>
+        <li><span class="sn">04</span><span class="st"><strong>Filter node</strong> (add after IF) → also filter where <code>WA_Sent</code> column does NOT equal <code>YES</code> — prevents sending duplicates if you re-run<span class="note">Add a column called "WA_Sent" to your sheet. Leave it blank for all rows initially.</span></span></li>
+        <li><span class="sn">05</span><span class="st"><strong>Split in Batches node</strong> → Batch Size: <code>5</code> — processes 5 leads at a time then loops</span></li>
+        <li><span class="sn">06</span><span class="st"><strong>HTTP Request node</strong> — this sends the WhatsApp:<br>
+          Method: <code>POST</code><br>
+          URL: <code>https://graph.facebook.com/v18.0/YOUR_PHONE_ID/messages</code><br>
+          Authentication: Generic Credential Type → Header Auth<br>
+          Header name: <code>Authorization</code><br>
+          Header value: <code>Bearer YOUR_ACCESS_TOKEN</code>
+        </span></li>
+        <li><span class="sn">07</span><span class="st">HTTP Request → Body: JSON → paste this body:</span></li>
+      </ul>
+
+      <div class="code" data-l="HTTP Request Body — Template Message">
+{
+  <span class="ck">"messaging_product"</span>: <span class="cs">"whatsapp"</span>,
+  <span class="ck">"to"</span>: <span class="cs">"91{{ $json.Phone.replace(/\s/g, '').replace(/^0/, '') }}"</span>,
+  <span class="cc">// Removes spaces, removes leading 0, adds India +91</span>
+  <span class="ck">"type"</span>: <span class="cs">"template"</span>,
+  <span class="ck">"template"</span>: {
+    <span class="ck">"name"</span>: <span class="cs">"website_audit_offer"</span>,
+    <span class="ck">"language"</span>: { <span class="ck">"code"</span>: <span class="cs">"en"</span> },
+    <span class="ck">"components"</span>: [{
+      <span class="ck">"type"</span>: <span class="cs">"body"</span>,
+      <span class="ck">"parameters"</span>: [
+        { <span class="ck">"type"</span>: <span class="cs">"text"</span>, <span class="ck">"text"</span>: <span class="cs">"{{ $json.Name.split(' ')[0] }}"</span> },
+        <span class="cc">// Takes first name only</span>
+        { <span class="ck">"type"</span>: <span class="cs">"text"</span>, <span class="ck">"text"</span>: <span class="cs">"{{ $json.Name }}"</span> }
+        <span class="cc">// Business name from your sheet</span>
+      ]
+    }]
+  }
+}</div>
+
+      <ul class="steps">
+        <li><span class="sn">08</span><span class="st"><strong>Wait node</strong> — add BEFORE the HTTP Request node → Wait: <code>30</code> seconds between each batch of 5. This is critical for avoiding bans.</span></li>
+        <li><span class="sn">09</span><span class="st"><strong>Google Sheets node</strong> (after HTTP Request) → Operation: Update Row → find the row by Phone number → Set <code>WA_Sent</code> = <code>YES</code> and <code>WA_Date</code> = <code>{{ $now.toISO() }}</code></span></li>
+        <li><span class="sn">10</span><span class="st"><strong>Telegram node</strong> (optional, add at end) → Message: <code>"✅ Sent {{ batchCount }} WhatsApp messages. Total sent today: {{ totalSent }}"</code></span></li>
+      </ul>
+
+      <div class="callout">
+        <strong>Phone Number Formatting for India</strong>
+        <p>Your data has numbers like <code>090586 72704</code> or <code>0562 404 0338</code>. The API needs <code>9190586727040</code> format. The expression in the body above handles this: removes spaces, removes leading 0, and prepends 91. Always test with your own number first.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STEP 7 -->
+<div class="sec" id="csv">
+  <div class="eyebrow">Part 2 — Step 7</div>
+  <div class="sec-title">Prepare Your CSV Data in Google Sheets</div>
+  <hr class="div">
+
+  <div class="phase">
+    <div class="phase-hdr" onclick="this.parentElement.classList.toggle('open')">
+      <div class="phase-num">7</div>
+      <div class="phase-info">
+        <div class="phase-name">Clean and upload your lead data</div>
+        <div class="phase-desc">Format the Agra restaurant/business data for the workflow</div>
+      </div>
+      <span class="phase-time">~15 min</span>
+      <span class="chev">▶</span>
+    </div>
+    <div class="phase-body">
+      <ul class="steps">
+        <li><span class="sn">01</span><span class="st">Open your CSV in Google Sheets → make sure these columns exist:<br>
+          <code>Name</code> | <code>Phone</code> | <code>Website</code> | <code>Rating</code> | <code>Category</code> | <code>Address</code></span></li>
+        <li><span class="sn">02</span><span class="st">Add 3 new columns at the end: <code>WA_Sent</code> | <code>WA_Date</code> | <code>Status</code> — leave all blank for now</span></li>
+        <li><span class="sn">03</span><span class="st"><strong>Filter out rows with no phone number</strong> — in your data, "Shri Chhappan Bhog" and "VRINDHAM DOSA CORNER" have no phone. n8n IF node handles this but clean it manually too.</span></li>
+        <li><span class="sn">04</span><span class="st"><strong>Prioritize by website presence</strong> — businesses WITH a website score lower on PageSpeed and are easier to pitch. Sort: Website is not empty → these go first</span></li>
+        <li><span class="sn">05</span><span class="st"><strong>Prioritize by rating</strong> — target 4.0+ rated businesses first. Higher-rated = more invested in their business = more likely to pay for a better website.</span></li>
+        <li><span class="sn">06</span><span class="st">Your sheet tab name should be exactly <code>Leads</code> — update this in your Google Sheets node</span></li>
+      </ul>
+
+      <div class="callout warn">
+        <strong>From Your Data — Who to Message First</strong>
+        <p>Looking at your screenshot: <strong>Sigmaji South Indian</strong> (4.5★, has website), <strong>Sardar G Malai Chaap</strong> (4.7★, Zomato link), <strong>Mapple Leaf</strong> (4.3★, has website), <strong>Altitude Rooftop</strong> (4.4★, has Facebook). These 4 have both phones AND web presence — perfect first batch for the audit offer.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SAFE SEND RATE -->
+<div class="sec" id="throttle">
+  <div class="eyebrow">Part 2 — Step 8</div>
+  <div class="sec-title">Safe Sending Rules — Don't Get Banned</div>
+  <div class="sec-sub">WhatsApp aggressively bans numbers that look like spam. Follow these rules and you'll never have a problem.</div>
+  <hr class="div">
+
+  <ul class="checklist">
+    <li><strong>Max 80 messages per day</strong> — the workflow stops after 80 regardless of how many leads you have</li>
+    <li><strong>30 second gap between batches of 5</strong> — the Wait node handles this</li>
+    <li><strong>Only message numbers from your scraped data</strong> — no random numbers</li>
+    <li><strong>Never send the same template twice</strong> — the WA_Sent column prevents this</li>
+    <li><strong>Use a dedicated number for API</strong> — not your personal WhatsApp number</li>
+    <li><strong>If someone replies STOP or NO</strong> — update their Status to "Opted Out" in Sheets and never message again</li>
+    <li><strong>Gradually scale</strong> — start with 20/day for the first week, then 40, then 80. This builds sender reputation.</li>
+    <li><strong>Personalize every message</strong> — the {{1}} and {{2}} variables in the template do this automatically</li>
+  </ul>
+
+  <div class="callout danger">
+    <strong>What Gets You Banned</strong>
+    <p>Sending 200+ messages/day from a new number. Sending identical messages to many numbers at once. Getting reported by recipients. Using a personal WhatsApp number (not the Cloud API number). Always use the API with a proper business number — not your SIM card WhatsApp.</p>
+  </div>
+</div>
+
+<!-- BAN SAFE RULES -->
+<div class="sec" id="rules">
+  <div class="eyebrow">Reference</div>
+  <div class="sec-title">What Happens After They Reply</div>
+  <hr class="div">
+
+  <ul class="checklist">
+    <li><strong>They reply YES</strong> → n8n WF-03 picks it up → logs them as "Replied" in CRM → you get a Telegram alert → manually send the Loom audit video within 1 hour</li>
+    <li><strong>They reply "Not interested"</strong> → update Status = Rejected in Sheets → never contact again</li>
+    <li><strong>No reply after 48 hours</strong> → WF-01 (follow-up sequence) fires automatically → sends one follow-up only</li>
+    <li><strong>They ask a question</strong> → reply manually via WhatsApp Business App → then move them to "Call Booked" track</li>
+    <li><strong>They book a call</strong> → WF-03 fires → auto-logged in CRM → you get Telegram alert with call time</li>
+  </ul>
+</div>
+
+<!-- N8N WORKFLOW JSON -->
+<div class="sec" id="json">
+  <div class="eyebrow">Reference</div>
+  <div class="sec-title">Copy-Paste n8n Workflow JSON</div>
+  <div class="sec-sub">In n8n → New Workflow → top right menu → Import from JSON → paste this. Then update YOUR_PHONE_ID and YOUR_TOKEN.</div>
+  <hr class="div">
+
+  <div class="code" data-l="n8n Workflow JSON — Import This">
+{
+  <span class="ck">"name"</span>: <span class="cs">"Xenotrix WA Outreach — Website Audit"</span>,
+  <span class="ck">"nodes"</span>: [
+    {
+      <span class="ck">"name"</span>: <span class="cs">"Start"</span>,
+      <span class="ck">"type"</span>: <span class="cs">"n8n-nodes-base.manualTrigger"</span>,
+      <span class="ck">"position"</span>: [<span class="cv">240</span>, <span class="cv">300</span>]
+    },
+    {
+      <span class="ck">"name"</span>: <span class="cs">"Read Leads Sheet"</span>,
+      <span class="ck">"type"</span>: <span class="cs">"n8n-nodes-base.googleSheets"</span>,
+      <span class="ck">"parameters"</span>: {
+        <span class="ck">"operation"</span>: <span class="cs">"readAllRows"</span>,
+        <span class="ck">"sheetName"</span>: <span class="cs">"Leads"</span>
+      },
+      <span class="ck">"position"</span>: [<span class="cv">440</span>, <span class="cv">300</span>]
+    },
+    {
+      <span class="ck">"name"</span>: <span class="cs">"Has Phone Number"</span>,
+      <span class="ck">"type"</span>: <span class="cs">"n8n-nodes-base.if"</span>,
+      <span class="ck">"parameters"</span>: {
+        <span class="ck">"conditions"</span>: {
+          <span class="ck">"string"</span>: [
+            { <span class="ck">"value1"</span>: <span class="cs">"={{ $json.Phone }}"</span>, <span class="ck">"operation"</span>: <span class="cs">"isNotEmpty"</span> },
+            { <span class="ck">"value1"</span>: <span class="cs">"={{ $json.WA_Sent }}"</span>, <span class="ck">"operation"</span>: <span class="cs">"notEqual"</span>, <span class="ck">"value2"</span>: <span class="cs">"YES"</span> }
+          ]
+        }
+      },
+      <span class="ck">"position"</span>: [<span class="cv">640</span>, <span class="cv">300</span>]
+    },
+    {
+      <span class="ck">"name"</span>: <span class="cs">"Batch of 5"</span>,
+      <span class="ck">"type"</span>: <span class="cs">"n8n-nodes-base.splitInBatches"</span>,
+      <span class="ck">"parameters"</span>: { <span class="ck">"batchSize"</span>: <span class="cv">5</span> },
+      <span class="ck">"position"</span>: [<span class="cv">840</span>, <span class="cv">300</span>]
+    },
+    {
+      <span class="ck">"name"</span>: <span class="cs">"Wait 30s"</span>,
+      <span class="ck">"type"</span>: <span class="cs">"n8n-nodes-base.wait"</span>,
+      <span class="ck">"parameters"</span>: { <span class="ck">"amount"</span>: <span class="cv">30</span>, <span class="ck">"unit"</span>: <span class="cs">"seconds"</span> },
+      <span class="ck">"position"</span>: [<span class="cv">1040</span>, <span class="cv">300</span>]
+    },
+    {
+      <span class="ck">"name"</span>: <span class="cs">"Send WhatsApp"</span>,
+      <span class="ck">"type"</span>: <span class="cs">"n8n-nodes-base.httpRequest"</span>,
+      <span class="ck">"parameters"</span>: {
+        <span class="ck">"method"</span>: <span class="cs">"POST"</span>,
+        <span class="ck">"url"</span>: <span class="cs">"https://graph.facebook.com/v18.0/YOUR_PHONE_ID/messages"</span>,
+        <span class="ck">"authentication"</span>: <span class="cs">"genericCredentialType"</span>,
+        <span class="ck">"sendHeaders"</span>: <span class="cv">true</span>,
+        <span class="ck">"headerParameters"</span>: {
+          <span class="ck">"parameters"</span>: [{ <span class="ck">"name"</span>: <span class="cs">"Authorization"</span>, <span class="ck">"value"</span>: <span class="cs">"Bearer YOUR_ACCESS_TOKEN"</span> }]
+        },
+        <span class="ck">"sendBody"</span>: <span class="cv">true</span>,
+        <span class="ck">"bodyParameters"</span>: {
+          <span class="ck">"parameters"</span>: [
+            { <span class="ck">"name"</span>: <span class="cs">"messaging_product"</span>, <span class="ck">"value"</span>: <span class="cs">"whatsapp"</span> },
+            { <span class="ck">"name"</span>: <span class="cs">"to"</span>, <span class="ck">"value"</span>: <span class="cs">"=91{{ $json.Phone.replace(/\\s/g,'').replace(/^0/,'') }}"</span> },
+            { <span class="ck">"name"</span>: <span class="cs">"type"</span>, <span class="ck">"value"</span>: <span class="cs">"template"</span> }
+          ]
+        }
+      },
+      <span class="ck">"position"</span>: [<span class="cv">1240</span>, <span class="cv">300</span>]
+    },
+    {
+      <span class="ck">"name"</span>: <span class="cs">"Mark Sent in Sheet"</span>,
+      <span class="ck">"type"</span>: <span class="cs">"n8n-nodes-base.googleSheets"</span>,
+      <span class="ck">"parameters"</span>: {
+        <span class="ck">"operation"</span>: <span class="cs">"update"</span>,
+        <span class="ck">"sheetName"</span>: <span class="cs">"Leads"</span>,
+        <span class="ck">"dataMode"</span>: <span class="cs">"autoMapInputData"</span>,
+        <span class="ck">"fieldsUi"</span>: {
+          <span class="ck">"values"</span>: [
+            { <span class="ck">"fieldId"</span>: <span class="cs">"WA_Sent"</span>, <span class="ck">"fieldValue"</span>: <span class="cs">"YES"</span> },
+            { <span class="ck">"fieldId"</span>: <span class="cs">"WA_Date"</span>, <span class="ck">"fieldValue"</span>: <span class="cs">"={{ $now.toISO() }}"</span> }
+          ]
+        }
+      },
+      <span class="ck">"position"</span>: [<span class="cv">1440</span>, <span class="cv">300</span>]
+    }
+  ]
+}</div>
+
+  <div class="callout">
+    <strong>After Importing</strong>
+    <p>1. Connect Google Sheets credential. 2. Replace <code>YOUR_PHONE_ID</code> and <code>YOUR_ACCESS_TOKEN</code> in the HTTP Request node. 3. Update Spreadsheet ID in both Sheets nodes. 4. Test with 1 lead (your own number) before running on real data.</p>
+  </div>
+</div>
+
+<footer>
+  <span class="b">Xenotrix</span> · WhatsApp Outreach Guide · xenotrix.com
+  <span>API + n8n · Free · First message today</span>
+</footer>
+
+</main>
+
+<script>
+function tog(el){ el.parentElement.classList.toggle('open'); }
+document.querySelectorAll('.phase-hdr').forEach(h => h.onclick = () => h.parentElement.classList.toggle('open'));
+document.querySelector('.phase.open') || document.querySelector('.phase').classList.add('open');
+</script>
+</body>
+</html>

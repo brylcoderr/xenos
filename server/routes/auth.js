@@ -156,9 +156,99 @@ router.post('/seed', async (req, res) => {
     });
     await adminUser.save();
     
+    // Asset Integration (Premium HTML Templates & Internal Resources)
+    const fs = require('fs');
+    const path = require('path');
+    const assetsPath = path.join(__dirname, '../../Assets');
+    const Template = require('../models/Template');
+
+    const premiumAssets = [
+      {
+        fileName: 'contract.html',
+        type: 'Client Agreement',
+        name: 'Premium Service Agreement',
+        variables: ['client_name', 'company_name', 'project_name', 'amount', 'date', 'phone', 'email']
+      },
+      {
+        fileName: 'onboarding.html',
+        type: 'Welcome Document',
+        name: 'Client Onboarding Dashboard',
+        variables: ['client_name', 'company_name', 'project_name', 'delivery_date', 'amount']
+      },
+      {
+        fileName: 'coldcall.html',
+        type: 'Internal Resource',
+        name: 'Cold Call Playbook',
+        variables: ['your_name']
+      },
+      {
+        fileName: 'xenotrix_roadmap.html',
+        type: 'Internal Resource',
+        name: 'Agency Growth Roadmap',
+        variables: []
+      },
+      {
+        fileName: 'n8n_automation_guide.html',
+        type: 'Internal Resource',
+        name: 'n8n Automation Guide',
+        variables: []
+      },
+      {
+        fileName: 'wa_outreach_guide.html',
+        type: 'Internal Resource',
+        name: 'WhatsApp Outreach Guide',
+        variables: []
+      },
+      {
+        fileName: 'xenotrix_coldcall_script.html',
+        type: 'Internal Resource',
+        name: 'Expert Cold Call Script',
+        variables: ['your_name']
+      },
+      {
+        fileName: 'xenotrix_crm_dashboard.html',
+        type: 'Internal Resource',
+        name: 'CRM Workflow Dashboard',
+        variables: []
+      },
+      {
+        fileName: 'xenotrix_onboarding_checklist.html',
+        type: 'Internal Resource',
+        name: 'Client Success Checklist',
+        variables: []
+      },
+      {
+        fileName: 'xenotrix_service_contract.html',
+        type: 'Internal Resource',
+        name: 'Master Service Agreement',
+        variables: []
+      }
+    ];
+
+    for (const t of premiumAssets) {
+      const filePath = path.join(assetsPath, t.fileName);
+      if (fs.existsSync(filePath)) {
+        const htmlContent = fs.readFileSync(filePath, 'utf8');
+        // Update if exists, or create
+        await Template.findOneAndUpdate(
+          { name: t.name },
+          {
+            name: t.name,
+            type: t.type,
+            htmlContent: htmlContent,
+            variables: t.variables,
+            isActive: true,
+            createdBy: adminUser._id
+          },
+          { upsert: true, new: true }
+        );
+      }
+    }
+    
     res.json({ 
-      message: 'Seed successful', 
-      user: { email: adminUser.email, password: 'password' } 
+      message: 'Seed successful - Premium assets synchronized', 
+      user: { email: adminUser.email, password: 'password' },
+      assetsProcessed: premiumAssets.length
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
