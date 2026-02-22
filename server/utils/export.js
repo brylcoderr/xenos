@@ -220,7 +220,7 @@ async function generatePDF(htmlContent, options = {}) {
     });
 
     await browser.close();
-    return pdf;
+    return Buffer.from(pdf);
   } catch (error) {
     console.error('CRITICAL PDF ERROR:', error);
     if (browser) await browser.close();

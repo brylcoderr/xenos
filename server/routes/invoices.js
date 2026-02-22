@@ -218,9 +218,11 @@ router.get('/:id/export/pdf', auth, async (req, res) => {
       type: 'Invoice'
     });
 
+    const binaryBuffer = Buffer.from(pdfBuffer);
     res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Length', binaryBuffer.length);
     res.setHeader('Content-Disposition', `attachment; filename="${invoice.invoiceNumber}.pdf"`);
-    res.send(pdfBuffer);
+    res.end(binaryBuffer);
   } catch (error) {
     console.error('Invoice PDF Export Error:', error);
     res.status(500).json({ message: error.message });

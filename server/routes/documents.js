@@ -261,9 +261,11 @@ router.get('/:id/export/pdf', auth, async (req, res) => {
       color: templateRenderer.getTemplateConfig(document.templateType).color
     });
 
+    const binaryBuffer = Buffer.from(pdfBuffer);
     res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Length', binaryBuffer.length);
     res.setHeader('Content-Disposition', `attachment; filename="${document.title.replace(/[^a-z0-9]/gi, '_')}.pdf"`);
-    res.send(pdfBuffer);
+    res.end(binaryBuffer);
   } catch (error) {
     console.error('PDF Export Route Error:', error);
     res.status(500).json({ 
@@ -298,9 +300,11 @@ router.get('/:id/export/docx', auth, async (req, res) => {
       { name: document.title, type: document.templateType }
     );
 
+    const binaryBuffer = Buffer.from(docxBuffer);
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+    res.setHeader('Content-Length', binaryBuffer.length);
     res.setHeader('Content-Disposition', `attachment; filename="${document.title.replace(/[^a-z0-9]/gi, '_')}.docx"`);
-    res.send(docxBuffer);
+    res.end(binaryBuffer);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
