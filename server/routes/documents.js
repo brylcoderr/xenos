@@ -266,7 +266,11 @@ router.get('/:id/export/pdf', auth, async (req, res) => {
     res.send(pdfBuffer);
   } catch (error) {
     console.error('PDF Export Route Error:', error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ 
+      message: error.message, 
+      details: 'This error often occurs on low-memory servers like Render Free Tier. Try using the "Print" button on the document page as a fallback.',
+      error: error.toString()
+    });
   }
 });
 

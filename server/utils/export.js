@@ -16,7 +16,11 @@ async function generatePDF(htmlContent, options = {}) {
         '--disable-accelerated-2d-canvas',
         '--disable-gpu',
         '--no-zygote',
-        '--single-process'
+        '--single-process',
+        '--disable-setuid-sandbox',
+        '--no-first-run',
+        '--no-sandbox',
+        '--disable-extensions'
       ]
     });
 
@@ -29,6 +33,8 @@ async function generatePDF(htmlContent, options = {}) {
     let logoDataUri = '';
     try {
       if (fs.existsSync(logoPath)) {
+        const stats = fs.statSync(logoPath);
+        console.log(`PDF Export: Using logo at ${logoPath} (${Math.round(stats.size/1024)} KB)`);
         const logoBase64 = fs.readFileSync(logoPath).toString('base64');
         logoDataUri = `data:image/png;base64,${logoBase64}`;
       }

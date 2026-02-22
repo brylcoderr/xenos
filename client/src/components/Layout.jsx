@@ -56,7 +56,7 @@ export default function Layout() {
 
       {/* Sidebar */}
       <aside className={cn(
-        "fixed lg:static inset-y-0 left-0 z-50 w-56 bg-background-2 border-r border-border transform transition-transform duration-200",
+        "fixed lg:static inset-y-0 left-0 z-50 w-56 bg-background-2 border-r border-border transform transition-transform duration-200 print:hidden",
         sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}>
         <div className="flex flex-col h-full">
@@ -113,7 +113,7 @@ export default function Layout() {
       {/* Main content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Header */}
-        <header className="h-14 bg-background-2 border-b border-border flex items-center justify-between px-4 sticky top-0 z-30">
+        <header className="h-14 bg-background-2 border-b border-border flex items-center justify-between px-4 sticky top-0 z-30 print:hidden">
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -150,19 +150,19 @@ export default function Layout() {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+        <main className="flex-1 p-4 lg:p-6 overflow-auto print:p-0">
           <Outlet />
         </main>
       </div>
       
-      {/* Activity Sidebar */}
-      <ActivitySidebar 
-        isOpen={activitySidebarVisible} 
-        onHide={() => setActivitySidebarVisible(false)} 
-      />
-      
-      {/* Floating Notepad */}
-      <FloatingNotepad />
+      <div className="print:hidden">
+        <ActivitySidebar 
+          isOpen={activitySidebarVisible} 
+          onHide={() => setActivitySidebarVisible(false)} 
+        />
+        
+        <FloatingNotepad />
+      </div>
     </div>
   );
 }

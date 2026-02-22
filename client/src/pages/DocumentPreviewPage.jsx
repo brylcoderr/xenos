@@ -166,6 +166,9 @@ export default function DocumentPreviewPage() {
   const templateConfig = TEMPLATE_CONFIGS[document.templateType] || { sections: [] };
   const templateInfo = TEMPLATE_TYPES[document.templateType] || TEMPLATE_TYPES.custom;
 
+  const backendUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace('/api', '') : '';
+  const logoUrl = `${backendUrl}/Assets/logo.png`;
+
   const replaceVariables = (html, variables) => {
     if (!html) return '';
     let processed = html;
@@ -248,12 +251,16 @@ export default function DocumentPreviewPage() {
           </div>
         </div>
 
-        <div className="card bg-white overflow-hidden" style={{ minHeight: '1000px' }}>
+        <div className="card bg-white overflow-hidden print:hidden" style={{ minHeight: '1000px' }}>
           <iframe
             srcDoc={replaceVariables(document.htmlContent, fields)}
             className="w-full h-[1200px] border-none"
             title="Document Preview"
           />
+        </div>
+        {/* Print-only version of the HTML content */}
+        <div className="hidden print:block bg-white p-0">
+          <div dangerouslySetInnerHTML={{ __html: replaceVariables(document.htmlContent, fields) }} />
         </div>
       </div>
     );
@@ -297,13 +304,16 @@ export default function DocumentPreviewPage() {
           style={{ fontFamily: 'Barlow, sans-serif', minHeight: '800px' }}
         >
           {/* Header */}
-          <div className="border-b-2 pb-4 mb-6" style={{ borderColor: templateInfo.color }}>
-            <h1 className="font-bold text-2xl uppercase" style={{ color: templateInfo.color }}>
-              {templateInfo.label}
-            </h1>
-            <p className="text-xs text-gray-500 mt-1">
-              {document.title} · {new Date(document.updatedAt || document.createdAt).toLocaleDateString()}
-            </p>
+          <div className="border-b-2 pb-4 mb-6 flex justify-between items-start" style={{ borderColor: templateInfo.color }}>
+            <div>
+              <h1 className="font-bold text-2xl uppercase" style={{ color: templateInfo.color }}>
+                {templateInfo.label}
+              </h1>
+              <p className="text-xs text-gray-500 mt-1">
+                {document.title} · {new Date(document.updatedAt || document.createdAt).toLocaleDateString()}
+              </p>
+            </div>
+            <img src={logoUrl} alt="Logo" className="h-12 object-contain" onError={(e) => e.target.style.display = 'none'} />
           </div>
 
           {/* Confidential Warning */}
